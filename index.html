@@ -2675,6 +2675,7 @@ TASKS.c3_join={id:'c3_join',coc:3,title:'Join CLIENT-01 to the domain',where:'CL
 addEventListener('beforeunload',()=>{if(G.coc&&!$('#world').classList.contains('hidden'))pauseTimer();save()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
 if(location.hash==='#crimp-preview')crimpPreview();else showTitle();
+addEventListener('hashchange',()=>{if(location.hash==='#crimp-preview'){closeModal();if(CTX)closeTask();W.running=false;crimpPreview()}});
 
 </script>
 </body>
