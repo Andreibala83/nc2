@@ -472,6 +472,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 .pp-label{text-align:center;font-size:10px;letter-spacing:1px;color:#666;margin:6px 0;font-weight:700}
 .fp-bot .pd-wires{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}.fp-bot .pd-wire{padding:.3em .55em;font-size:.85em}
 .fp-bot .pd-wires .btn.on{background:#f5c518;color:#1a1400;border-color:#f5c518}.fp-bot .pdled{font-size:.8em;padding:1px 4px}
+.port.half::before{background:linear-gradient(90deg,#2b7fd6 50%,transparent 50%);border-color:#8cf}
 
 </style>
 </head>
@@ -2166,7 +2167,7 @@ COCS[2]={icon:'🔌',title:'Set Up Computer Networks',sub:'Crimp & test cables �
   {type:'pc',x:760,y:330,w:160,h:62,label:'PC-02',tasks:['c2_pc2']},{type:'chair',x:827,y:404,w:26,h:20},
   {type:'plant',x:24,y:540,w:30,h:30},{type:'plant',x:906,y:100,w:30,h:30},{type:'extinguisher',x:210,y:108,w:14,h:28},
   {type:'door',exit:1,solid:false,x:944,y:470,w:16,h:90}]}};
-const PORTS={ont:{name:'ISP Modem (ONT)',ports:['LAN1','LAN2'],power:null},rt:{name:'Wireless Router',ports:['WAN','LAN1','LAN2','LAN3','LAN4'],power:'rt'},sw:{name:'8-Port Switch',ports:['P1','P2','P3','P4','P5','P6','P7','P8'],power:'sw'},pp:{name:'Patch Panel (front)',ports:['F1','F2','F3','F4','F5','F6','F7','F8'],power:null},pr:{name:'Patch Panel (rear runs)',ports:['R1','R2','R3','R4','R5','R6','R7','R8'],power:null},pc1:{name:'PC-01 (NIC)',ports:['NIC'],power:null},pc2:{name:'PC-02 (NIC)',ports:['NIC'],power:null}};
+const PORTS={ont:{name:'ISP Modem (ONT)',ports:['LAN1','LAN2'],power:null},rt:{name:'Wireless Router',ports:['WAN','LAN1','LAN2','LAN3','LAN4'],power:'rt'},sw:{name:'8-Port Switch',ports:['P1','P2','P3','P4','P5','P6','P7','P8'],power:'sw'},pp:{name:'Patch Panel',ports:['1','2','3','4','5','6','7','8'],power:null},pc1:{name:'PC-01 (NIC)',ports:['NIC'],power:null},pc2:{name:'PC-02 (NIC)',ports:['NIC'],power:null}};
 function c2link(L){
  const has=(a,b)=>L.patch.some(([x,y])=>(x.startsWith(a)&&y.startsWith(b))||(x.startsWith(b)&&y.startsWith(a)));
  const swUp=L.pw.sw,rtUp=L.pw.rt;
@@ -2442,42 +2443,43 @@ TASKS.c2_punch={id:'c2_punch',coc:2,title:'Punch down the patch panel',where:'Ne
    if(L.patch)c2link(L);ctx.check()}
   render()}};
 TASKS.c2_patch={id:'c2_patch',coc:2,title:'Connect the network devices',where:'Network Rack',
- info:'Network diagram:\n\nISP Modem (LAN) ──▶ Router (WAN)\nRouter (LAN) ──▶ Switch\nSwitch ──▶ Patch panel front port 1 and 2\nPatch panel rear run 1 ──▶ PC-01\nPatch panel rear run 2 ──▶ PC-02\n\nOnly the ports you punched down work. Then power on the router and the switch.',
- objectives:[{id:'wan',text:'Connect the ISP modem to the router\'s WAN (internet) port',hint:'The blue WAN port is for the internet line from the ISP modem.',check:L=>L.patch.some(([x,y])=>[x,y].includes('rt.WAN')&&[x,y].some(p=>p.startsWith('ont.')))},
-  {id:'up',text:'Connect a router LAN port to the switch (uplink)',hint:'Router LAN1–4 ↔ any switch port. Never use the WAN port for the switch.',check:L=>L.patch.some(([x,y])=>{const p=[x,y].sort();return p[0].startsWith('rt.LAN')&&p[1].startsWith('sw.')})},
-  {id:'ppf',text:'Patch two switch ports to the patch panel front (ports 1 and 2)',hint:'Switch P2 ↔ panel F1 and switch P3 ↔ panel F2, for example.',check:L=>['1','2'].every(n=>L.patch.some(([x,y])=>[x,y].includes('pp.F'+n)&&[x,y].some(p=>p.startsWith('sw.'))))},
-  {id:'pc1',text:'Connect PC-01 to patch panel run 1',hint:'PC-01 NIC ↔ panel rear R1 (the run you punched down).',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc1.NIC')&&[x,y].includes('pr.R1'))},
-  {id:'pc2',text:'Connect PC-02 to patch panel run 2',hint:'PC-02 NIC ↔ panel rear R2.',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc2.NIC')&&[x,y].includes('pr.R2'))},
+ info:'Network diagram (5 cables):\n\nWireless Router (LAN) ──▶ Switch\nSwitch ──▶ Patch Panel port 1\nSwitch ──▶ Patch Panel port 2\nPatch Panel port 1 ──▶ PC-01\nPatch Panel port 2 ──▶ PC-02\n\nOnly the patch panel ports you punched down work. Then power on the router and the switch.',
+ objectives:[{id:'up',text:'Connect a router LAN port to the switch (uplink)',hint:'Router LAN1–4 ↔ any switch port. Never use the WAN port for the switch.',check:L=>L.patch.some(([x,y])=>{const p=[x,y].sort();return p[0].startsWith('rt.LAN')&&p[1].startsWith('sw.')})},
+  {id:'ppf',text:'Connect the switch to patch panel ports 1 and 2',hint:'Tap a free switch port, then patch panel port 1. Do the same for port 2.',check:L=>['1','2'].every(n=>L.patch.some(([x,y])=>[x,y].includes('pp.F'+n)&&[x,y].some(p=>p.startsWith('sw.'))))},
+  {id:'pc1',text:'Connect PC-01 to patch panel port 1',hint:'Tap PC-01 NIC, then patch panel port 1.',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc1.NIC')&&[x,y].includes('pr.R1'))},
+  {id:'pc2',text:'Connect PC-02 to patch panel port 2',hint:'Tap PC-02 NIC, then patch panel port 2.',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc2.NIC')&&[x,y].includes('pr.R2'))},
   {id:'pwr',text:'Power on the router and the switch (link lights on)',hint:'Press the power buttons on the router and the switch.',check:L=>L.pw.rt&&L.pw.sw}],
  start(ctx){
   const L=ctx.L;let sel=null;
-  const used=p=>L.patch.find(c=>c.includes(p));
-  const lit=p=>{const c=used(p);if(!c)return false;const o=c[0]===p?c[1]:c[0];const pw=x=>{const d=x.split('.')[0];return PORTS[d].power?L.pw[PORTS[d].power]:true};return pw(p)&&pw(o)};
+  const ui2in=(p,o)=>{if(!p.startsWith('pp.'))return p;const n=p.slice(3);return o&&/^pc\d/.test(o)?'pr.R'+n:'pp.F'+n};
+  const in2ui=p=>p.startsWith('pp.F')?'pp.'+p.slice(4):p.startsWith('pr.R')?'pp.'+p.slice(4):p;
+  const usedAll=p=>L.patch.filter(c=>c.some(x=>in2ui(x)===p));
+  const used=p=>p.startsWith('pp.')?(usedAll(p).length>=2?usedAll(p)[0]:null):L.patch.find(c=>c.includes(p));
+  const lit=p=>{const c=p.startsWith('pp.')?usedAll(p)[0]:used(p);if(c&&p.startsWith('pp.'))p=c.find(x=>in2ui(x)===p);if(!c)return false;const o=c[0]===p?c[1]:c[0];const pw=x=>{const d=x.split('.')[0];return PORTS[d]&&PORTS[d].power?L.pw[PORTS[d].power]:true};return pw(p)&&pw(o)};
   const render=()=>{
-   const dev=k=>{const d=PORTS[k];return `<div class="dev"><span class="nm">${d.name}</span><div class="ports">${d.ports.map(p=>{const id=k+'.'+p;return `<button class="port ${p==='WAN'?'wan':''} ${sel===id?'sel':''} ${used(id)?'used':''}" data-p="${id}"><span class="lk ${lit(id)?'on':''}"></span>${p}</button>`}).join('')}</div>${d.power?`<button class="pwr ${L.pw[d.power]?'on':''}" data-pw="${d.power}">⏻ ${L.pw[d.power]?'ON':'OFF'}</button>`:''}</div>`};
-   ctx.body.innerHTML=`<div class="stage"><div class="panel"><p class="small muted" style="margin:0">Tap a port, then tap another port to connect a cable. Tap a used port to unplug it. Use your 5 crimped cables. Patch panel ports that were not punched down have no link.</p></div><div class="rackwrap" id="rw"><div class="rack">${dev('ont')}${dev('rt')}${dev('sw')}${dev('pp')}${dev('pr')}</div><div class="desk-ports"><div class="dev" style="background:#3a2e22">${dev('pc1').replace('<div class="dev">','').replace(/<\/div>$/,'')}</div><div class="dev" style="background:#3a2e22">${dev('pc2').replace('<div class="dev">','').replace(/<\/div>$/,'')}</div></div><svg class="cables-svg" id="cs"></svg></div></div>`;
+   const dev=k=>{const d=PORTS[k];return `<div class="dev"><span class="nm">${d.name}</span><div class="ports">${d.ports.map(p=>{const id=k+'.'+p;return `<button class="port ${p==='WAN'?'wan':''} ${sel===id?'sel':''} ${used(id)?'used':''} ${k==='pp'&&usedAll(id).length===1?'half':''}" data-p="${id}"><span class="lk ${lit(id)?'on':''}"></span>${p}</button>`}).join('')}</div>${d.power?`<button class="pwr ${L.pw[d.power]?'on':''}" data-pw="${d.power}">⏻ ${L.pw[d.power]?'ON':'OFF'}</button>`:''}</div>`};
+   ctx.body.innerHTML=`<div class="stage"><div class="panel"><p class="small muted" style="margin:0">Tap a port, then another port to connect a cable. Tap a used port to unplug it. Use your 5 crimped cables. A patch panel port takes one cable from the switch and one to a PC.</p></div><div class="rackwrap" id="rw"><div class="rack">${dev('rt')}${dev('sw')}${dev('pp')}</div><div class="desk-ports"><div class="dev" style="background:#3a2e22">${dev('pc1').replace('<div class="dev">','').replace(/<\/div>$/,'')}</div><div class="dev" style="background:#3a2e22">${dev('pc2').replace('<div class="dev">','').replace(/<\/div>$/,'')}</div></div><svg class="cables-svg" id="cs"></svg></div></div>`;
    $$('.port',ctx.body).forEach(b=>b.onclick=()=>tap(b.dataset.p));
    $$('[data-pw]',ctx.body).forEach(b=>b.onclick=()=>{L.pw[b.dataset.pw]=!L.pw[b.dataset.pw];c2link(L);ctx.check();render()});
    requestAnimationFrame(lines);
   };
   const lines=()=>{const svg=$('#cs',ctx.body),rw=$('#rw',ctx.body);if(!svg||!rw)return;const R=rw.getBoundingClientRect();
-   svg.innerHTML=L.patch.map(([a,b],i)=>{const pa=$(`[data-p="${a}"]`,rw),pb=$(`[data-p="${b}"]`,rw);if(!pa||!pb)return '';const A=pa.getBoundingClientRect(),B=pb.getBoundingClientRect();const x1=A.left+A.width/2-R.left,y1=A.top+A.height/2-R.top,x2=B.left+B.width/2-R.left,y2=B.top+B.height/2-R.top;const cy=Math.max(y1,y2)+30;
+   svg.innerHTML=L.patch.map(([a,b],i)=>{const pa=$(`[data-p="${in2ui(a)}"]`,rw),pb=$(`[data-p="${in2ui(b)}"]`,rw);if(!pa||!pb)return '';const A=pa.getBoundingClientRect(),B=pb.getBoundingClientRect();const x1=A.left+A.width/2-R.left,y1=A.top+A.height/2-R.top,x2=B.left+B.width/2-R.left,y2=B.top+B.height/2-R.top;const cy=Math.max(y1,y2)+30;
     return `<path d="M${x1} ${y1} C ${x1} ${cy}, ${x2} ${cy}, ${x2} ${y2}" stroke="${['#2b7fd6','#f2c230','#e2554a','#35d07f','#c06be0','#ff9d2e'][i%6]}" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>`}).join('')};
   const ro=new ResizeObserver(()=>lines());ro.observe(ctx.body);ctx.cleanup.push(()=>ro.disconnect());
   function tap(p){
-   const c=used(p);if(c&&!sel){L.patch=L.patch.filter(x=>x!==c);c2link(L);toast('Cable unplugged.');ctx.check();return render()}
-   if(!sel){sel=p;return render()}
-   if(sel===p){sel=null;return render()}
-   if(used(sel)||used(p)){toast('That port already has a cable. Unplug it first.');sel=null;return render()}
-   const a=sel,b=p,da=a.split('.')[0],db=b.split('.')[0];sel=null;
-   if(da===db){toast('Connecting a device to itself makes a loop. Choose another device.','bad');return render()}
-   const pair=[a,b].sort().join('|');const w=[a,b].find(x=>x==='rt.WAN');
+   const pp=p.startsWith('pp.');
+   if(!sel){const cs=pp?usedAll(p):(used(p)?[used(p)]:[]);if(cs.length&&(!pp||cs.length>=2)){const c=cs[cs.length-1];L.patch=L.patch.filter(x=>x!==c);c2link(L);toast('Cable unplugged.');ctx.check();return render()}sel=p;return render()}
+   if(sel===p){if(pp&&usedAll(p).length){const c=usedAll(p).pop();L.patch=L.patch.filter(x=>x!==c);c2link(L);toast('Cable unplugged.');ctx.check()}sel=null;return render()}
+   const da=sel.split('.')[0],db=p.split('.')[0];
+   if(da===db){toast('Connecting a device to itself makes a loop. Choose another device.','bad');sel=null;return render()}
+   const a=ui2in(sel,db),b=ui2in(p,da);sel=null;
+   if(L.patch.some(c=>c.includes(a)||c.includes(b))){toast(a.startsWith('pr.')||b.startsWith('pr.')?'That patch panel port already goes to a PC.':'That port already has a cable. Unplug it first.');return render()}
    L.patch.push([a,b]);c2link(L);
-   if(w&&![da,db].includes('ont'))ctx.penalty(3,'Only the ISP modem goes into the router\'s WAN port');
-   else if([da,db].includes('ont')&&!w)ctx.penalty(3,'The ISP modem must connect to the router WAN port, not a LAN/switch port');
-   else if([da,db].sort().join()==='pp,pr')ctx.penalty(2,'The front and the rear of the same patch panel port are already joined inside the panel');
-   else if([da,db].includes('pr')&&![da,db].some(d=>d==='pc1'||d==='pc2'))ctx.penalty(2,'The rear runs go out to the PCs, not to the switch');
-   else if([da,db].sort().join()==='pc1,pc2')ctx.penalty(3,'PC-01 and PC-02 should both connect to the switch, not to each other');
+   if([a,b].includes('rt.WAN'))ctx.penalty(3,'The WAN port is the internet line. Connect the switch to a router LAN port');
+   else if([da,db].includes('pp')&&[da,db].includes('rt'))ctx.penalty(2,'The patch panel connects to the switch, not straight to the router');
+   else if([da,db].sort().join()==='pc1,pc2')ctx.penalty(3,'PC-01 and PC-02 should not connect to each other');
+   else if([da,db].some(d=>d==='pc1'||d==='pc2')&&![da,db].includes('pp'))ctx.penalty(2,'The PCs connect through the patch panel');
    ctx.check();render();
   }
   render();
