@@ -476,6 +476,12 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 .ppback{margin-top:10px;background:#15181c;border:2px dashed #3c4f70;border-radius:8px;padding:8px 10px}
 .ppback .dev{background:#202630}.port.plugend{border-radius:8px 8px 3px 3px;background:#1d4f9a;border-color:#7fb0ff}.port.plugend::after{content:"";position:absolute;left:50%;top:-14px;width:10px;height:14px;transform:translateX(-50%);background:#2b6fd6;border-radius:3px 3px 0 0}
 .port.plugend.loose{background:#5a2a2a;border-color:#c66}
+/* TP-Link web admin look */
+.ra.tp{font-family:Verdana,Arial,sans-serif}.tp-top{background:#4acbd6;color:#fff;display:flex;align-items:center;gap:20px;padding:10px 16px}
+.tp-top b{font-size:22px;font-weight:700;letter-spacing:-.5px}.tp-top span{font-size:13px;font-weight:700;line-height:1.3}.tp-top small{font-weight:400;font-size:11px}
+.tpb{background:#fff!important;color:#333!important;border:1px solid #999!important;min-width:110px}.tpb:hover{background:#eef9fa!important}
+.ra.tp .r-nav.tpnav{background:#4acbd6}.ra.tp .tpnav button{background:#fff;color:#333;border-bottom:1px solid #4acbd6;text-align:left;font-size:12px}.ra.tp .tpnav button.on{background:#ffd200;color:#000}
+.ra.tp h4{color:#4acbd6;font-weight:400;font-size:16px}
 
 </style>
 </head>
@@ -2153,11 +2159,12 @@ TASKS.c1_drv={id:'c1_drv',coc:1,title:'Install device drivers',where:'Test Bench
  }};
 
 /* ================= COC 2: SET UP COMPUTER NETWORKS ================= */
+const TPL0=()=>({v2:1,ip:'192.168.0.1',mask:'255.255.255.0',lgw:'',up:false,internet:false,mode:'router',dhcp:{on:true,start:'192.168.0.100',end:'192.168.0.199',gw:'192.168.0.1',dns:'192.168.0.1',lease:120},ssid:'TP-Link_E00C',broadcast:true,sec:'none',key:'',admin:null,time:false,rebooted:false});
 COCS[2]={icon:'🔌',title:'Set Up Computer Networks',sub:'Crimp & test cables · patch the network · configure router & Wi-Fi · IP addressing · file sharing',
- brief:'Welcome to COC 2. Your job: set up a small office LAN. Make 5 patch cables, punch down the patch panel, connect the ISP modem, router, switch, patch panel and two PCs, configure the wireless router, give the PCs static IPs, and share a folder between them.',
+ brief:'Welcome to COC 2. Your job: set up a small office LAN. Make 5 patch cables, punch down the patch panel, connect the router, switch, patch panel, Server PC and Client PC, set up the TP-Link router as an access point, and give both PCs static IPs (192.168.100.x).',
  tasks:['c2_crimp','c2_punch','c2_patch','c2_router','c2_pc1','c2_pc2'],
  lab:()=>{const L={made:0,punch:{},patch:[],pw:{rt:false,sw:false},
-  router:{ip:'192.168.1.1',up:false,internet:false,dhcp:{on:true,start:'192.168.1.100',end:'192.168.1.199'},ssid:'NETLINK_5A3C',broadcast:true,sec:'none',key:'',admin:'admin',lease:120,rebooted:false},
+  router:TPL0(),
   nodes:{'PC-01':mkNode({hostname:'DESKTOP-PC4K1AB',accounts:{student:{pw:'Css@2026'}},mac:'B4-2E-99-31-0A-11'}),'PC-02':mkNode({hostname:'DESKTOP-9QW2LZE',accounts:{student:{pw:'Css@2026'}},mac:'B4-2E-99-31-0A-12'}),LAPTOP:mkNode({hostname:'TECH-LAPTOP',accounts:{tech:{pw:'tech'}},mac:'3C-52-82-1A-7F-0E',seg:'rt'})}};c2link(L);return L},
  room:{floor:['#24343a','#2a3b42'],wall:['#3d5a5f','#2c4549'],start:{x:470,y:560},objs:[
   {type:'board',wall:1,solid:false,x:250,y:18,w:300,h:60,text:['COC 2','Set Up Computer Networks']},
@@ -2166,11 +2173,11 @@ COCS[2]={icon:'🔌',title:'Set Up Computer Networks',sub:'Crimp & test cables �
   {type:'crimp',x:220,y:310,w:210,h:72,label:'Crimping Table',tasks:['c2_crimp']},{type:'chair',x:312,y:394,w:26,h:20},
   {type:'rack',x:460,y:100,w:90,h:70,label:'Network Rack',tasks:['c2_punch','c2_patch']},
   {type:'laptop',x:590,y:100,w:150,h:62,label:'Router & Tech Laptop',tasks:['c2_router']},
-  {type:'pc',x:560,y:330,w:160,h:62,label:'PC-01',tasks:['c2_pc1']},{type:'chair',x:627,y:404,w:26,h:20},
-  {type:'pc',x:760,y:330,w:160,h:62,label:'PC-02',tasks:['c2_pc2']},{type:'chair',x:827,y:404,w:26,h:20},
+  {type:'pc',x:560,y:330,w:160,h:62,label:'Server PC',tasks:['c2_pc1']},{type:'chair',x:627,y:404,w:26,h:20},
+  {type:'pc',x:760,y:330,w:160,h:62,label:'Client PC',tasks:['c2_pc2']},{type:'chair',x:827,y:404,w:26,h:20},
   {type:'plant',x:24,y:540,w:30,h:30},{type:'plant',x:906,y:100,w:30,h:30},{type:'extinguisher',x:210,y:108,w:14,h:28},
   {type:'door',exit:1,solid:false,x:944,y:470,w:16,h:90}]}};
-const PORTS={ont:{name:'ISP Modem (ONT)',ports:['LAN1','LAN2'],power:null},rt:{name:'Wireless Router',ports:['WAN','LAN1','LAN2','LAN3','LAN4'],power:'rt'},sw:{name:'8-Port Switch',ports:['P1','P2','P3','P4','P5','P6','P7','P8'],power:'sw'},pp:{name:'Patch Panel (front)',ports:['1','2','3','4','5','6','7','8'],power:null},pr:{name:'Patch Panel back cables',ports:['R1','R2'],power:null},pc1:{name:'PC-01 (NIC)',ports:['NIC'],power:null},pc2:{name:'PC-02 (NIC)',ports:['NIC'],power:null}};
+const PORTS={ont:{name:'ISP Modem (ONT)',ports:['LAN1','LAN2'],power:null},rt:{name:'Wireless Router',ports:['WAN','LAN1','LAN2','LAN3','LAN4'],power:'rt'},sw:{name:'8-Port Switch',ports:['P1','P2','P3','P4','P5','P6','P7','P8'],power:'sw'},pp:{name:'Patch Panel (front)',ports:['1','2','3','4','5','6','7','8'],power:null},pr:{name:'Patch Panel back cables',ports:['R1','R2'],power:null},pc1:{name:'Server PC (NIC)',ports:['NIC'],power:null},pc2:{name:'Client PC (NIC)',ports:['NIC'],power:null}};
 function c2link(L){
  const has=(a,b)=>L.patch.some(([x,y])=>(x.startsWith(a)&&y.startsWith(b))||(x.startsWith(b)&&y.startsWith(a)));
  const swUp=L.pw.sw,rtUp=L.pw.rt;
@@ -2266,8 +2273,8 @@ function endIssues(E,n){const r=[];if(E.st!=='crimped')return [`End ${n}: not cr
 const STEPS=[['boot','Slide on the boot'],['strip','Strip the jacket'],['untw','Untwist the pairs'],['arr','Arrange & trim the wires'],['plug','Push on the RJ45'],['crimp','Crimp the connector']];
 function stepDone(E,k){const o=['reel','cut','stripped','untwisted','trimmed','inserted','crimped'],i=o.indexOf(E.st);return {boot:E.boot,strip:i>=2,untw:i>=3,arr:i>=4,plug:i>=5,crimp:i>=6}[k]}
 TASKS.c2_crimp={id:'c2_crimp',coc:2,title:'Make and test 5 straight-through cables',where:'Crimping Table',
- info:'Make 5 straight-through Cat6 patch cables (Router→Switch, Switch→Patch panel ×2, Patch panel→PC ×2), (T568B on both ends, with boots).\n\n• Tap a tool on the pegboard or bench to pick it up, then tap the cable to use it.\n• The crimper has several blades and dies. Choose the right one!\n• Drag along each twisted pair to untwist it. Drag wires sideways to arrange them (left = pin 1, clip facing down).\n• Drag the RJ45 down onto the wires.\n\nNobody tells you if a step is wrong. The LAN tester will!',
- objectives:[['c1','Cable 1 (Router → Switch)'],['c2','Cable 2 (Switch → Patch panel 1)'],['c3','Cable 3 (Switch → Patch panel 2)'],['c4','Cable 4 (Patch panel → PC-01)'],['c5','Cable 5 (Patch panel → PC-02)']].map(([id,t],i)=>({id,text:t+' passes the LAN tester and inspection',hint:i?'If an LED never lights, that wire is open. If the numbers do not match, the order is wrong. Cut off the bad end and redo it.':'T568B: W/O, O, W/G, Bl, W/Bl, G, W/Br, Br. Trim to about 13 mm. Clip facing DOWN. Push the plug all the way. Squeeze the crimper until it clicks.',check:L=>L.made>=i+1})),
+ info:'Make 5 straight-through Cat6 patch cables (Router→Switch, Switch→Patch panel ×2, Patch panel→Server PC and Client PC), (T568B on both ends, with boots).\n\n• Tap a tool on the pegboard or bench to pick it up, then tap the cable to use it.\n• The crimper has several blades and dies. Choose the right one!\n• Drag along each twisted pair to untwist it. Drag wires sideways to arrange them (left = pin 1, clip facing down).\n• Drag the RJ45 down onto the wires.\n\nNobody tells you if a step is wrong. The LAN tester will!',
+ objectives:[['c1','Cable 1 (Router → Switch)'],['c2','Cable 2 (Switch → Patch panel 1)'],['c3','Cable 3 (Switch → Patch panel 2)'],['c4','Cable 4 (Patch panel port 1 back → Server PC)'],['c5','Cable 5 (Patch panel port 2 back → Client PC)']].map(([id,t],i)=>({id,text:t+' passes the LAN tester and inspection',hint:i?'If an LED never lights, that wire is open. If the numbers do not match, the order is wrong. Cut off the bad end and redo it.':'T568B: W/O, O, W/G, Bl, W/Bl, G, W/Br, Br. Trim to about 13 mm. Clip facing DOWN. Push the plug all the way. Squeeze the crimper until it clicks.',check:L=>L.made>=i+1})),
  start(ctx){
   const L=ctx.L,f=ctx.R.flags;
   const newEnd=st=>({st,boot:false,strip:0,tw:[TW,TW,TW,TW],order:NATURAL.slice(),L:0,plug:null,crimp:'none'});
@@ -2446,11 +2453,11 @@ TASKS.c2_punch={id:'c2_punch',coc:2,title:'Punch down the patch panel',where:'Ne
    if(L.patch)c2link(L);ctx.check()}
   render()}};
 TASKS.c2_patch={id:'c2_patch',coc:2,title:'Connect the network devices',where:'Network Rack',
- info:'Network diagram (5 cables):\n\nWireless Router (LAN) ──▶ Switch\nSwitch ──▶ Patch Panel port 1 (front)\nSwitch ──▶ Patch Panel port 2 (front)\nPatch Panel port 1 (back) ──▶ PC-01\nPatch Panel port 2 (back) ──▶ PC-02\n\nOnly the patch panel ports you punched down work. Then power on the router and the switch.',
+ info:'Network diagram (5 cables):\n\n1. Router LAN 1 ──▶ Switch port 1\n2. Switch port 2 ──▶ Patch Panel port 1 (front)\n3. Switch port 3 ──▶ Patch Panel port 2 (front)\n4. Patch Panel port 1 (back) ──▶ Server PC\n5. Patch Panel port 2 (back) ──▶ Client PC\n\nOnly the patch panel ports you punched down work. Then power on the router and the switch.',
  objectives:[{id:'up',text:'Connect a router LAN port to the switch (uplink)',hint:'Router LAN1–4 ↔ any switch port. Never use the WAN port for the switch.',check:L=>L.patch.some(([x,y])=>{const p=[x,y].sort();return p[0].startsWith('rt.LAN')&&p[1].startsWith('sw.')})},
   {id:'ppf',text:'Connect the switch to patch panel ports 1 and 2',hint:'Tap a free switch port, then patch panel port 1. Do the same for port 2.',check:L=>['1','2'].every(n=>L.patch.some(([x,y])=>[x,y].includes('pp.F'+n)&&[x,y].some(p=>p.startsWith('sw.'))))},
-  {id:'pc1',text:'Connect PC-01 to patch panel port 1',hint:'Tap PC-01 NIC, then the back cable of patch panel port 1 (R1).',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc1.NIC')&&[x,y].includes('pr.R1'))},
-  {id:'pc2',text:'Connect PC-02 to patch panel port 2',hint:'Tap PC-02 NIC, then the back cable of patch panel port 2 (R2).',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc2.NIC')&&[x,y].includes('pr.R2'))},
+  {id:'pc1',text:'Connect the Server PC to the back cable of patch panel port 1',hint:'Tap the Server PC NIC, then the back cable of patch panel port 1 (R1).',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc1.NIC')&&[x,y].includes('pr.R1'))},
+  {id:'pc2',text:'Connect the Client PC to the back cable of patch panel port 2',hint:'Tap the Client PC NIC, then the back cable of patch panel port 2 (R2).',check:L=>L.patch.some(([x,y])=>[x,y].includes('pc2.NIC')&&[x,y].includes('pr.R2'))},
   {id:'pwr',text:'Power on the router and the switch (link lights on)',hint:'Press the power buttons on the router and the switch.',check:L=>L.pw.rt&&L.pw.sw}],
  start(ctx){
   const L=ctx.L;let sel=null;
@@ -2481,77 +2488,88 @@ TASKS.c2_patch={id:'c2_patch',coc:2,title:'Connect the network devices',where:'N
    if([a,b].includes('rt.WAN'))ctx.penalty(3,'The WAN port is the internet line. Connect the switch to a router LAN port');
    else if([da,db].includes('pp')&&[da,db].includes('rt'))ctx.penalty(2,'The patch panel connects to the switch, not straight to the router');
    else if([da,db].includes('pr')&&![da,db].some(d=>d==='pc1'||d==='pc2'))ctx.penalty(2,'The back cables of the patch panel go to the PCs');
-   else if([da,db].sort().join()==='pc1,pc2')ctx.penalty(3,'PC-01 and PC-02 should not connect to each other');
+   else if([da,db].sort().join()==='pc1,pc2')ctx.penalty(3,'The Server PC and Client PC should not connect to each other');
    else if([da,db].some(d=>d==='pc1'||d==='pc2')&&![da,db].includes('pr'))ctx.penalty(2,'The PCs connect to the cables at the back of the patch panel');
    ctx.check();render();
   }
   render();
  }};
-/* ---------- Router web admin (used by Edge) ---------- */
+/* ---------- Router web admin (used by Edge): TP-Link TL-WR840N ---------- */
 function routerPage(body,D){
- const R=D.L.router;let page='login',tab='status',dirty=false;
+ const R=D.L.router;if(!R.v2)Object.assign(R,TPL0(),{up:R.up});let page=R.admin?'login':'create',tab='status';
  const rf=(l,h)=>`<div class="rf"><span>${l}</span>${h}</div>`,DT='oninput="this.closest(\'.ra\')._d=1" onchange="this.closest(\'.ra\')._d=1"';
- const secName=k=>({none:'Disable Security (Open)',wep:'WEP',wpa:'WPA-PSK (TKIP)',wpa2:'WPA2-PSK (AES)'}[k]);
+ const top=`<div class="tp-top"><b>tp-link</b><span>TP-Link Wireless N Router WR840N<br><small>Model No. TL-WR840N</small></span></div>`;
+ const restart=async(msg,after)=>{body.innerHTML=`<div class="ra tp">${top}<div style="padding:40px;text-align:center"><h3>${msg}</h3><div style="height:10px;background:#ddd;max-width:360px;margin:auto"><div id="rbb" style="height:100%;width:0;background:#4acbd6"></div></div><p id="rbt">0%</p></div></div>`;
+  for(let i=0;i<=100;i+=5){await sleep(70);const b=$('#rbb',body);if(!b)return;b.style.width=i+'%';$('#rbt',body).textContent=i+'%'}R.rebooted=true;after()};
  const render=()=>{
-  if(page==='login'){body.innerHTML=`<div class="ra"><div class="rlogin"><div class="r-top" style="margin:-24px -24px 16px">NetLink</div><p>Please log in to manage your router.</p><input id="ru" placeholder="Username" autocapitalize="off" autocomplete="off"><input id="rp" type="password" placeholder="Password"><div class="rerr" id="re"></div><button class="rbtn" style="width:100%" id="rl">Log In</button></div></div>`;
-   const go=()=>{if($('#ru',body).value.trim()==='admin'&&$('#rp',body).value===R.admin){page='admin';D.changed('rlogin');render()}else{$('#re',body).textContent='Incorrect username or password.';D.changed('rloginfail')}};$('#rl',body).onclick=go;$$('input',body).forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go()});return}
-  let f='';
-  if(tab==='status')f=`<h4>Status</h4><table style="border-collapse:collapse">${[['Firmware','3.16.9 Build 20260112'],['LAN IP',R.ip],['Wireless name',R.ssid],['Security',secName(R.sec)],['DHCP server',(R.dhcp.on?'Enabled':'Disabled')+` (${R.dhcp.start} – ${R.dhcp.end})`],['WAN',R.internet?'Dynamic IP · Connected':'Disconnected (check WAN cable)']].map(r=>`<tr><td style="padding:6px 12px 6px 0;color:#666">${r[0]}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
-  if(tab==='wl')f=`<h4>Wireless Settings</h4>${rf('Wireless Network Name (SSID):',`<input id="wS" value="${esc(R.ssid)}" maxlength="32" autocapitalize="off" ${DT}>`)}${rf('Region:','<select><option>Philippines</option></select>')}${rf('Channel:','<select><option>Auto</option><option>1</option><option>6</option><option>11</option></select>')}${rf('',`<label><input type="checkbox" id="wB" ${R.broadcast?'checked':''} ${DT}> Enable SSID Broadcast</label>`)}<div class="rerr" id="re"></div><button class="rbtn" data-s="wl">Save</button>`;
-  if(tab==='sec')f=`<h4>Wireless Security</h4>${['none','wep','wpa','wpa2'].map(k=>`<label style="display:block;margin:7px 0"><input type="radio" name="sec" value="${k}" ${R.sec===k?'checked':''} ${DT}> ${secName(k)}${k==='wpa2'?' (Recommended)':''}</label>`).join('')}${rf('Wireless Password:',`<input id="wK" value="${esc(R.key)}" autocapitalize="off" ${DT}>`)}<p style="color:#777;font-size:12px">Enter 8 to 63 ASCII characters.</p><div class="rerr" id="re"></div><button class="rbtn" data-s="sec">Save</button>`;
-  if(tab==='dhcp')f=`<h4>DHCP Settings</h4>${rf('DHCP Server:',`<label><input type="radio" name="dh" value="1" ${R.dhcp.on?'checked':''} ${DT}> Enable</label>&nbsp;<label><input type="radio" name="dh" value="0" ${R.dhcp.on?'':'checked'} ${DT}> Disable</label>`)}${rf('Start IP Address:',`<input id="dS" value="${R.dhcp.start}" inputmode="decimal" ${DT}>`)}${rf('End IP Address:',`<input id="dE" value="${R.dhcp.end}" inputmode="decimal" ${DT}>`)}${rf('Lease Time (min):',`<input value="${R.lease}" inputmode="numeric">`)}${rf('Default Gateway:',`<input value="${R.ip}" disabled>`)}<div class="rerr" id="re"></div><button class="rbtn" data-s="dhcp">Save</button>`;
-  if(tab==='sys')f=`<h4>System Tools · Administrator Password</h4>${rf('Old Password:',`<input id="aO" type="password" ${DT}>`)}${rf('New Password:',`<input id="aN" type="password" ${DT}>`)}${rf('Confirm New Password:',`<input id="aC" type="password" ${DT}>`)}<div class="rerr" id="re"></div><button class="rbtn" data-s="sys">Save</button><hr style="margin:18px 0;border:0;border-top:1px solid #e3e8ee"><h4>Reboot</h4><p>Reboot the router to apply all saved settings.</p><button class="rbtn" style="background:#c62828" id="rb">Reboot</button>`;
-  const tabs=[['status','Status'],['wl','Wireless'],['sec','Wireless Security'],['dhcp','DHCP'],['sys','System Tools']];
-  body.innerHTML=`<div class="ra"><div class="r-top">NetLink <small>N300 Wireless Router · ${R.ip}</small></div><div class="r-wrap"><nav class="r-nav">${tabs.map(([k,l])=>`<button class="${tab===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</nav><div class="r-main">${f}</div></div></div>`;
+  if(page==='create'){body.innerHTML=`<div class="ra tp">${top}<div class="rlogin"><h3 style="font-weight:400">Create Login Password</h3><p style="color:#888;font-size:12px">For security, please create a login password for management.</p><input id="p1" type="password" placeholder="Password"><input id="p2" type="password" placeholder="Confirm Password"><div class="rerr" id="re"></div><button class="rbtn tpb" style="width:100%" id="go">Let's Get Started</button></div></div>`;
+   $('#go',body).onclick=()=>{const a=$('#p1',body).value,b=$('#p2',body).value;if(a.length<6)return $('#re',body).textContent='Use at least 6 characters.';if(a!==b)return $('#re',body).textContent='The passwords do not match.';R.admin=a;D.changed('rcreate',a);page='admin';render()};return}
+  if(page==='login'){body.innerHTML=`<div class="ra tp">${top}<div class="rlogin"><input id="rp" type="password" placeholder="Password"><div class="rerr" id="re"></div><button class="rbtn tpb" style="width:100%" id="rl">Log In</button></div></div>`;
+   const go=()=>{if($('#rp',body).value===R.admin){page='admin';D.changed('rlogin',R.ip);render()}else{$('#re',body).textContent='Incorrect password.';D.changed('rloginfail')}};$('#rl',body).onclick=go;$('#rp',body).onkeydown=e=>{if(e.key==='Enter')go()};return}
+  let f='';const modes=[['router','Wireless Router'],['wisp','WISP'],['ap','Access Point'],['re','Range Extender']];
+  if(tab==='status')f=`<h4>Status</h4><table style="border-collapse:collapse">${[['Operation Mode',modes.find(m=>m[0]===R.mode)[1]],['LAN IP',R.ip],['Wireless Name',R.ssid],['Security',R.sec==='wpa2'?'WPA2-PSK / AES':'Disabled'],['DHCP',`${R.dhcp.on?'Enabled':'Disabled'} (${R.dhcp.start} – ${R.dhcp.end})`],['System Time',R.time?new Date().toLocaleString():'1970-01-01 00:09:01']].map(r=>`<tr><td style="padding:6px 14px 6px 0;color:#666">${r[0]}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
+  if(tab==='mode')f=`<h4>Operation Mode</h4><p style="color:#666">Select an Operation Mode:</p>${modes.map(([k,l])=>`<label style="display:block;margin:6px 0"><input type="radio" name="om" value="${k}" ${R.mode===k?'checked':''} ${DT}> ${l}</label>`).join('')}<button class="rbtn tpb" data-s="mode">Save</button><p style="color:#c33;font-size:12px">The device will restart after you click Save.</p>`;
+  if(tab==='lan')f=`<h4>LAN Settings</h4>${rf('LAN Type:','<select><option>Static IP</option><option>Smart IP(DHCP)</option></select>')}${rf('MAC Address:','A8:42:A1:6C:E0:0C')}${rf('IP Address:',`<input id="lI" value="${R.ip}" inputmode="decimal" ${DT}>`)}${rf('Subnet Mask:',`<input id="lM" value="${R.mask}" inputmode="decimal" ${DT}>`)}${rf('Gateway:',`<input id="lG" value="${R.lgw||''}" inputmode="decimal" ${DT}> <small style="color:#c33">(optional)</small>`)}<div class="rerr" id="re"></div><button class="rbtn tpb" data-s="lan">Save</button><p style="color:#888;font-size:12px">If you change the IP address, you must use the new IP address to log in.</p>`;
+  if(tab==='wl')f=`<h4>Wireless Settings</h4>${rf('Wireless:','<label><input type="radio" checked> Enable</label>')}${rf('Wireless Network Name:',`<input id="wS" value="${esc(R.ssid)}" maxlength="32" autocapitalize="off" ${DT}> <small>(Also called SSID)</small>`)}${rf('Mode:','<select><option>11bgn mixed</option></select>')}${rf('Channel:','<select><option>Auto</option></select>')}${rf('',`<label><input type="checkbox" id="wB" ${R.broadcast?'checked':''} ${DT}> Enable SSID Broadcast</label>`)}<div class="rerr" id="re"></div><button class="rbtn tpb" data-s="wl">Save</button>`;
+  if(tab==='sec')f=`<h4>Wireless Security Settings</h4><label style="display:block;margin:6px 0"><input type="radio" name="sec" value="none" ${R.sec!=='wpa2'?'checked':''} ${DT}> Disable Wireless Security</label><label style="display:block;margin:6px 0"><input type="radio" name="sec" value="wpa2" ${R.sec==='wpa2'?'checked':''} ${DT}> WPA/WPA2/WPA3 - Personal (Recommended)</label>${rf('Version:','<select id="sV"><option>Auto</option><option selected>WPA2-PSK</option></select>')}${rf('Encryption:','<select id="sE"><option>Auto</option><option selected>AES</option></select>')}${rf('Wireless Password:',`<input id="wK" value="${esc(R.key)}" autocapitalize="off" ${DT}>`)}<div class="rerr" id="re"></div><button class="rbtn tpb" data-s="sec">Save</button>`;
+  if(tab==='dhcp')f=`<h4>DHCP Settings</h4>${rf('DHCP Server:',`<label><input type="radio" name="dh" value="0" ${R.dhcp.on?'':'checked'} ${DT}> Disable</label>&nbsp;<label><input type="radio" name="dh" value="1" ${R.dhcp.on?'checked':''} ${DT}> Enable</label>`)}${rf('Start IP Address:',`<input id="dS" value="${R.dhcp.start}" inputmode="decimal" ${DT}>`)}${rf('End IP Address:',`<input id="dE" value="${R.dhcp.end}" inputmode="decimal" ${DT}>`)}${rf('Address Lease Time:',`<input id="dL" value="${R.dhcp.lease||1}" inputmode="numeric" style="width:60px" ${DT}> minutes`)}${rf('Default Gateway:',`<input id="dG" value="${R.dhcp.gw||''}" inputmode="decimal" ${DT}>`)}${rf('Default Domain:','<input>')}${rf('DNS Server:',`<input id="dD" value="${R.dhcp.dns||''}" inputmode="decimal" ${DT}>`)}${rf('Secondary DNS Server:','<input value="0.0.0.0">')}<div class="rerr" id="re"></div><button class="rbtn tpb" data-s="dhcp">Save</button>`;
+  if(tab==='time')f=`<h4>Time Settings</h4>${rf('Time Zone:','<select style="max-width:300px"><option>(GMT+08:00) Beijing, Hong Kong, Manila, Singapore</option><option>(GMT) Greenwich Mean Time</option></select>')}${rf('Date:',`<input id="tD" value="${R.time?new Date().toLocaleDateString():'1970-1-1'}" style="width:120px" ${DT}>`)}${rf('Time:',`<input id="tT" value="${R.time?new Date().toLocaleTimeString():'0:09:01'}" style="width:120px" ${DT}> <button class="rbtn" id="gp" style="padding:4px 10px">Get from PC</button>`)}${rf('NTP Server 1:','<input value="eu.pool.ntp.org">')}<div class="rerr" id="re"></div><button class="rbtn tpb" data-s="time">Save</button>`;
+  if(tab==='reboot')f=`<h4>Reboot</h4><p>Click this button to reboot the device.</p><button class="rbtn" style="background:#c62828" id="rb">Reboot</button>`;
+  const tabs=[['status','Status'],['qs','Quick Setup'],['mode','Operation Mode'],['lan','Network'],['wl','Wireless'],['sec','- Wireless Security'],['gn','Guest Network'],['dhcp','DHCP'],['time','System Tools'],['reboot','- Reboot'],['out','Logout']];
+  body.innerHTML=`<div class="ra tp">${top}<div class="r-wrap"><nav class="r-nav tpnav">${tabs.map(([k,l])=>`<button class="${tab===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</nav><div class="r-main">${f}</div></div></div>`;
   const ra=$('.ra',body);ra._d=0;
-  $$('[data-t]',body).forEach(b=>b.onclick=()=>{if(ra._d){toast('⚠ Unsaved changes were discarded. Click <b>Save</b> before leaving a page!','bad');D.changed('rdiscard')}tab=b.dataset.t;render()});
-  $$('[data-s]',body).forEach(b=>b.onclick=()=>save(b.dataset.s));if($('#rb',body))$('#rb',body).onclick=reboot;
+  $$('[data-t]',body).forEach(b=>b.onclick=()=>{const t=b.dataset.t;if(t==='qs'||t==='gn')return toast('Not needed for this task.');if(t==='out'){page='login';return render()}if(ra._d){toast('⚠ Unsaved changes were discarded. Click <b>Save</b> before leaving a page!','bad');D.changed('rdiscard')}tab=t;render()});
+  $$('[data-s]',body).forEach(b=>b.onclick=()=>save(b.dataset.s));if($('#rb',body))$('#rb',body).onclick=()=>restart('Rebooting...',()=>{page='login';render()});
+  if($('#gp',body))$('#gp',body).onclick=()=>{$('#tD',body).value=new Date().toLocaleDateString();$('#tT',body).value=new Date().toLocaleTimeString();ra._d=1};
  };
- function save(t){const err=m=>{$('#re',body).textContent=m},q=x=>$(x,body);
-  if(t==='wl'){const v=q('#wS').value.trim();if(!v)return err('SSID cannot be empty.');R.ssid=v;R.broadcast=q('#wB').checked}
-  if(t==='sec'){const s=$('input[name=sec]:checked',body).value,k=q('#wK').value;if(s!=='none'&&(k.length<8||k.length>63))return err('The password must be 8–63 characters.');R.sec=s;R.key=k}
-  if(t==='dhcp'){const on=$('input[name=dh]:checked',body).value==='1',a=q('#dS').value.trim(),b=q('#dE').value.trim();if(!validIP(a)||!validIP(b)||!sameNet(a,R.ip,'255.255.255.0')||!sameNet(b,R.ip,'255.255.255.0'))return err('Addresses must be valid and inside 192.168.1.x');if(ip2n(a)>ip2n(b))return err('The start address must be lower than the end address.');if(a===R.ip||b===R.ip)return err('The pool cannot include the router address.');R.dhcp={on,start:a,end:b}}
-  if(t==='sys'){const o=q('#aO').value,nw=q('#aN').value,c=q('#aC').value;if(o!==R.admin)return err('The old password is incorrect.');if(nw.length<8)return err('The new password must be at least 8 characters.');if(nw!==c)return err('Passwords do not match.');if(nw===o)return err('The new password must be different.');R.admin=nw;q('#aO').value=q('#aN').value=q('#aC').value=''}
-  $('.ra',body)._d=0;err('');R.rebooted=false;toast('💾 Saved. Settings take effect after a reboot.','good');D.changed('rsave',t)}
- async function reboot(){if($('.ra',body)._d){toast('⚠ Unsaved changes on this page were discarded.','bad');D.changed('rdiscard')}
-  body.innerHTML=`<div class="ra" style="padding:40px;text-align:center"><h3>Rebooting...</h3><div style="height:10px;background:#ddd;max-width:360px;margin:auto"><div id="rbb" style="height:100%;width:0;background:#0b6bcb;transition:width .1s"></div></div><p id="rbt">0%</p></div>`;
-  for(let i=0;i<=100;i+=5){await sleep(80);const b=$('#rbb',body);if(!b)return;b.style.width=i+'%';$('#rbt',body).textContent=i+'%'}
-  R.rebooted=true;page='login';tab='status';D.changed('rreboot');render()}
+ function save(t){const err=m=>{$('#re',body)&&($('#re',body).textContent=m)},q=x=>$(x,body),inNet=x=>validIP(x)&&sameNet(x,R.ip,R.mask);
+  if(t==='mode'){R.mode=$('input[name=om]:checked',body).value;D.changed('rsave','mode');return restart('The device is restarting...',()=>{page='login';render()})}
+  if(t==='wl'){const v=q('#wS').value.trim();if(!v)return err('The wireless network name cannot be empty.');R.ssid=v;R.broadcast=q('#wB').checked}
+  if(t==='sec'){const sv=$('input[name=sec]:checked',body).value,k=q('#wK').value;if(sv==='wpa2'&&(k.length<8||k.length>63))return err('The password must be 8–63 characters.');R.sec=sv;R.key=k}
+  if(t==='lan'){const ip=q('#lI').value.trim(),m=q('#lM').value.trim(),g=q('#lG').value.trim();if(!validIP(ip))return err('Invalid IP address.');if(!validIP(m))return err('Invalid subnet mask.');if(g&&!validIP(g))return err('Invalid gateway.');
+   const old=R.ip;Object.assign(R,{ip,mask:m,lgw:g});if(!sameNet(R.dhcp.start,ip,m)){const base=ip.split('.').slice(0,3).join('.');R.dhcp.start=base+'.100';R.dhcp.end=base+'.199';R.dhcp.gw=ip;R.dhcp.dns=ip}
+   D.changed('rsave','lan');const lp=D.L.nodes.LAPTOP;if(lp&&lp.dhcp&&typeof dhcpRenew==='function'){lp.ip='';dhcpRenew(D.L,lp)}
+   return restart('The device is restarting...',()=>{if(ip!==old){body.innerHTML=`<div style="padding:40px;color:#444;font-family:Segoe UI,sans-serif"><div style="font-size:40px">😟</div><h2 style="font-weight:400">Hmm… can't reach this page</h2><p><b>${esc(old)}</b> took too long to respond.</p><p style="color:#999;font-size:12px">The router now uses a new address. Type it in the address bar.</p></div>`;return}page='login';render()})}
+  if(t==='dhcp'){const on=$('input[name=dh]:checked',body).value==='1',a=q('#dS').value.trim(),b=q('#dE').value.trim(),g=q('#dG').value.trim(),dn=q('#dD').value.trim();
+   if(!inNet(a)||!inNet(b))return err(`Addresses must be valid and inside ${R.ip.split('.').slice(0,3).join('.')}.x`);if(ip2n(a)>ip2n(b))return err('The start address must be lower than the end address.');
+   if(g&&!validIP(g))return err('Invalid default gateway.');if(dn&&!validIP(dn))return err('Invalid DNS server.');R.dhcp={on,start:a,end:b,gw:g,dns:dn,lease:+q('#dL').value||1}}
+  if(t==='time'){R.time=true}
+  $('.ra',body)._d=0;err('');toast('💾 Saved.','good');D.changed('rsave',t);render()}
  render();
 }
 /* ---------- Task 3: Router ---------- */
-TASKS.c2_router={id:'c2_router',coc:2,title:'Configure the wireless router',where:'Router & Tech Laptop',
- info:'Your laptop is plugged into the router. Open Microsoft Edge and go to the router address on its sticker:\n\nNetLink N300 · http://192.168.1.1 · admin / admin\n\nSettings required:\n• SSID: CSS-NCII-LAB\n• Security: strongest available, password Tesda@2026\n• DHCP pool: 192.168.1.100 – 192.168.1.150\n• New admin password: at least 8 characters (your choice)\n• Save every page, then Reboot the router.',
- objectives:[{id:'login',text:'Log in to the router web page',hint:'In Edge, type 192.168.1.1 in the address bar. Login: admin / admin.',check:(L,f)=>f.login},
-  {id:'ssid',text:'Set the SSID to CSS-NCII-LAB',hint:'Wireless tab › SSID › Save. It is case-sensitive.',check:L=>L.router.ssid==='CSS-NCII-LAB'&&L.router.broadcast},
-  {id:'sec',text:'Set WPA2-PSK (AES) with password Tesda@2026',hint:'Wireless Security tab › WPA2-PSK (AES) › password › Save.',check:L=>L.router.sec==='wpa2'&&L.router.key==='Tesda@2026'},
-  {id:'dhcp',text:'Set the DHCP pool to 192.168.1.100 – 192.168.1.150',hint:'DHCP tab › Start 192.168.1.100, End 192.168.1.150 › Save.',check:L=>L.router.dhcp.on&&L.router.dhcp.start==='192.168.1.100'&&L.router.dhcp.end==='192.168.1.150'},
-  {id:'adm',text:'Change the default admin password',hint:'System Tools › Old: admin, New: (8+ chars) › Save.',check:L=>L.router.admin!=='admin'},
-  {id:'rb',text:'Reboot the router to apply the settings',hint:'System Tools › Reboot. Do this last, after saving everything.',check:(L,f)=>L.router.rebooted&&f.login&&L.router.ssid==='CSS-NCII-LAB'&&L.router.sec==='wpa2'&&L.router.admin!=='admin'&&L.router.dhcp.end==='192.168.1.150'}],
+TASKS.c2_router={id:'c2_router',coc:2,title:'Configure the TP-Link router',where:'Router & Tech Laptop',
+ info:'Router: TP-Link TL-WR840N (factory settings). Your laptop is plugged into it with a LAN cable. Open Microsoft Edge and go to 192.168.0.1.\n\n1. Create the login password: admin.123\n2. Operation Mode › Access Point › Save (it restarts)\n3. Wireless › change the wireless network name › Save\n4. Wireless Security › WPA2-PSK, AES, password admin.123 › Save\n5. Network › LAN › IP 192.168.100.12, mask 255.255.255.0 › Save (it restarts)\n6. Log in again at 192.168.100.12\n7. DHCP › Start 192.168.100.1, End 192.168.100.99, gateway and DNS 192.168.100.12 › Save\n8. System Tools › Time Settings › Get from PC › Save',
+ objectives:[{id:'pw',text:'Create the router login password admin.123',hint:'Edge › 192.168.0.1 › type admin.123 twice › Let\'s Get Started.',check:L=>L.router.admin==='admin.123'},
+  {id:'ap',text:'Set Operation Mode to Access Point',hint:'Operation Mode › Access Point › Save. The router restarts.',check:L=>L.router.mode==='ap'},
+  {id:'ssid',text:'Change the wireless network name (SSID)',hint:'Wireless › Wireless Network Name › Save.',check:L=>L.router.ssid&&L.router.ssid!=='TP-Link_E00C'},
+  {id:'sec',text:'Set wireless security WPA2-PSK (AES), password admin.123',hint:'Wireless Security › WPA/WPA2/WPA3 - Personal › WPA2-PSK, AES › password admin.123 › Save.',check:L=>L.router.sec==='wpa2'&&L.router.key==='admin.123'},
+  {id:'lan',text:'Change the router LAN IP to 192.168.100.12 and log in again',hint:'Network › LAN › 192.168.100.12 / 255.255.255.0 › Save. Then type 192.168.100.12 in Edge.',check:(L,f)=>L.router.ip==='192.168.100.12'&&L.router.mask==='255.255.255.0'&&f.newlogin},
+  {id:'dhcp',text:'Set DHCP: 192.168.100.1 – 192.168.100.99, gateway and DNS 192.168.100.12',hint:'DHCP › DHCP Settings › fill in the values › Save.',check:L=>{const d=L.router.dhcp;return d.on&&d.start==='192.168.100.1'&&d.end==='192.168.100.99'&&d.gw==='192.168.100.12'&&d.dns==='192.168.100.12'}},
+  {id:'time',text:'Set the router time (System Tools › Time Settings)',hint:'Click Get from PC, then Save.',check:L=>L.router.time}],
  start(ctx){
-  const L=ctx.L;c2link(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
+  const L=ctx.L;if(!L.router.v2){Object.assign(L.router,TPL0());L.nodes.LAPTOP.ip=''}c2link(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
   if(!L.router.up){scr.innerHTML='<div class="post">The router has no power. Finish "Connect the network devices" first.</div>';return}
-  const D=new Desktop(scr,{L,key:'LAPTOP',user:'tech',startup:['edge'],onChange:(ev,d)=>{if(ev==='rlogin')ctx.flag('login');if(ev==='rloginfail'&&!ctx.R.flags.lf){ctx.R.flags.lf=1;ctx.penalty(2,'Wrong router login. Check the sticker')}if(ev==='rdiscard')ctx.penalty(3,'Left a router page without saving');ctx.check()}});
+  const D=new Desktop(scr,{L,key:'LAPTOP',user:'tech',startup:['edge'],onChange:(ev,d)=>{if(ev==='rlogin'&&d==='192.168.100.12')ctx.R.flags.newlogin=true;
+   if(ev==='rcreate'&&d!=='admin.123')ctx.penalty(2,'The task sheet asks for the router password admin.123');
+   if(ev==='rloginfail'&&!ctx.R.flags.lf){ctx.R.flags.lf=1;ctx.penalty(2,'Wrong router password')}if(ev==='rdiscard')ctx.penalty(3,'Left a router page without saving');ctx.check()}});
   ctx.cleanup.push(()=>D.destroy());
  }};
 /* ---------- Task 4 & 5: PCs ---------- */
-function pcTask(id,nm,ip,extra){return {id,coc:2,title:`Configure ${nm}`,where:nm,
- info:`Sign in: student / Css@2026\n\n• Computer name: ${nm}\n• IP address: ${ip}\n• Subnet mask: 255.255.255.0\n• Default gateway: 192.168.1.1\n• Preferred DNS: 192.168.1.1\n`+extra.info,
+function pcTask(id,nm,label,ip,gw,extra){return {id,coc:2,title:`Configure the ${label}`,where:label,
+ info:`${label} (${nm}). Sign in: student / Css@2026\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: ${ip}\n• Subnet mask: 255.255.255.0\n• Default gateway: ${gw}\n• Preferred DNS server: 192.168.100.13\n`+extra.info,
  objectives:[{id:'login',text:'Sign in to Windows',hint:'Password: Css@2026',check:(L,f)=>f.login},
-  {id:'name',text:`Rename the computer to ${nm} and restart`,hint:'Right-click Start › System, or run sysdm.cpl › Change... › type the name › OK › Restart Now.',check:L=>L.nodes[nm].hostname===nm},
-  {id:'ip',text:`Set the static IP ${ip}/24, gateway 192.168.1.1, DNS 192.168.1.1`,hint:'Run ncpa.cpl › Ethernet › Properties › Internet Protocol Version 4 › Properties › "Use the following IP address".',check:L=>{const n=L.nodes[nm];return !n.dhcp&&n.ip===ip&&n.mask==='255.255.255.0'&&n.gw==='192.168.1.1'&&['192.168.1.1','8.8.8.8'].includes(n.dns1)}},
+  {id:'ip',text:`Set IP ${ip}, mask 255.255.255.0, gateway ${gw}, DNS 192.168.100.13`,hint:'Run ncpa.cpl › Ethernet › Properties › Internet Protocol Version 4 (TCP/IPv4) › Properties › "Use the following IP address".',check:L=>{const n=L.nodes[nm];return !n.dhcp&&n.ip===ip&&n.mask==='255.255.255.0'&&n.gw===gw&&n.dns1==='192.168.100.13'}},
   ...extra.obj],
  start(ctx){const L=ctx.L;c2link(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
   const D=new Desktop(scr,{L,key:nm,user:'student',locked:true,onChange:(ev,d)=>{if(ev==='login')ctx.flag('login');extra.ev&&extra.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
-TASKS.c2_pc1=pcTask('c2_pc1','PC-01','192.168.1.11',{info:'\nShare a folder:\n• Create C:\\CSS-Files\n• Share name: CSS-Files\n• Permission: Everyone = Full Control\n• Turn on network discovery and file & printer sharing\n\nTest: ping the router 192.168.1.1',
+TASKS.c2_pc1=pcTask('c2_pc1','PC-01','Server PC','192.168.100.13','192.168.100.12',{info:'\nTest: ping the router 192.168.100.12.\nTurn on file and printer sharing so the Client PC can ping this PC.',
  obj:[{id:'disc',text:'Turn on network discovery and file & printer sharing',hint:'Control Panel › Network and Sharing Center › Change advanced sharing settings › turn both on › Save changes.',check:L=>L.nodes['PC-01'].discovery&&L.nodes['PC-01'].fileShare},
-  {id:'share',text:'Create C:\\CSS-Files and share it as "CSS-Files" (Everyone: Full Control)',hint:'File Explorer › Local Disk (C:) › New folder › name it CSS-Files › Properties › Sharing › Advanced Sharing › Share this folder › Permissions › Everyone: Full Control.',check:L=>{const s=L.nodes['PC-01'].shares['CSS-Files'];return s&&s.path==='C:\\CSS-Files'&&(s.full||s.change)}},
-  {id:'ping',text:'Ping the router (192.168.1.1) successfully',hint:'Open Command Prompt and type: ping 192.168.1.1',check:(L,f)=>f.ping}],
- ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.1.1')ctx.R.flags.ping=true;if(ev==='share'){const s=L.nodes['PC-01'].shares['CSS-Files'];if(s&&!s.full&&!s.change&&!ctx.R.flags.ro){ctx.R.flags.ro=1;toast('Note: the share is Read-only. The task sheet asks for Full Control.','bad')}}}});
-TASKS.c2_pc2=pcTask('c2_pc2','PC-02','192.168.1.12',{info:'\nTest the network:\n• Ping PC-01 (192.168.1.11)\n• Open \\\\PC-01\\CSS-Files and create a new text file in it',
- obj:[{id:'ping',text:'Ping PC-01 (192.168.1.11) successfully',hint:'Command Prompt: ping 192.168.1.11. If it times out, PC-01\'s firewall blocks ping until file & printer sharing is ON there.',check:(L,f)=>f.ping},
-  {id:'open',text:'Open \\\\PC-01\\CSS-Files and create a text file in it',hint:'Run dialog or File Explorer address bar: \\\\PC-01\\CSS-Files (or \\\\192.168.1.11\\CSS-Files) › New text file.',check:(L,f)=>f.write}],
- ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.1.11')ctx.R.flags.ping=true;if(ev==='remotewrite'&&d.share.toLowerCase()==='css-files')ctx.R.flags.write=true}});
+  {id:'ping',text:'Ping the router (192.168.100.12) successfully',hint:'Command Prompt: ping 192.168.100.12. The router must already use its new IP.',check:(L,f)=>f.ping}],
+ ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.100.12')ctx.R.flags.ping=true}});
+TASKS.c2_pc2=pcTask('c2_pc2','PC-02','Client PC','192.168.100.14','192.168.100.13',{info:'\nTest: ping the Server PC 192.168.100.13.',
+ obj:[{id:'ping',text:'Ping the Server PC (192.168.100.13) successfully',hint:'Command Prompt: ping 192.168.100.13. If it times out, turn on file & printer sharing on the Server PC.',check:(L,f)=>f.ping}],
+ ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.100.13')ctx.R.flags.ping=true}});
 
 /* ================= 3D crimping task (replaces the 2D bench when WebGL2 is available) ================= */
 (function(){
