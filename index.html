@@ -497,6 +497,11 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 .ventoy .vtitle{text-align:center;font-weight:700;color:#fff}.ventoy .vtitle span{display:block;font-weight:400;color:#888;font-size:12px}
 .ventoy .vlist{border:2px solid #4af;margin:6% 0;padding:8px;flex:1}.ventoy .vlist div{display:flex;justify-content:space-between;padding:4px 8px;cursor:pointer}
 .ventoy .vlist .sel,.ventoy .vlist div:hover{background:#4af;color:#000}.ventoy .vfoot{color:#ccc;font-size:12px;text-align:center}.ventoy .vfoot b{cursor:pointer;color:#ff0}
+/* Group Policy consoles */
+.gp{display:flex;height:100%;min-height:360px;font-size:13px;color:#222;background:#fff}
+.gp-tree{width:38%;min-width:200px;border-right:1px solid #ddd;overflow:auto;padding:4px 0;background:#fff}
+.gp-n{padding:3px 6px;cursor:pointer;white-space:nowrap}.gp-n:hover{background:#e5f1fb}.gp-n.on{background:#cce4f7}.gp-n.lnk{font-style:italic}
+.gp-main{flex:1;overflow:auto;padding:10px}
 
 </style>
 </head>
@@ -614,8 +619,9 @@ function ipconfigOut(n,all){
  if(all){const d=dnsServers(n);L.push('   DNS Servers . . . . . . . . . . . : '+(d[0]||''));d.slice(1).forEach(x=>L.push('                                       '+x));L.push('   NetBIOS over Tcpip. . . . . . . . : Enabled')}
  return L;
 }
-const HELP=['Commands available in this simulator:','  ipconfig  [/all | /release | /renew | /flushdns]','  ping <ip or name>      Test connectivity','  nslookup <name>        Test DNS name resolution','  hostname               Show the computer name','  whoami                 Show the signed-in user','  getmac                 Show the MAC address','  net view \\\\<computer>  Show shared folders on a computer','  net share              Show folders shared on this PC','  shutdown /r /t 0       Restart this computer','  cls  |  exit'];
+const HELP=['Commands available in this simulator:','  ipconfig  [/all | /release | /renew | /flushdns]','  ping <ip or name>      Test connectivity','  nslookup <name>        Test DNS name resolution','  hostname               Show the computer name','  whoami                 Show the signed-in user','  getmac                 Show the MAC address','  net view \\\\<computer>  Show shared folders on a computer','  net share              Show folders shared on this PC','  gpupdate /force        Refresh Group Policy','  shutdown /r /t 0       Restart this computer','  cls  |  exit'];
 async function execCmd(L,n,c,print,hooks){
+ if(hooks.pend){const f=hooks.pend;hooks.pend=null;return f(c,print)}
  const lc=c.toLowerCase().trim(),parts=lc.split(/\s+/),cmd=parts[0];
  if(!lc)return;
  const notState=()=>{print('');print('The operation failed as no adapter is in the state permissible for');print('this operation.')};
@@ -636,6 +642,7 @@ async function execCmd(L,n,c,print,hooks){
     hooks.changed&&hooks.changed();return}
    if(parts[1]==='/flushdns'){print('');print('Windows IP Configuration');print('');print('Successfully flushed the DNS Resolver Cache.');return}
    ipconfigOut(n,parts[1]==='/all').forEach(print);return;
+  case 'gpupdate':{if(typeof gpUpdate==='function')return gpUpdate(L,n,parts,print,hooks);print('Updating policy...');return}
   case 'ping':{const r=simPing(L,n,c.trim().split(/\s+/)[1]);for(const l of r.lines){print(l);await sleep(/^(Reply|Request|PING:)/.test(l)?(r.slow?900:300):30)}hooks.onPing&&hooks.onPing(r);return}
   case 'nslookup':{const t=parts[1];if(!t)return print('Usage: nslookup <name>');const srv=dnsServers(n)[0];
    if(!n.media||!srv){print('*** Default servers are not available');print('Server:  UnKnown');print('Address:  127.0.0.1');print('');print(`*** UnKnown can't find ${t}: No response from server`);return}
@@ -1202,7 +1209,7 @@ const START_ITEMS=[
  {a:'edge',l:'Microsoft Edge',i:'🌐',k:'edge browser internet'},
 ];
 class Desktop{
- constructor(host,o){this.host=host;this.o=o;this.L=o.L;this.key=o.key;this.z=10;this.wins=[];this.subs=[];this.user=o.user||'';this.render();if(o.locked)this.lockScreen();else this.afterLogin()}
+ constructor(host,o){window._D=this;this.host=host;this.o=o;this.L=o.L;this.key=o.key;this.z=10;this.wins=[];this.subs=[];this.user=o.user||'';this.render();if(o.locked)this.lockScreen();else this.afterLogin()}
  get n(){return this.L.nodes[this.key]}
  get server(){return this.n.os==='server'}
  render(){
@@ -1223,7 +1230,7 @@ class Desktop{
  on(fn){this.subs.push(fn);return()=>{this.subs=this.subs.filter(f=>f!==fn)}}
  changed(ev,data){this.tick();this.subs.slice().forEach(f=>{try{f(ev,data)}catch(e){console.error(e)}});this.o.onChange&&this.o.onChange(ev,data)}
  closeMenus(){$$('.ds-menu,.ds-ctx',this.root).forEach(m=>m.remove())}
- items(){const n=this.n,it=START_ITEMS.slice();if(this.server){it.unshift({a:'servermanager',l:'Server Manager',i:'🗄️',k:'server manager servermanager roles features'});if(n.isDC)it.push({a:'aduc',l:'Active Directory Users and Computers',i:'👥',k:'dsa.msc active directory users computers aduc ou'});if(n.dhcpRole)it.push({a:'dhcp',l:'DHCP',i:'🔢',k:'dhcpmgmt.msc dhcp scope'});if(n.isDC)it.push({a:'dns',l:'DNS',i:'🔤',k:'dnsmgmt.msc dns'})}return it}
+ items(){const n=this.n,it=START_ITEMS.slice();if(this.server){it.unshift({a:'servermanager',l:'Server Manager',i:'🗄️',k:'server manager servermanager roles features'});if(n.isDC)it.push({a:'aduc',l:'Active Directory Users and Computers',i:'👥',k:'dsa.msc active directory users computers aduc ou'});if(n.dhcpRole)it.push({a:'dhcp',l:'DHCP',i:'🔢',k:'dhcpmgmt.msc dhcp scope'});if(n.isDC)it.push({a:'dns',l:'DNS',i:'🔤',k:'dnsmgmt.msc dns'});if(n.isDC)it.push({a:'gpmc',l:'Group Policy Management',i:'📜',k:'gpmc.msc group policy management gpo'})}it.push({a:'mstsc',l:'Remote Desktop Connection',i:'🖥️',k:'mstsc remote desktop connection rdp'});if(this.n.installed)this.n.installed.forEach(x=>it.push({a:'_app',l:x,i:'📦',k:x.toLowerCase()}));return it}
  startMenu(search){
   if($('.ds-menu',this.root)){this.closeMenus();if(!search)return}
   const m=el(`<div class="ds-menu"><div class="ms"><input placeholder="Type here to search (e.g. ncpa.cpl, cmd, device manager)"></div><div class="ml"></div><div class="pw"><button data-p="winx">⚙ More (Win+X)</button><button data-p="restart">⟳ Restart</button><button data-p="signout">👤 Sign out</button></div></div>`);
@@ -1247,8 +1254,9 @@ class Desktop{
  runCmd(c){
   const raw=c.trim(),q=raw.toLowerCase(),n=this.n;
   if(q.startsWith('\\\\'))return this.open('explorer',{path:raw});
-  const map={cmd:'cmd','cmd.exe':'cmd',control:'control','control panel':'control','ncpa.cpl':'ncpa','firewall.cpl':'firewall','sysdm.cpl':'sysdm','devmgmt.msc':'devmgmt',explorer:'explorer','explorer.exe':'explorer',msedge:'edge',edge:'edge',servermanager:'servermanager','servermanager.exe':'servermanager','dsa.msc':'aduc','dhcpmgmt.msc':'dhcp','dnsmgmt.msc':'dns','control netconnections':'ncpa'};
-  const a=map[q];if(!a||(a==='servermanager'&&!this.server)||(a==='aduc'&&!n.isDC)||(a==='dhcp'&&!n.dhcpRole)||(a==='dns'&&!n.isDC)){this.msg('Run',`Windows cannot find '${esc(raw)}'. Make sure you typed the name correctly, and then try again.`,{icon:'⛔'});return}
+  const map={cmd:'cmd','cmd.exe':'cmd',control:'control','control panel':'control','ncpa.cpl':'ncpa','firewall.cpl':'firewall','sysdm.cpl':'sysdm','devmgmt.msc':'devmgmt',explorer:'explorer','explorer.exe':'explorer',msedge:'edge',edge:'edge',servermanager:'servermanager','servermanager.exe':'servermanager','dsa.msc':'aduc','gpmc.msc':'gpmc',mstsc:'mstsc','mstsc.exe':'mstsc','dhcpmgmt.msc':'dhcp','dnsmgmt.msc':'dns','control netconnections':'ncpa'};
+  if(/^gpupdate(\s|$)/.test(q))return this.open('cmd',{cmd:raw});
+  const a=map[q];if(!a||(a==='gpmc'&&!n.isDC)||(a==='servermanager'&&!this.server)||(a==='aduc'&&!n.isDC)||(a==='dhcp'&&!n.dhcpRole)||(a==='dns'&&!n.isDC)){this.msg('Run',`Windows cannot find '${esc(raw)}'. Make sure you typed the name correctly, and then try again.`,{icon:'⛔'});return}
   if(a==='firewall')return this.open('control',{page:'fw'});
   this.open(a);
  }
@@ -1324,7 +1332,7 @@ class Desktop{
 }
 
 /* ---------- Command Prompt ---------- */
-APPS.cmd={title:D=>'Command Prompt',icon:'⬛',w:700,h:420,open(w,D){w.body.innerHTML='<div class="termhost"></div>';makeTerm($('.termhost',w.body),D.L,D.n,{user:()=>D.user,restart:()=>D.restart(),close:()=>w.close(),changed:()=>D.changed('ip'),onPing:r=>D.changed('ping',r),onCmd:c=>D.changed('cmd',c)})}};
+APPS.cmd={title:D=>'Command Prompt',icon:'⬛',w:700,h:420,open(w,D,args){w.body.innerHTML='<div class="termhost"></div>';const T=makeTerm($('.termhost',w.body),D.L,D.n,{user:()=>D.user,restart:()=>D.restart(),close:()=>w.close(),changed:()=>D.changed('ip'),onPing:r=>D.changed('ping',r),onCmd:c=>D.changed('cmd',c),D,signout:()=>D.lockScreen()});if(args&&args.cmd)setTimeout(()=>T.run(args.cmd),300)}};
 /* ---------- Run ---------- */
 APPS.run={title:'Run',icon:'🏃',w:420,dialog:true,open(w,D){w.body.innerHTML=`<div class="dp"><p>Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p><div class="wf"><label>Open:</label><input style="flex:1;max-width:none" autocapitalize="off" autocomplete="off"></div></div><div class="dbtns"><button class="wb pri">OK</button><button class="wb">Cancel</button><button class="wb">Browse...</button></div>`;
  const i=$('input',w.body),[ok,cn]=$$('.wb',w.body);const go=()=>{const v=i.value;if(!v.trim())return;w.close();D.runCmd(v)};ok.onclick=go;cn.onclick=()=>w.close();i.onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>i.focus(),30)}};
@@ -1507,9 +1515,10 @@ APPS.explorer={title:'File Explorer',icon:'📁',w:760,h:470,open(w,D,args){
    const open=()=>{if(x.go){if(x.go.startsWith('\\\\')&&!remote(x.go).ok)return netErr(x.go);go(x.go)}else D.msg(x.n,'This file is empty.')};
    b.onclick=()=>{if(sel===i&&b._t&&Date.now()-b._t<500&&!matchMedia('(pointer:fine)').matches)return open();sel=i;b._t=Date.now();$$('.exi',w.body).forEach(e=>e.classList.toggle('sel',e===b))};
    b.ondblclick=open;
-   b.oncontextmenu=e=>{e.preventDefault();sel=i;$$('.exi',w.body).forEach(e2=>e2.classList.toggle('sel',e2===b));const m=[{l:'<b>Open</b>',f:open}];if(x.d){m.push({l:'Give access to ›  Specific people...',f:()=>simpleShare(D,path+'\\'+x.n,render)},null,{l:'Rename',f:()=>toast('Renaming is not needed for this task.')},{l:'Delete',f:()=>{if(confirm('Delete this folder?')){n.fs[path]=n.fs[path].filter(y=>y.n!==x.n);render()}}},null,{l:'Properties',f:()=>folderProps(D,path+'\\'+x.n,render)})}D.ctxMenu(e.clientX,e.clientY,m)}});
-  q('#xI').oncontextmenu=e=>{if(e.target.id!=='xI')return;e.preventDefault();if(!canNew)return;D.ctxMenu(e.clientX,e.clientY,[{l:'View ›'},{l:'Refresh',f:render},null,{l:'New › Folder',f:()=>newItem(true)},{l:'New › Text Document',f:()=>newItem(false)}])};
+   b.oncontextmenu=e=>{e.preventDefault();sel=i;$$('.exi',w.body).forEach(e2=>e2.classList.toggle('sel',e2===b));const m=[{l:'<b>Open</b>',f:open}];if(!x.d&&!path.startsWith('\\'))m.push({l:'Copy',f:()=>{D.clip={from:path,n:x.n};toast('Copied "'+x.n+'". Open the destination folder, right-click an empty area › Paste.')}});if(x.d){m.push({l:'Give access to ›  Specific people...',f:()=>simpleShare(D,path+'\\'+x.n,render)},null,{l:'Rename',f:()=>toast('Renaming is not needed for this task.')},{l:'Delete',f:()=>{if(confirm('Delete this folder?')){n.fs[path]=n.fs[path].filter(y=>y.n!==x.n);render()}}},null,{l:'Properties',f:()=>folderProps(D,path+'\\'+x.n,render)})}D.ctxMenu(e.clientX,e.clientY,m)}});
+  q('#xI').oncontextmenu=e=>{if(e.target.id!=='xI')return;e.preventDefault();if(!canNew)return;D.ctxMenu(e.clientX,e.clientY,[{l:'View ›'},{l:'Refresh',f:render},null,{l:'Paste',dis:!D.clip,f:()=>pasteHere()},null,{l:'New › Folder',f:()=>newItem(true)},{l:'New › Text Document',f:()=>newItem(false)}])};
  }
+ function pasteHere(){const c=D.clip;if(!c)return;if(path.startsWith('\\'))return toast('Paste into a local folder for this task.');const arr=n.fs[path]||(n.fs[path]=[]);if(arr.some(x=>x.n===c.n))return toast('The destination already has a file named "'+c.n+'".');arr.push({n:c.n,d:0});D.changed('paste',{to:path,n:c.n});toast('Copied '+c.n+' to '+path);render()}
  function newItem(isDir){
   let base=isDir?'New folder':'New Text Document.txt';
   if(path.startsWith('\\\\')){const r=remote(path);const sh=Object.entries(r.t.shares).find(([k])=>k.toLowerCase()===r.share.toLowerCase());const p=sh[1];
@@ -1532,11 +1541,13 @@ function folderProps(D,p,after){
   ${tab==='sharing'?`<fieldset class="wfs"><legend>Network File and Folder Sharing</legend><p>📁 ${esc(name)}<br>${sh?'Shared':'Not Shared'}</p><p>Network Path:<br>${sh?esc('\\\\'+n.hostname+'\\'+sh[0]):'Not Shared'}</p><button class="wb" id="fpS">Share...</button></fieldset>
    <fieldset class="wfs"><legend>Advanced Sharing</legend><p>Set custom permissions, create multiple shares, and set other advanced sharing options.</p><button class="wb" id="fpA">🛡️ Advanced Sharing...</button></fieldset>
    <fieldset class="wfs"><legend>Password Protection</legend><p style="font-size:12px">People without a user account and password for this computer can access folders shared with everyone. To change this setting, use the Network and Sharing Center.</p></fieldset>`:''}
-  ${tab!=='general'&&tab!=='sharing'?'<p style="color:#666">Not needed for this task. Use the Sharing tab.</p>':''}
+  ${tab==='security'?`<p>Object name: ${esc(p)}</p><p>Group or user names:</p><div class="wlist">${['CREATOR OWNER','SYSTEM','Administrators','Users',...Object.keys((n.ntfs||{})[p]||{}).filter(k=>!['CREATOR OWNER','SYSTEM','Administrators','Users'].includes(k))].map(k=>`<div>👥 ${esc(k)}</div>`).join('')}</div><p style="font-size:12px">To change permissions, click Edit.</p><button class="wb" id="fpE">Edit...</button>`:''}
+  ${!['general','sharing','security'].includes(tab)?'<p style="color:#666">Not needed for this task.</p>':''}
   </div><div class="dbtns"><button class="wb pri" id="fpO">OK</button><button class="wb" id="fpC">Cancel</button><button class="wb" disabled>Apply</button></div>`;
   $$('.wtabs span',w.body).forEach(s=>s.onclick=()=>{tab=s.dataset.t;render()});
   if($('#fpA',w.body))$('#fpA',w.body).onclick=()=>advShare(D,p,render);
   if($('#fpS',w.body))$('#fpS',w.body).onclick=()=>simpleShare(D,p,render);
+  if($('#fpE',w.body))$('#fpE',w.body).onclick=()=>{const cur=((n.ntfs||{})[p])||{};aclDlg(D,'Permissions for '+name,Object.assign({'CREATOR OWNER':{full:true},SYSTEM:{full:true,change:true,read:true},Administrators:{full:true,change:true,read:true},Users:{read:true}},cur),[],A=>{n.ntfs=n.ntfs||{};n.ntfs[p]=A;D.changed('ntfs',p);render()})};
   $('#fpO',w.body).onclick=()=>{w.close();after&&after()};$('#fpC',w.body).onclick=()=>{w.close();after&&after()}};
  render();
 }
@@ -1549,13 +1560,29 @@ function advShare(D,p,after){
  const apply=()=>{Object.keys(n.shares).forEach(k=>{if(n.shares[k].path===p)delete n.shares[k]});if(q('#asOn').checked){const sn=q('#asN').value.trim();if(!sn){D.msg('Advanced Sharing','Enter a share name.',{icon:'⛔'});return false}n.shares[sn]={path:p,...perm}}D.changed('share');return true};
  q('#asO').onclick=()=>{if(apply()){w.close();after&&after()}};q('#asA').onclick=()=>apply();q('#asC').onclick=()=>w.close();
 }
+function pickPrincipal(D,title,cb){
+ const w=D.win('Select Users, Computers, Service Accounts, or Groups',{dialog:true,w:460,icon:''}),dc=dcOf(D.L);let ok=null;
+ w.body.innerHTML=`<div class="dp"><p>Select this object type:</p><input value="Users, Groups, or Built-in security principals" disabled style="width:100%"><p>From this location:</p><input value="${dc?esc(dc.domain):esc(D.n.hostname)}" disabled style="width:100%"><p>Enter the object names to select (<u>examples</u>):</p><div style="display:flex;gap:6px"><input id="ppN" style="flex:1" autocapitalize="off" autocomplete="off"><button class="wb" id="ppC">Check Names</button></div><div id="ppE" style="color:#c00;font-size:12px;margin-top:6px"></div></div><div class="dbtns"><button class="wb pri" id="ppO">OK</button><button class="wb" id="ppX">Cancel</button></div>`;
+ const known=['Domain Users','Authenticated Users','Everyone','Administrators','Users','Domain Admins','Remote Desktop Users'];
+ const check=()=>{const v=$('#ppN',w.body).value.trim().replace(/^tesda\\/i,'');if(!v){$('#ppE',w.body).textContent='Type a name first.';return null}
+  let hit=known.find(k=>k.toLowerCase()===v.toLowerCase());if(hit&&/^domain /i.test(hit)&&!dc)hit=null;
+  if(!hit&&dc)hit=((dc.adUsers||[]).find(u=>u.logon.toLowerCase()===v.toLowerCase())||{}).logon;
+  if(!hit){$('#ppE',w.body).textContent=`An object named "${v}" cannot be found. Check the selected object types and location, and that you typed the object name correctly.`;return null}
+  $('#ppE',w.body).textContent='';$('#ppN',w.body).value=hit;$('#ppN',w.body).style.textDecoration='underline';ok=hit;return hit};
+ $('#ppC',w.body).onclick=check;$('#ppN',w.body).oninput=()=>{ok=null;$('#ppN',w.body).style.textDecoration=''};
+ $('#ppO',w.body).onclick=()=>{const h=ok||check();if(!h)return;w.close();cb(h)};$('#ppX',w.body).onclick=()=>w.close();setTimeout(()=>$('#ppN',w.body).focus(),30)}
+function aclDlg(D,title,acl,base,cb){
+ const w=D.win(title,{dialog:true,w:380,icon:''});const A=JSON.parse(JSON.stringify(acl));base.forEach(b=>{if(!A[b])A[b]={read:true}});let cur=Object.keys(A)[0];
+ const render=()=>{const names=Object.keys(A),p=A[cur]||{};w.body.innerHTML=`<div class="dp"><p>Group or user names:</p><div class="wlist">${names.map(k=>`<div class="${k===cur?'sel':''}" data-u="${esc(k)}">👥 ${esc(k)}</div>`).join('')}</div><div class="row" style="justify-content:flex-end;margin:6px 0"><button class="wb" id="aA">Add...</button><button class="wb" id="aR">Remove</button></div>
+ <table style="width:100%;font-size:13px;border:1px solid #ccc;background:#fff"><tr style="background:#f3f3f3"><td style="padding:4px">Permissions for ${esc(cur||'')}</td><td>Allow</td><td>Deny</td></tr>${[['full','Full Control'],['change','Change / Modify'],['read','Read']].map(([k,l])=>`<tr><td style="padding:4px">${l}</td><td><input type="checkbox" data-k="${k}" ${p[k]?'checked':''} ${cur?'':'disabled'}></td><td><input type="checkbox" disabled></td></tr>`).join('')}</table></div><div class="dbtns"><button class="wb pri" id="aO">OK</button><button class="wb" id="aC">Cancel</button><button class="wb" id="aP">Apply</button></div>`;
+  $$('[data-u]',w.body).forEach(d=>d.onclick=()=>{cur=d.dataset.u;render()});
+  $('#aA',w.body).onclick=()=>pickPrincipal(D,'',h=>{if(!A[h])A[h]={read:true};cur=h;render()});
+  $('#aR',w.body).onclick=()=>{if(cur){delete A[cur];cur=Object.keys(A)[0];render()}};
+  $$('input[data-k]',w.body).forEach(c=>c.onchange=()=>{const q=A[cur],k=c.dataset.k;q[k]=c.checked;if(k==='full'&&c.checked){q.change=true;q.read=true}if(k==='change'&&c.checked)q.read=true;if(!c.checked&&k!=='full')q.full=false;if(!c.checked&&k==='read')q.change=false;render()});
+  $('#aO',w.body).onclick=()=>{cb(A);w.close()};$('#aP',w.body).onclick=()=>cb(A);$('#aC',w.body).onclick=()=>w.close()};render()}
 function permDlg(D,sn,perm,cb){
- const w=D.win('Permissions for '+sn,{dialog:true,w:360,icon:''});const p={...perm};
- const render=()=>{w.body.innerHTML=`<div class="dp"><div class="wtabs"><span class="on">Share Permissions</span></div><p>Group or user names:</p><div class="wlist"><div class="sel">👥 Everyone</div></div><div class="row" style="justify-content:flex-end;margin:6px 0"><button class="wb">Add...</button><button class="wb">Remove</button></div>
- <table style="width:100%;font-size:13px;border:1px solid #ccc;background:#fff"><tr style="background:#f3f3f3"><td style="padding:4px">Permissions for Everyone</td><td>Allow</td><td>Deny</td></tr>${[['full','Full Control'],['change','Change'],['read','Read']].map(([k,l])=>`<tr><td style="padding:4px">${l}</td><td><input type="checkbox" data-k="${k}" ${p[k]?'checked':''}></td><td><input type="checkbox" disabled></td></tr>`).join('')}</table></div><div class="dbtns"><button class="wb pri">OK</button><button class="wb">Cancel</button></div>`;
-  $$('input[data-k]',w.body).forEach(c=>c.onchange=()=>{const k=c.dataset.k;p[k]=c.checked;if(k==='full'&&c.checked){p.change=true;p.read=true}if(k==='change'&&c.checked)p.read=true;if(!c.checked&&(k==='change'||k==='read'))p.full=false;if(!c.checked&&k==='read'){p.change=false}render()});
-  const b=$$('.dbtns .wb',w.body);b[0].onclick=()=>{cb(p);w.close()};b[1].onclick=()=>w.close()};render();
-}
+ const acl=Object.assign({Everyone:{full:!!perm.full,change:!!perm.change,read:perm.read!==false}},perm.acl||{});
+ aclDlg(D,'Permissions for '+sn,acl,[],A=>{const ev=A.Everyone||{};const o={full:!!ev.full,change:!!ev.change,read:!!ev.read,acl:{}};Object.keys(A).forEach(k=>{if(k!=='Everyone')o.acl[k]=A[k]});if(!A.Everyone){o.noEveryone=true}cb(o)})}
 function simpleShare(D,p,after){
  const n=D.n,name=p.split('\\').pop(),w=D.win('Network access',{dialog:true,w:440,icon:'👥'});let list=[{u:'Owner ('+(D.user||'you')+')',lv:'Owner'}];
  const render=()=>{w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;margin:0 0 8px">Choose people to share with</h3><p>Type a name and then click Add, or click the arrow to find someone.</p><div style="display:flex;gap:6px"><select id="ssU" style="flex:1"><option>Everyone</option><option>Guest</option></select><button class="wb" id="ssAdd">Add</button></div>
@@ -1634,7 +1661,7 @@ APPS.servermanager={title:'Server Manager',icon:'🗄️',w:900,h:560,single:tru
   if(page==='dash')body=`<div class="sm-tile"><div style="font-size:18px;font-weight:300;margin-bottom:10px">WELCOME TO SERVER MANAGER</div><div style="display:grid;gap:8px"><div><b>1</b> &nbsp;<a data-go="local">Configure this local server</a></div><div><b>2</b> &nbsp;<a data-go="add">Add roles and features</a></div><div><b>3</b> &nbsp;<span style="opacity:.75">Add other servers to manage</span></div><div><b>4</b> &nbsp;<span style="opacity:.75">Create a server group</span></div><div><b>5</b> &nbsp;<span style="opacity:.75">Connect this server to cloud services</span></div></div></div>
    <b>ROLES AND SERVER GROUPS</b><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${[n.roles.adds&&'AD DS',n.roles.dhcp&&'DHCP',n.isDC&&'DNS','File and Storage Services','Local Server'].filter(Boolean).map(r=>`<div style="border:1px solid #ccc;border-top:4px solid #1e64a8;padding:10px;min-width:150px"><b>${r}</b><br><span style="color:#2a7a2a">● Manageability</span><br>Events<br>Services</div>`).join('')}</div>`;
   if(page==='local'){const ipTxt=!n.nic?'Not connected':n.dhcp?'IPv4 address assigned by DHCP, IPv6 enabled':esc(n.ip)+', IPv6 enabled';
-   body=`<b>PROPERTIES</b><br><span style="color:#666">For ${esc(n.hostname)}</span><table class="sm-props" style="margin-top:10px"><tr><td>Computer name</td><td><span class="sm-link" data-go="sysdm">${esc(n.hostname)}</span>${n.pendingName?' <small style="color:#c60">(restart pending: '+esc(n.pendingName)+')</small>':''}</td></tr><tr><td>${n.domain?'Domain':'Workgroup'}</td><td><span class="sm-link" data-go="sysdm">${esc(n.domain||n.workgroup)}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Windows Defender Firewall</td><td>${n.domain?'Domain: On':'Public: On'}</td></tr><tr><td>Remote management</td><td>Enabled</td></tr><tr><td>Remote Desktop</td><td>Disabled</td></tr><tr><td>NIC Teaming</td><td>Disabled</td></tr><tr><td>Ethernet</td><td><span class="sm-link" data-go="ncpa">${ipTxt}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Operating system version</td><td>Microsoft Windows Server 2019 Standard</td></tr><tr><td>IE Enhanced Security Configuration</td><td>On</td></tr><tr><td>Time zone</td><td>(UTC+08:00) Kuala Lumpur, Singapore</td></tr><tr><td>Processors</td><td>Intel(R) Xeon(R) E-2224 CPU @ 3.40GHz</td></tr><tr><td>Installed memory (RAM)</td><td>16 GB</td></tr></table>`}
+   body=`<b>PROPERTIES</b><br><span style="color:#666">For ${esc(n.hostname)}</span><table class="sm-props" style="margin-top:10px"><tr><td>Computer name</td><td><span class="sm-link" data-go="sysdm">${esc(n.hostname)}</span>${n.pendingName?' <small style="color:#c60">(restart pending: '+esc(n.pendingName)+')</small>':''}</td></tr><tr><td>${n.domain?'Domain':'Workgroup'}</td><td><span class="sm-link" data-go="sysdm">${esc(n.domain||n.workgroup)}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Windows Defender Firewall</td><td>${n.domain?'Domain: On':'Public: On'}</td></tr><tr><td>Remote management</td><td>Enabled</td></tr><tr><td>Remote Desktop</td><td><span class="sm-link" data-go="rdpdlg">${n.rdp&&n.rdp.on?'Enabled':'Disabled'}</span></td></tr><tr><td>NIC Teaming</td><td>Disabled</td></tr><tr><td>Ethernet</td><td><span class="sm-link" data-go="ncpa">${ipTxt}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Operating system version</td><td>Microsoft Windows Server 2019 Standard</td></tr><tr><td>IE Enhanced Security Configuration</td><td>On</td></tr><tr><td>Time zone</td><td>(UTC+08:00) Kuala Lumpur, Singapore</td></tr><tr><td>Processors</td><td>Intel(R) Xeon(R) E-2224 CPU @ 3.40GHz</td></tr><tr><td>Installed memory (RAM)</td><td>16 GB</td></tr></table>`}
   if(page==='all')body=`<b>SERVERS</b><table class="sm-props" style="margin-top:8px"><tr><td><b>Server Name</b></td><td><b>IPv4 Address</b></td><td><b>Manageability</b></td></tr><tr><td>${esc(n.hostname)}</td><td>${esc(n.ip)}</td><td>Online - Performance counters not started</td></tr></table>`;
   if(['adds','dhcp','dnsr','file'].includes(page))body=`<b>${{adds:'AD DS',dhcp:'DHCP',dnsr:'DNS',file:'File and Storage Services'}[page]}</b><p>Servers: ${esc(n.hostname)}</p>${page==='adds'&&n.pendingPromote?'<div class="wwarn">⚠ Configuration required for Active Directory Domain Services at '+esc(n.hostname)+'. <span class="sm-link" data-go="promote">More...</span></div>':''}${page==='dhcp'&&n.pendingDhcpCfg?'<div class="wwarn">⚠ Configuration required for DHCP Server at '+esc(n.hostname)+'. <span class="sm-link" data-go="dhcpcfg">More...</span></div>':''}<p style="color:#666">Use the <b>Tools</b> menu to open the management console for this role.</p>`;
   w.body.innerHTML=`<div class="sm"><div class="sm-nav">${nav.map(([k,l])=>`<button class="${page===k?'on':''}" data-p="${k}">${l}</button>`).join('')}</div><div class="sm-main"><div class="sm-top"><div class="h">Server Manager › ${nav.find(x=>x[0]===page)[1].slice(2)}</div><button title="Refresh" data-a="ref">⟳</button><button class="sm-flag" data-a="flag" title="Notifications">🚩${flag?'<span class="bang">!</span>':''}</button><button data-a="manage">Manage</button><button data-a="tools">Tools</button><button>View</button><button>Help</button></div><div class="sm-body">${body}</div></div></div>`;
@@ -1644,7 +1671,7 @@ APPS.servermanager={title:'Server Manager',icon:'🗄️',w:900,h:560,single:tru
   btn('ref').onclick=render;
   btn('flag').onclick=e=>{const it=[];if(n.pendingPromote)it.push({l:'⚠ <b>Post-deployment Configuration</b><br><small>Configuration required for AD DS at '+esc(n.hostname)+'</small><br><u style="color:#06c">Promote this server to a domain controller</u>',f:()=>D.open('adpromo')});if(n.pendingDhcpCfg)it.push({l:'⚠ <b>Post-deployment Configuration</b><br><small>Configuration required for DHCP Server</small><br><u style="color:#06c">Complete DHCP configuration</u>',f:()=>D.open('dhcpcfg')});if(!it.length)it.push({l:'No new notifications.'});D.ctxMenu(e.clientX,e.clientY,it)};
   btn('manage').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[{l:'Add Roles and Features',f:()=>D.open('addroles')},{l:'Remove Roles and Features',f:()=>toast('Removing roles is not part of this assessment.')},{l:'Add Servers'},{l:'Create Server Group'},{l:'Server Manager Properties'}]);
-  btn('tools').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[n.isDC&&{l:'Active Directory Administrative Center',f:()=>D.open('aduc')},n.isDC&&{l:'Active Directory Users and Computers',f:()=>D.open('aduc')},{l:'Component Services'},{l:'Computer Management'},n.dhcpRole&&{l:'DHCP',f:()=>D.open('dhcp')},n.isDC&&{l:'DNS',f:()=>D.open('dns')},{l:'Event Viewer'},n.isDC&&{l:'Group Policy Management'},{l:'Services'},{l:'Task Scheduler'},{l:'Windows Defender Firewall with Advanced Security'}].filter(Boolean))};
+  btn('tools').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[n.isDC&&{l:'Active Directory Administrative Center',f:()=>D.open('aduc')},n.isDC&&{l:'Active Directory Users and Computers',f:()=>D.open('aduc')},{l:'Component Services'},{l:'Computer Management'},n.dhcpRole&&{l:'DHCP',f:()=>D.open('dhcp')},n.isDC&&{l:'DNS',f:()=>D.open('dns')},{l:'Event Viewer'},n.isDC&&{l:'Group Policy Management',f:()=>D.open('gpmc')},{l:'Services'},{l:'Task Scheduler'},{l:'Windows Defender Firewall with Advanced Security'}].filter(Boolean))};
  render();w.sub(render);
 }};
 /* ---------- Add Roles and Features wizard ---------- */
@@ -2834,7 +2861,7 @@ COCS[3]={icon:'🗄️',title:'Set Up Computer Servers',sub:'Windows Server 2016
   {type:'door',exit:1,solid:false,x:944,y:250,w:16,h:90}]}};
 const c3mig=L=>{if(!L.v2&&!Object.keys(G.prog).some(k=>k.startsWith('c3_'))){const f=COCS[3].lab();Object.keys(L).forEach(k=>delete L[k]);Object.assign(L,f)}};
 function srvTask(id,title,info,objectives,o={}){return {id,coc:3,title,where:'Server Console',info:'Server login: Administrator / Admin.123\n\n'+info,objectives,
- start(ctx){const L=ctx.L;c3mig(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
+ start(ctx){const L=ctx.L;c3mig(L);o.start&&o.start(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
   const D=new Desktop(scr,{L,key:'SRV',user:'Administrator',locked:true,startup:['servermanager'],expect:{domain:'tesda.com'},onChange:(ev,d)=>{if(ev==='login')ctx.flag('login'+(L.nodes.SRV.isDC?'dc':''));o.ev&&o.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
 const S=L=>L.nodes.SRV;
 TASKS.c3_srv=srvTask('c3_srv','Server IP configuration','Internet Protocol Version 4 (TCP/IPv4) on the server:\n• IP address: 192.168.100.13\n• Subnet mask: 255.255.255.0\n• Default gateway: 192.168.100.12\n• Preferred DNS server: 192.168.100.13',[
@@ -2864,6 +2891,192 @@ TASKS.c3_join={id:'c3_join',coc:3,title:'Configure the client and join the domai
   {id:'du',text:'Sign in as the domain user TESDA\\Client A',hint:'On the lock screen choose "Other user" and type TESDA\\Client A with password Admin.123.',check:(L,f)=>f.du}],
  start(ctx){const L=ctx.L;c3mig(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
   const D=new Desktop(scr,{L,key:'CLIENT',user:'student',locked:true,onChange:(ev,d)=>{if(ev==='login'){ctx.flag('login');if(/client a/i.test(d))ctx.flag('du')}if(ev==='joinfail'&&!ctx.R.flags.jf){ctx.R.flags.jf=1;ctx.penalty(3,'Domain join failed: the client could not find the domain controller')}ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
+
+/* ================= COC 3: Group Policy (folder redirection, software deployment) + Remote Desktop ================= */
+const dcNode=L=>nodesOf(L).find(o=>o.isDC);
+const lcEq=(a,b)=>(a||'').toLowerCase()===(b||'').toLowerCase();
+function shareFor(n,path){const e=Object.entries(n.shares||{}).find(([k,v])=>lcEq(v.path,path));return e?{name:e[0],...e[1]}:null}
+function shareAllows(sh,who,lvl){if(!sh)return false;const pick=a=>a&&(lvl==='full'?a.full:lvl==='change'?(a.full||a.change):(a.full||a.change||a.read));
+ if(!sh.noEveryone&&pick({full:sh.full,change:sh.change,read:sh.read!==false}))return true;const acl=sh.acl||{};return pick(acl[who])||pick(acl['Authenticated Users'])}
+function ntfsAllows(n,path,who,lvl){const a=((n.ntfs||{})[Object.keys(n.ntfs||{}).find(k=>lcEq(k,path))]||{});const q=a[who]||a['Authenticated Users']||a.Everyone;return !!q&&(lvl==='full'?q.full:lvl==='change'?(q.full||q.change):(q.full||q.change||q.read))}
+function rootFolder(n,name){const it=(n.fs['C:']||[]).find(x=>x.d&&lcEq(x.n,name));return it?'C:\\'+it.n:null}
+function uncOk(L,unc){/* \\HOST\share\... -> {node,share,path} */const m=/^\\\\([^\\]+)\\([^\\]+)(.*)$/.exec(unc||'');if(!m)return null;const dc=dcNode(L);if(!dc)return null;
+ const hostOk=lcEq(m[1],dc.hostname)||m[1]===dc.ip||lcEq(m[1],dc.hostname+'.'+dc.domain)||lcEq(m[1],dc.domain);if(!hostOk)return null;
+ const sh=Object.entries(dc.shares||{}).find(([k])=>lcEq(k,m[2]));if(!sh)return null;return {node:dc,share:sh[0],sh:sh[1],rest:m[3]}}
+const gposOf=n=>n.gpos||(n.gpos=[]);
+function gpoForUser(dc,user){const ou=(user&&user.ou)||'';return gposOf(dc).filter(g=>(g.links||[]).some(t=>lcEq(t,dc.domain)||lcEq(t,ou))&&(g.filter||[]).some(f=>['domain users','authenticated users','everyone'].includes(f.toLowerCase())||lcEq(f,user&&user.logon)))}
+/* what happens on the client when a domain user signs in */
+function applyUserPolicy(L,client,userId){
+ const dc=dcNode(L);if(!dc||!userId||!userId.includes('\\'))return {};const logon=userId.split('\\').pop();const u=(dc.adUsers||[]).find(x=>lcEq(x.logon,logon));if(!u)return {};
+ const res={fr:null,sw:[],errors:[]};
+ gpoForUser(dc,u).forEach(g=>{
+  const d=g.fr&&g.fr.desktop;if(d&&d.setting==='basic'){const t=uncOk(L,d.root);
+   if(!t)res.errors.push('Folder Redirection: the root path "'+(d.root||'')+'" is not a shared folder on the server.');
+   else if(!shareAllows(t.sh,'Domain Users','change')||!ntfsAllows(dc,t.sh.path,'Domain Users','change'))res.errors.push('Folder Redirection: Domain Users have no write permission on '+d.root+'.');
+   else{const base=t.sh.path,uf=base+'\\'+u.logon;dc.fs[base]=dc.fs[base]||[];if(!dc.fs[base].some(x=>lcEq(x.n,u.logon)))dc.fs[base].push({n:u.logon,d:1});dc.fs[uf]=dc.fs[uf]||[];if(!dc.fs[uf].some(x=>x.n==='Desktop'))dc.fs[uf].push({n:'Desktop',d:1});dc.fs[uf+'\\Desktop']=dc.fs[uf+'\\Desktop']||[];
+    res.fr=d.root.replace(/\\+$/,'')+'\\'+u.logon+'\\Desktop'}}
+  (g.sw||[]).forEach(pk=>{if(pk.type!=='assigned')return;const t=uncOk(L,pk.path);
+   if(!t){res.errors.push('Software installation: "'+pk.file+'" was added from a local path ('+pk.path+'). Clients cannot reach it. Use the network path \\\\server\\share.');return}
+   if(!shareAllows(t.sh,'Domain Users','read')||!ntfsAllows(dc,t.sh.path,'Domain Users','read')){res.errors.push('Software installation: access to '+pk.path+' is denied.');return}
+   if(!pk.atLogon){res.errors.push('Software installation: '+pk.name+' is assigned but "Install this application at logon" is not ticked, so it only installs when first opened.');}
+   res.sw.push(pk.name)})});
+ client.redirect=res.fr;client.installed=Array.from(new Set([...(client.installed||[]),...res.sw]));return res}
+/* gpupdate /force */
+async function gpUpdate(L,n,parts,print,hooks){
+ const force=parts.includes('/force');print('Updating policy...');await sleep(1400);print('');
+ const dc=dcNode(L);if(!n.isDC&&(!n.domain||!dc||lreach(L,n,dc.ip,true)!=='ok')){print('Computer policy could not be updated successfully. The following errors were encountered:');print('');print('The processing of Group Policy failed because of lack of network connectivity to a domain controller.');hooks.D&&hooks.D.changed('gpupdate',{ok:false});return}
+ print(force?'Computer Policy update has completed successfully.':'Computer Policy update has completed successfully.');print('User Policy update has completed successfully.');print('');
+ const D=hooks.D;if(D)D.changed('gpupdate',{ok:true,force});
+ if(!n.isDC&&D&&D.user.includes('\\')&&dc&&gposOf(dc).some(g=>(g.sw||[]).length||g.fr)){print('Certain User policies are enabled that can only run during logon.');print('OK to log off? (Y/N)');
+  hooks.pend=(c,pr)=>{if(/^y/i.test(c.trim())){pr('');pr('Signing out...');D.changed('gpsignout');setTimeout(()=>D.lockScreen(),900)}else pr('Policy will be applied at the next sign in.')}}
+}
+/* ---------- Group Policy Management ---------- */
+APPS.gpmc={title:'Group Policy Management',icon:'📜',w:860,h:520,single:true,open(w,D){
+ const n=D.n;let sel='domain',tab='scope';const gp=gposOf(n);
+ const node=(id,label,depth,icon,cls='')=>`<div class="gp-n ${sel===id?'on':''} ${cls}" data-id="${esc(id)}" style="padding-left:${6+depth*14}px">${icon} ${esc(label)}</div>`;
+ const linked=t=>gp.filter(g=>(g.links||[]).some(l=>lcEq(l,t)));
+ const render=()=>{const ous=n.ous||[];
+  let tree=node('forest','Forest: '+n.domain,0,'🌲')+node('domains','Domains',1,'📂')+node('domain',n.domain,2,'🏛️')+node('ddp','Default Domain Policy',3,'📜','lnk')+linked(n.domain).map(g=>node('L:'+n.domain+':'+g.name,g.name,3,'📜','lnk')).join('')+
+   node('dcs','Domain Controllers',3,'📁')+ous.map(o=>node('ou:'+o,o,3,'📁')+linked(o).map(g=>node('L:'+o+':'+g.name,g.name,4,'📜','lnk')).join('')).join('')+node('gpos','Group Policy Objects',3,'📁')+gp.map(g=>node('G:'+g.name,g.name,4,'📜')).join('')+node('wmi','WMI Filters',3,'📁')+node('sites','Sites',1,'📂');
+  let right='';const g=sel.startsWith('L:')||sel.startsWith('G:')?gp.find(x=>x.name===sel.split(':').pop()):null;
+  if(g){right=`<h3 style="margin:0 0 6px;font-weight:400">${esc(g.name)}</h3><div class="wtabs">${['scope','details','settings','delegation'].map(t=>`<span data-tab="${t}" class="${tab===t?'on':''}">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}</div>`+
+   (tab==='scope'?`<b>Links</b><table class="sm-props"><tr><td><b>Location</b></td><td><b>Enforced</b></td><td><b>Link Enabled</b></td></tr>${(g.links||[]).map(l=>`<tr><td>${esc(l)}</td><td>No</td><td>Yes</td></tr>`).join('')||'<tr><td colspan=3>(none)</td></tr>'}</table>
+    <b style="display:block;margin-top:12px">Security Filtering</b><p style="font-size:12px;margin:2px 0">The settings in this GPO can only apply to the following groups, users, and computers:</p><div class="wlist" id="gF">${(g.filter||[]).map((f,i)=>`<div data-f="${i}" class="${g._fs===i?'sel':''}">👥 ${esc(f)}</div>`).join('')}</div><div class="row"><button class="wb" id="gFa">Add...</button><button class="wb" id="gFr">Remove</button><button class="wb">Properties</button></div>`
+   :tab==='settings'?`<p>${g.fr&&g.fr.desktop?'User Configuration › Folder Redirection › Desktop: '+esc(g.fr.desktop.setting==='basic'?'Basic, '+g.fr.desktop.root:'Not configured'):''}</p><p>${(g.sw||[]).map(p=>'User Configuration › Software installation › '+esc(p.name)+' ('+p.type+')').join('<br>')}</p><p style="color:#888">Right-click the GPO and choose Edit... to change settings.</p>`:`<p style="color:#888">Not needed for this task.</p>`)}
+  else if(sel==='domain'||sel.startsWith('ou:'))right=`<h3 style="margin:0 0 6px;font-weight:400">${esc(sel==='domain'?n.domain:sel.slice(3))}</h3><p>Linked Group Policy Objects:</p><table class="sm-props"><tr><td><b>Link Order</b></td><td><b>GPO</b></td></tr>${(sel==='domain'?[{name:'Default Domain Policy'},...linked(n.domain)]:linked(sel.slice(3))).map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.name)}</td></tr>`).join('')}</table><p style="color:#888;font-size:12px">Right-click this item to create a GPO and link it here.</p>`;
+  else right='<p style="color:#888">Select an item in the tree.</p>';
+  w.body.innerHTML=`<div class="gp"><div class="gp-tree">${node('root','Group Policy Management',0,'📜')}${tree}</div><div class="gp-main">${right}</div></div>`;
+  $$('.gp-n',w.body).forEach(b=>{b.onclick=()=>{const id=b.dataset.id;if(id.startsWith('L:')&&!D._gpLinkMsg){D._gpLinkMsg=1;D.msg('Group Policy Management Console','You have selected a link to a Group Policy Object (GPO). Except for changes to link properties, changes you make here are global to the GPO, and will impact all other locations where this GPO is linked.',{icon:'ℹ️'})}sel=id;tab='scope';render()};
+   b.oncontextmenu=e=>{e.preventDefault();const id=b.dataset.id;sel=id;render();
+    if(id==='domain'||id.startsWith('ou:'))return D.ctxMenu(e.clientX,e.clientY,[{l:'Create a GPO in this domain, and Link it here...',f:()=>newGpo(id==='domain'?n.domain:id.slice(3))},{l:'Link an Existing GPO...',f:()=>linkExisting(id==='domain'?n.domain:id.slice(3))},{l:'Block Inheritance'},null,{l:'Refresh',f:render}]);
+    if(id==='gpos')return D.ctxMenu(e.clientX,e.clientY,[{l:'New',f:()=>newGpo(null)}]);
+    if(id.startsWith('L:')||id.startsWith('G:'))return D.ctxMenu(e.clientX,e.clientY,[{l:'<b>Edit...</b>',f:()=>D.open('gpme',{gpo:id.split(':').pop()})},{l:'Enforced'},{l:'✓ Link Enabled'},null,{l:'Delete',f:()=>{const nm=id.split(':').pop();if(id.startsWith('L:')){const t=id.split(':')[1];const x=gp.find(q=>q.name===nm);x.links=x.links.filter(l=>l!==t)}else{n.gpos=n.gpos.filter(q=>q.name!==nm);gp.splice(0,gp.length,...n.gpos)}D.changed('gpo');sel='domain';render()}}])}});
+  $$('[data-tab]',w.body).forEach(t=>t.onclick=()=>{tab=t.dataset.tab;render()});
+  if(g&&$('#gFa',w.body)){$$('[data-f]',w.body).forEach(d=>d.onclick=()=>{g._fs=+d.dataset.f;render()});
+   $('#gFa',w.body).onclick=()=>pickPrincipal(D,'',h=>{g.filter=g.filter||[];if(!g.filter.some(f=>lcEq(f,h)))g.filter.push(h);D.changed('gpo');render()});
+   $('#gFr',w.body).onclick=()=>{if(g._fs==null)return toast('Select a group first.');D.msg('Group Policy Management','Do you want to remove this delegation privilege?',{icon:'❓',buttons:['OK','Cancel']}).then(r=>{if(r==='OK'){g.filter.splice(g._fs,1);g._fs=null;D.changed('gpo');render()}})}}
+ };
+ function newGpo(target){const ww=D.win('New GPO',{dialog:true,w:400,icon:''});ww.body.innerHTML=`<div class="dp"><label>Name:</label><input id="gN" style="width:100%" autocapitalize="characters"><label style="margin-top:8px;display:block">Source Starter GPO:</label><select style="width:100%"><option>(none)</option></select></div><div class="dbtns"><button class="wb pri" id="gO">OK</button><button class="wb" id="gC">Cancel</button></div>`;
+  $('#gO',ww.body).onclick=()=>{const v=$('#gN',ww.body).value.trim();if(!v)return;let g=gp.find(x=>lcEq(x.name,v));if(!g){g={name:v,links:[],filter:['Authenticated Users'],fr:{},sw:[]};gp.push(g)}if(target&&!g.links.includes(target))g.links.push(target);ww.close();sel=target?'L:'+target+':'+g.name:'G:'+g.name;D.changed('gpo');render()};$('#gC',ww.body).onclick=()=>ww.close();setTimeout(()=>$('#gN',ww.body).focus(),30)}
+ function linkExisting(target){if(!gp.length)return D.msg('Select GPO','There are no Group Policy Objects yet.');D.ctxMenu(innerWidth/2,innerHeight/2,gp.map(g=>({l:g.name,f:()=>{if(!g.links.includes(target))g.links.push(target);D.changed('gpo');render()}})))}
+ render();w.sub(ev=>{if(ev==='gpo')render()});
+}};
+/* ---------- Group Policy Management Editor ---------- */
+APPS.gpme={title:(D,a)=>'Group Policy Management Editor',icon:'📝',w:820,h:500,open(w,D,args){
+ const n=D.n,g=gposOf(n).find(x=>x.name===args.gpo);if(!g){w.close();return}g.fr=g.fr||{};g.sw=g.sw||[];let sel='u-sw';
+ const FR=['AppData(Roaming)','Desktop','Start Menu','Documents','Pictures','Music','Videos','Favorites','Contacts','Downloads','Links','Searches','Saved Games'];
+ const nd=(id,l,d,i)=>`<div class="gp-n ${sel===id?'on':''}" data-id="${id}" style="padding-left:${6+d*14}px">${i} ${l}</div>`;
+ const render=()=>{
+  const tree=nd('root',esc(g.name)+' ['+esc(n.hostname)+'.'+esc(n.domain)+'] Policy',0,'📜')+nd('c','Computer Configuration',1,'🖥️')+nd('c-p','Policies',2,'📁')+nd('c-pr','Preferences',2,'📁')+nd('u','User Configuration',1,'👤')+nd('u-p','Policies',2,'📁')+nd('u-ss','Software Settings',3,'📁')+nd('u-sw','Software installation',4,'📦')+nd('u-ws','Windows Settings',3,'📁')+nd('u-sc','Scripts (Logon/Logoff)',4,'📄')+nd('u-sec','Security Settings',4,'📁')+nd('u-fr','Folder Redirection',4,'📁')+nd('u-at','Administrative Templates',3,'📁')+nd('u-pr','Preferences',2,'📁');
+  let right='';
+  if(sel==='u-sw')right=`<table class="sm-props" id="swT"><tr><td><b>Name</b></td><td><b>Version</b></td><td><b>Deployment state</b></td><td><b>Source</b></td></tr>${g.sw.map((p,i)=>`<tr class="swr" data-i="${i}"><td>📦 ${esc(p.name)}</td><td>${esc(p.ver)}</td><td>${p.type==='assigned'?'Assigned':'Published'}</td><td>${esc(p.path)}</td></tr>`).join('')}</table>${g.sw.length?'':'<p style="color:#888">There are no items to show in this view. Right-click "Software installation" › New › Package...</p>'}`;
+  else if(sel==='u-fr')right=`<div class="ex-items">${FR.map(f=>`<button class="exi frd" data-f="${f}"><span class="em">📁</span>${f}</button>`).join('')}</div><p style="color:#888;font-size:12px">Right-click a folder › Properties.</p>`;
+  else right='<p style="color:#888">Select an item to view its description.</p>';
+  w.body.innerHTML=`<div class="gp"><div class="gp-tree">${tree}</div><div class="gp-main">${right}</div></div>`;
+  $$('.gp-n',w.body).forEach(b=>{b.onclick=()=>{sel=b.dataset.id;render()};b.oncontextmenu=e=>{e.preventDefault();sel=b.dataset.id;render();if(sel==='u-sw')D.ctxMenu(e.clientX,e.clientY,[{l:'New › Package...',f:newPkg},null,{l:'Properties'}])}});
+  $$('.frd',w.body).forEach(b=>{const f=b.dataset.f;b.ondblclick=()=>frProps(f);b.oncontextmenu=e=>{e.preventDefault();D.ctxMenu(e.clientX,e.clientY,[{l:'<b>Properties</b>',f:()=>frProps(f)}])}});
+  $$('.swr',w.body).forEach(r=>{const p=g.sw[+r.dataset.i];r.oncontextmenu=e=>{e.preventDefault();D.ctxMenu(e.clientX,e.clientY,[{l:'Assign',f:()=>{p.type='assigned';D.changed('gpo');render()}},{l:'Publish',f:()=>{p.type='published';D.changed('gpo');render()}},null,{l:'All Tasks › Remove...',f:()=>{g.sw.splice(+r.dataset.i,1);D.changed('gpo');render()}},null,{l:'<b>Properties</b>',f:()=>pkgProps(p)}])};r.ondblclick=()=>pkgProps(p)});
+ };
+ function frProps(f){const cur=g.fr[f.toLowerCase()]||{setting:'none',mode:'peruser',root:'',grant:true,move:true,apply2k:false};const c={...cur};const ww=D.win(f+' Properties',{dialog:true,w:440,icon:''});let tab='target';
+  const r=()=>{ww.body.innerHTML=`<div class="dp"><div class="wtabs"><span data-t="target" class="${tab==='target'?'on':''}">Target</span><span data-t="settings" class="${tab==='settings'?'on':''}">Settings</span></div>
+   ${tab==='target'?`<p>You can specify the location of the ${esc(f)} folder.</p><div class="wf"><label>Setting:</label><select id="fS" style="flex:1"><option value="none" ${c.setting==='none'?'selected':''}>Not configured</option><option value="basic" ${c.setting==='basic'?'selected':''}>Basic - Redirect everyone's folder to the same location</option><option value="adv" ${c.setting==='adv'?'selected':''}>Advanced - Specify locations for various user groups</option></select></div>
+    ${c.setting==='basic'?`<fieldset class="wfs"><legend>Target folder location</legend><select id="fM" style="width:100%"><option value="peruser" ${c.mode==='peruser'?'selected':''}>Create a folder for each user under the root path</option><option value="home" ${c.mode==='home'?'selected':''}>Redirect to the user's home directory</option><option value="local" ${c.mode==='local'?'selected':''}>Redirect to the local userprofile location</option></select><label style="display:block;margin-top:8px">Root Path:</label><input id="fR" style="width:100%" value="${esc(c.root)}" autocapitalize="off" spellcheck="false"><p style="font-size:12px;color:#555">For user Clair, this folder will be redirected to:<br>${esc((c.root||'\\\\server\\share').replace(/\\+$/,''))}\\Clair\\${esc(f)}</p></fieldset>`:'<p style="font-size:12px;color:#555">This folder is not redirected.</p>'}`
+   :`<p>Select the redirection settings for ${esc(f)}.</p><label class="radio"><input type="checkbox" id="fG" ${c.grant?'checked':''}> Grant the user exclusive rights to ${esc(f)}</label><label class="radio"><input type="checkbox" id="fMv" ${c.move?'checked':''}> Move the contents of ${esc(f)} to the new location</label><label class="radio"><input type="checkbox" id="fA" ${c.apply2k?'checked':''}> Also apply redirection policy to Windows 2000, Windows 2000 Server, Windows XP, and Windows Server 2003 operating systems</label>`}
+   </div><div class="dbtns"><button class="wb pri" id="fO">OK</button><button class="wb" id="fC">Cancel</button><button class="wb" id="fP">Apply</button></div>`;
+   const q=s=>$(s,ww.body),grab=()=>{if(q('#fS'))c.setting=q('#fS').value;if(q('#fM'))c.mode=q('#fM').value;if(q('#fR'))c.root=q('#fR').value.trim();if(q('#fG')){c.grant=q('#fG').checked;c.move=q('#fMv').checked;c.apply2k=q('#fA').checked}};
+   $$('.wtabs span',ww.body).forEach(s=>s.onclick=()=>{grab();tab=s.dataset.t;r()});if(q('#fS'))q('#fS').onchange=()=>{grab();r()};
+   const apply=()=>{grab();if(c.setting==='basic'&&c.mode==='peruser'&&!/^\\\\[^\\]+\\[^\\]+/.test(c.root)){D.msg('Folder Redirection','The root path must be a network path in the form \\\\server\\share. Copy the Network Path from the Sharing tab of the shared folder.',{icon:'⛔'});return false}g.fr[f.toLowerCase()]=c;D.changed('gpo');return true};
+   q('#fO').onclick=()=>{if(apply()){ww.close();render()}};q('#fP').onclick=apply;q('#fC').onclick=()=>ww.close()};r()}
+ function newPkg(){const ww=D.win('Open',{dialog:true,w:560,icon:''});let dir='\\\\'+n.hostname+'\\';
+  const r=()=>{let items=[],err='';const t=uncOk(D.L,dir.replace(/\\+$/,''));
+   if(/^\\\\[^\\]+\\?$/.test(dir)&&(lcEq(dir.slice(2).replace(/\\$/,''),n.hostname)||dir.slice(2).replace(/\\$/,'')===n.ip))items=Object.keys(n.shares).map(s=>({n:s,d:1}));
+   else if(t)items=(n.fs[t.sh.path+t.rest]||[]).filter(x=>x.d||/\.msi$/i.test(x.n));else if(/^[a-z]:/i.test(dir)){const p=dir.replace(/\\+$/,'');items=(n.fs[p.length===2?p.toUpperCase():p]||[]).filter(x=>x.d||/\.msi$/i.test(x.n))}else err='Windows can\'t find this location.';
+   ww.body.innerHTML=`<div class="dp"><div style="display:flex;gap:6px"><input id="oD" style="flex:1" value="${esc(dir)}" autocapitalize="off" spellcheck="false"><button class="wb" id="oG">Go</button></div><div class="wlist" style="height:180px;margin-top:6px">${err?`<div style="color:#c00">${err}</div>`:items.map((x,i)=>`<div data-i="${i}">${x.d?'📁':'📦'} ${esc(x.n)}</div>`).join('')||'<div style="color:#888">This folder is empty.</div>'}</div>
+    <div class="wf" style="margin-top:6px"><label>File name:</label><input id="oF" style="flex:1"></div><div class="wf"><label></label><select style="flex:1"><option>Windows Installer packages (*.msi)</option></select></div></div><div class="dbtns"><button class="wb pri" id="oO">Open</button><button class="wb" id="oC">Cancel</button></div>`;
+   const q=s=>$(s,ww.body);q('#oG').onclick=()=>{dir=q('#oD').value.trim();if(!dir.endsWith('\\'))dir+='\\';r()};q('#oD').onkeydown=e=>{if(e.key==='Enter')q('#oG').onclick()};
+   $$('[data-i]',ww.body).forEach(d=>{const x=items[+d.dataset.i];d.onclick=()=>{$$('[data-i]',ww.body).forEach(z=>z.classList.remove('sel'));d.classList.add('sel');if(!x.d)q('#oF').value=x.n};d.ondblclick=()=>{if(x.d){dir=dir+x.n+'\\';r()}else{q('#oF').value=x.n;q('#oO').onclick()}}});
+   q('#oC').onclick=()=>ww.close();
+   q('#oO').onclick=async()=>{const fn=q('#oF').value.trim();if(!fn)return;if(!/\.msi$/i.test(fn))return D.msg('Open','Only Windows Installer packages (.msi) can be deployed.',{icon:'⛔'});const full=dir+fn;ww.close();
+    if(!/^\\\\/.test(full)){const a=await D.msg('Software installation',`The Group Policy Software Installation snap-in cannot verify that "${esc(full)}" is a network location. Do you want to continue?`,{icon:'⚠️',buttons:['Yes','No']});if(a!=='Yes')return}
+    deployDlg(full,fn)}};r()}
+ function deployDlg(full,fn){const ww=D.win('Deploy Software',{dialog:true,w:340,icon:''});ww.body.innerHTML=`<div class="dp"><p>Select deployment method:</p><label class="radio"><input type="radio" name="dm" value="published"> Published</label><label class="radio"><input type="radio" name="dm" value="assigned" checked> Assigned</label><label class="radio"><input type="radio" name="dm" value="adv"> Advanced</label><p style="font-size:12px">Select this option to Assign the application without modifications.</p></div><div class="dbtns"><button class="wb pri" id="dO">OK</button><button class="wb" id="dC">Cancel</button></div>`;
+  $('#dO',ww.body).onclick=()=>{const t=$('input[name=dm]:checked',ww.body).value;const nm=/7z/i.test(fn)?'7-Zip 23.01 (x64 edition)':/chrome/i.test(fn)?'Google Chrome':fn.replace(/\.msi$/i,'');g.sw.push({name:nm,ver:'23.1',file:fn,path:full,type:t==='published'?'published':'assigned',atLogon:false});ww.close();D.changed('gpo');render()};$('#dC',ww.body).onclick=()=>ww.close()}
+ function pkgProps(p){const ww=D.win(p.name+' Properties',{dialog:true,w:420,icon:''});let tab='dep';const c={...p};
+  const r=()=>{ww.body.innerHTML=`<div class="dp"><div class="wtabs">${[['gen','General'],['dep','Deployment'],['up','Upgrades'],['cat','Categories'],['mod','Modifications'],['sec','Security']].map(([k,l])=>`<span data-t="${k}" class="${tab===k?'on':''}">${l}</span>`).join('')}</div>
+   ${tab==='dep'?`<fieldset class="wfs"><legend>Deployment type</legend><label class="radio"><input type="radio" name="pt" value="published" ${c.type==='published'?'checked':''}> Published</label><label class="radio"><input type="radio" name="pt" value="assigned" ${c.type==='assigned'?'checked':''}> Assigned</label></fieldset><fieldset class="wfs"><legend>Deployment options</legend><label class="radio"><input type="checkbox" checked> Auto-install this application by file extension activation</label><label class="radio"><input type="checkbox"> Uninstall this application when it falls out of the scope of management</label><label class="radio"><input type="checkbox"> Do not display this package in the Add/Remove Programs control panel</label><label class="radio"><input type="checkbox" id="pL" ${c.atLogon?'checked':''}> Install this application at logon</label></fieldset>`:tab==='gen'?`<p>Name: ${esc(p.name)}</p><p>Version: ${esc(p.ver)}</p><p>Source: ${esc(p.path)}</p>`:'<p style="color:#888">Not needed for this task.</p>'}
+   </div><div class="dbtns"><button class="wb pri" id="pO">OK</button><button class="wb" id="pC">Cancel</button><button class="wb" id="pA">Apply</button></div>`;
+   const grab=()=>{const t=$('input[name=pt]:checked',ww.body);if(t)c.type=t.value;if($('#pL',ww.body))c.atLogon=$('#pL',ww.body).checked};
+   $$('.wtabs span',ww.body).forEach(s=>s.onclick=()=>{grab();tab=s.dataset.t;r()});const ap=()=>{grab();Object.assign(p,c);D.changed('gpo');render()};
+   $('#pO',ww.body).onclick=()=>{ap();ww.close()};$('#pA',ww.body).onclick=ap;$('#pC',ww.body).onclick=()=>ww.close()};r()}
+ render();
+}};
+/* ---------- Remote Desktop: server side (System Properties › Remote) ---------- */
+APPS.rdpdlg={title:'System Properties',icon:'💻',w:430,dialog:true,single:true,open(w,D){
+ const n=D.n;n.rdp=n.rdp||{on:false,users:[]};const c={on:n.rdp.on,nla:true,users:[...n.rdp.users]};
+ const r=()=>{w.body.innerHTML=`<div class="dp"><div class="wtabs"><span>Computer Name</span><span>Hardware</span><span>Advanced</span><span class="on">Remote</span></div>
+  <fieldset class="wfs"><legend>Remote Assistance</legend><label class="radio"><input type="checkbox"> Allow Remote Assistance connections to this computer</label></fieldset>
+  <fieldset class="wfs"><legend>Remote Desktop</legend><p>Choose an option, and then specify who can connect.</p><label class="radio"><input type="radio" name="rd" value="0" ${c.on?'':'checked'}> Don't allow remote connections to this computer</label><label class="radio"><input type="radio" name="rd" value="1" ${c.on?'checked':''}> Allow remote connections to this computer</label><label class="radio" style="margin-left:18px"><input type="checkbox" ${c.nla?'checked':''} id="rN" ${c.on?'':'disabled'}> Allow connections only from computers running Remote Desktop with Network Level Authentication (recommended)</label><div class="row" style="justify-content:flex-end"><button class="wb" id="rU" ${c.on?'':'disabled'}>Select Users...</button></div></fieldset></div>
+  <div class="dbtns"><button class="wb pri" id="rO">OK</button><button class="wb" id="rC">Cancel</button><button class="wb" id="rA">Apply</button></div>`;
+  $$('input[name=rd]',w.body).forEach(i=>i.onchange=()=>{c.on=i.value==='1';if(c.on&&!n.rdp.on)D.msg('Remote Desktop Connection','Some PCs might not be able to connect if they use older versions of Remote Desktop. To allow all connections, clear the Network Level Authentication check box.',{icon:'ℹ️'});r()});
+  $('#rU',w.body).onclick=()=>usersDlg();const ap=()=>{n.rdp={on:c.on,users:c.users};D.changed('rdp');};
+  $('#rO',w.body).onclick=()=>{ap();w.close()};$('#rA',w.body).onclick=ap;$('#rC',w.body).onclick=()=>w.close()};
+ function usersDlg(){const ww=D.win('Remote Desktop Users',{dialog:true,w:380,icon:''});const rr=()=>{ww.body.innerHTML=`<div class="dp"><p>The users listed below can connect to this computer, and any members of the Administrators group can connect even if they are not listed.</p><div class="wlist">${c.users.map(u=>`<div>👥 ${esc(u)}</div>`).join('')||'<div style="color:#888">(none)</div>'}</div><p style="font-size:12px">Administrator already has access.</p><div class="row"><button class="wb" id="uA">Add...</button><button class="wb" id="uR">Remove</button></div></div><div class="dbtns"><button class="wb pri" id="uO">OK</button><button class="wb" id="uC">Cancel</button></div>`;
+  $('#uA',ww.body).onclick=()=>pickPrincipal(D,'',h=>{if(!c.users.includes(h))c.users.push(h);rr()});$('#uR',ww.body).onclick=()=>{c.users.pop();rr()};$('#uO',ww.body).onclick=()=>ww.close();$('#uC',ww.body).onclick=()=>ww.close()};rr()}
+ r()}};
+/* ---------- Remote Desktop Connection (mstsc) on the client ---------- */
+APPS.mstsc={title:'Remote Desktop Connection',icon:'🖥️',w:460,h:300,open(w,D){
+ const n=D.n;w.body.innerHTML=`<div class="dp"><div style="background:#1e64a8;color:#fff;padding:10px 12px;margin:-10px -10px 10px">🖥️ <b>Remote Desktop</b> Connection</div><div class="wf"><label>Computer:</label><input id="mC" style="flex:1" placeholder="Example: computer.fabrikam.com" autocapitalize="off" spellcheck="false"></div><div class="wf"><label>User name:</label><span style="color:#666">None specified</span></div><p style="font-size:12px;color:#666">You will be asked for credentials when you connect.</p></div><div class="dbtns"><button class="wb pri" id="mG">Connect</button><button class="wb">Help</button></div>`;
+ const go=async()=>{const t=$('#mC',w.body).value.trim();if(!t)return;const dc=dcNode(D.L);const ip=validIP(t)?t:(dc&&(lcEq(t,dc.domain)||lcEq(t,dc.hostname)||lcEq(t,dc.hostname+'.'+dc.domain))?dc.ip:resolveName(D.L,n,t));const tg=ip&&nodesOf(D.L).find(o=>o.ip===ip);
+  w.body.innerHTML='<div class="dp" style="text-align:center;padding:30px"><div class="spinner" style="border-color:#1e64a8;border-top-color:transparent;margin:auto"></div><p>Initiating remote connection...</p></div>';await sleep(1400);
+  if(!tg||lreach(D.L,n,ip,true)!=='ok'||!tg.rdp||!tg.rdp.on){await D.msg('Remote Desktop Connection','Remote Desktop can\'t connect to the remote computer for one of these reasons:<br><br>1) Remote access to the server is not enabled<br>2) The remote computer is turned off<br>3) The remote computer is not available on the network<br><br>Make sure the remote computer is turned on and connected to the network, and that remote access is enabled.',{icon:'⛔'});D.changed('rdpfail');w.close();return}
+  w.body.innerHTML=`<div class="dp"><b>Enter your credentials</b><p style="font-size:12px">These credentials will be used to connect to ${esc(t)}.</p><input id="mU" style="width:100%" value="${esc(D.user)}" autocapitalize="off"><input id="mP" type="password" style="width:100%;margin-top:6px" placeholder="Password"><div id="mE" style="color:#c00;font-size:12px"></div></div><div class="dbtns"><button class="wb pri" id="mO">OK</button><button class="wb" id="mX">Cancel</button></div>`;
+  $('#mX',w.body).onclick=()=>w.close();$('#mO',w.body).onclick=async()=>{const u=$('#mU',w.body).value.trim().replace(/^tesda\\/i,''),p=$('#mP',w.body).value;const dc2=dcNode(D.L);
+   const rec=lcEq(u,'administrator')?{logon:'Administrator',pw:tg.accounts.Administrator.pw,admin:1}:(dc2.adUsers||[]).find(x=>lcEq(x.logon,u));
+   if(!rec||rec.pw!==p)return $('#mE',w.body).textContent='The user name or password is incorrect.';
+   const allowed=rec.admin||(tg.rdp.users||[]).some(x=>lcEq(x,'Domain Users')||lcEq(x,rec.logon)||lcEq(x,'Authenticated Users')||lcEq(x,'Everyone'));
+   if(!allowed){await D.msg('Remote Desktop Connection','The connection was denied because the user account is not authorized for remote login.',{icon:'⛔'});return}
+   w.setTitle(t+' - Remote Desktop Connection');w.body.innerHTML=`<div style="height:100%;min-height:240px;background:linear-gradient(#0b3a6e,#081d36);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-family:Segoe UI,sans-serif"><div style="font-size:42px">🗄️</div><b>${esc(tg.hostname)} — Windows Server 2016</b><span style="opacity:.8">Signed in remotely as TESDA\\${esc(rec.logon)}</span><button class="wb" id="mD" style="margin-top:10px">Disconnect</button></div>`;
+   D.changed('rdpok',{to:tg.hostname,user:rec.logon});$('#mD',w.body).onclick=()=>w.close()}};
+ $('#mG',w.body).onclick=go;$('#mC',w.body).onkeydown=e=>{if(e.key==='Enter')go()}}};
+/* ================= COC 3 tasks from the instructor's guide ================= */
+const srvSetup=L=>{const s=L.nodes.SRV;if(!s)return;s.gpos=s.gpos||[];s.ntfs=s.ntfs||{};s.rdp=s.rdp||{on:false,users:[]};
+ if(!s.fs['C:'].some(x=>x.n==='Installers')){s.fs['C:'].push({n:'Installers',d:1});s.fs['C:\\Installers']=[{n:'7z2301-x64.msi',d:0},{n:'GoogleChromeStandaloneEnterprise64.msi',d:0},{n:'vlc-3.0.20-win64.exe',d:0}]}};
+const DU='Domain Users';
+const S3=L=>L.nodes.SRV;
+TASKS.c3_fr=srvTask('c3_fr','Folder Redirection','1. This PC › Local Disk (C:) › create the folder SHARED FILES\n2. Properties › Sharing › Advanced Sharing › Share this folder › Permissions › Add "Domain Users" › Full Control\n3. Security tab › Edit › Add "Domain Users" › Full Control\n4. Sharing tab: copy the Network Path\n5. Tools › Group Policy Management › right-click COMPUTERS DOMAIN › Create a GPO in this domain, and Link it here › name: FOLDER REDIRECTION\n6. Security Filtering › Add › Domain Users\n7. Right-click FOLDER REDIRECTION › Edit › User Configuration › Policies › Windows Settings › Folder Redirection › Desktop › Properties\n8. Setting: Basic, "Create a folder for each user under the root path", Root Path = the network path\n9. Settings tab › Apply › OK',[
+ {id:'dir',text:'Create C:\\SHARED FILES',hint:'File Explorer › Local Disk (C:) › New folder › SHARED FILES.',check:L=>!!rootFolder(S3(L),'SHARED FILES')},
+ {id:'share',text:'Share it: Domain Users = Full Control (share permissions)',hint:'Right-click the folder › Properties › Sharing › Advanced Sharing › ☑ Share this folder › Permissions › Add... › Domain Users › Check Names › OK › tick Full Control.',check:L=>{const p=rootFolder(S3(L),'SHARED FILES');return p&&shareAllows(shareFor(S3(L),p),DU,'full')}},
+ {id:'ntfs',text:'Security tab: Domain Users = Full Control',hint:'Properties › Security › Edit... › Add... › Domain Users › tick Full Control › Apply.',check:L=>{const p=rootFolder(S3(L),'SHARED FILES');return p&&ntfsAllows(S3(L),p,DU,'full')}},
+ {id:'gpo',text:'GPO "FOLDER REDIRECTION" linked to the COMPUTERS DOMAIN OU',hint:'Tools › Group Policy Management › Forest › Domains › tesda.com › right-click COMPUTERS DOMAIN › Create a GPO in this domain, and Link it here...',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'FOLDER REDIRECTION')&&g.links.some(l=>lcEq(l,'COMPUTERS DOMAIN')))},
+ {id:'flt',text:'Security Filtering: add Domain Users',hint:'Click the FOLDER REDIRECTION link › Scope tab › Security Filtering › Add... › Domain Users.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'FOLDER REDIRECTION')&&(g.filter||[]).some(f=>lcEq(f,DU)))},
+ {id:'desk',text:'Redirect Desktop: Basic, a folder for each user, root path = \\\\server\\SHARED FILES',hint:'Right-click the GPO › Edit... › User Configuration › Policies › Windows Settings › Folder Redirection › right-click Desktop › Properties.',check:L=>gposOf(S3(L)).some(g=>{const d=g.fr&&g.fr.desktop;if(!lcEq(g.name,'FOLDER REDIRECTION')||!d||d.setting!=='basic'||d.mode!=='peruser')return false;const t=uncOk(L,d.root.replace(/\\+$/,''));return t&&lcEq(t.sh.path,rootFolder(S3(L),'SHARED FILES'))})}],{start:srvSetup});
+TASKS.c3_sw=srvTask('c3_sw','Software Deployment','1. This PC › Local Disk (C:) › create the folder Softwares\n2. Share it (Advanced Sharing › Permissions): Domain Users = Full Control\n3. Security tab › Edit › Domain Users = Full Control\n4. Copy the .msi installers from C:\\Installers into Softwares (only .msi can be deployed)\n5. Group Policy Management › right-click tesda.com › Create a GPO in this domain, and Link it here › SOFTWARE DEPLOYMENT\n6. Security Filtering › Add › Domain Users\n7. Edit › User Configuration › Policies › Software Settings › Software installation › New › Package\n8. Pick the .msi through the network path \\\\server\\Softwares (not C:\\)\n9. Assigned › OK, then Properties › Deployment › ☑ Install this application at logon\n10. Run gpupdate /force',[
+ {id:'dir',text:'Create C:\\Softwares and share it: Domain Users = Full Control',hint:'New folder › Softwares › Properties › Sharing › Advanced Sharing › Permissions › Add Domain Users › Full Control.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&shareAllows(shareFor(S3(L),p),DU,'full')}},
+ {id:'ntfs',text:'Security tab: Domain Users = Full Control',hint:'Properties › Security › Edit... › Add... › Domain Users › Full Control.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&ntfsAllows(S3(L),p,DU,'full')}},
+ {id:'msi',text:'Copy an .msi installer into Softwares',hint:'Open C:\\Installers › right-click 7z2301-x64.msi › Copy › open C:\\Softwares › right-click empty space › Paste.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&(S3(L).fs[p]||[]).some(x=>/\.msi$/i.test(x.n))}},
+ {id:'gpo',text:'GPO "SOFTWARE DEPLOYMENT" linked, Security Filtering: Domain Users',hint:'Group Policy Management › right-click tesda.com › Create a GPO in this domain, and Link it here... › then Scope › Security Filtering › Add › Domain Users.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'SOFTWARE DEPLOYMENT')&&g.links.length&&(g.filter||[]).some(f=>lcEq(f,DU)))},
+ {id:'pkg',text:'Assign the package from the network path \\\\server\\Softwares',hint:'Edit the GPO › User Configuration › Policies › Software Settings › right-click Software installation › New › Package... › type \\\\SERVERNAME\\Softwares\\ › choose the .msi › Assigned.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'SOFTWARE DEPLOYMENT')&&(g.sw||[]).some(p=>p.type==='assigned'&&uncOk(L,p.path)))},
+ {id:'logon',text:'Deployment tab: ☑ Install this application at logon',hint:'Right-click the package › Properties › Deployment.',check:L=>gposOf(S3(L)).some(g=>(g.sw||[]).some(p=>p.atLogon))},
+ {id:'gpu',text:'Run gpupdate /force on the server',hint:'Win + R › gpupdate /force, or Command Prompt.',check:(L,f)=>f.gpu}],
+ {start:srvSetup,ev:(ctx,ev,d)=>{if(ev==='gpupdate'&&d&&d.ok&&d.force)ctx.R.flags.gpu=true}});
+TASKS.c3_rdp=srvTask('c3_rdp','Remote Desktop','1. Server Manager › Local Server › click "Disabled" next to Remote Desktop\n2. ◉ Allow remote connections to this computer\n3. Select Users... › Add... › Domain Users › OK\n4. Apply › OK',[
+ {id:'on',text:'Allow remote connections to this computer',hint:'Server Manager › Local Server › Remote Desktop: Disabled › Allow remote connections.',check:L=>S3(L).rdp&&S3(L).rdp.on},
+ {id:'du',text:'Add Domain Users to the Remote Desktop users',hint:'In the Remote tab › Select Users... › Add... › Domain Users › Check Names › OK.',check:L=>S3(L).rdp&&S3(L).rdp.on&&(S3(L).rdp.users||[]).some(u=>lcEq(u,DU))}],{start:srvSetup});
+TASKS.c3_test={id:'c3_test',coc:3,title:'Test the policies and Remote Desktop on the client',where:'Client PC',
+ info:'On the client, sign in as TESDA\\Client A (password Admin.123).\n\n1. Open Command Prompt › gpupdate /force › type Y to sign out\n2. Sign in again as Client A: the Desktop is redirected and the software installs\n3. Open Remote Desktop Connection (mstsc) › Computer: tesda.com or the server IP › Connect › sign in as Client A',
+ objectives:[{id:'login',text:'Sign in as TESDA\\Client A',hint:'Lock screen › Other user › TESDA\\Client A / Admin.123.',check:(L,f)=>f.du},
+  {id:'gpu',text:'Run gpupdate /force and sign out (Y)',hint:'Command Prompt: gpupdate /force, then type Y.',check:(L,f)=>f.gpout},
+  {id:'fr',text:'After signing in again, the Desktop is redirected to the server',hint:'If it failed, check the share and Security permissions and the root path on the server.',check:L=>!!L.nodes.CLIENT.redirect},
+  {id:'sw',text:'The assigned software installs at logon',hint:'If it is missing, check that the package path is \\\\server\\Softwares and "Install this application at logon" is ticked.',check:L=>(L.nodes.CLIENT.installed||[]).length>0},
+  {id:'rdp',text:'Connect to the server with Remote Desktop Connection',hint:'Start › Remote Desktop Connection › tesda.com › Connect › TESDA\\Client A.',check:(L,f)=>f.rdp}],
+ start(ctx){const L=ctx.L;c3mig(L);srvSetup(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
+  const D=new Desktop(scr,{L,key:'CLIENT',user:'student',locked:true,onChange:(ev,d)=>{
+   if(ev==='login'&&/client a/i.test(d||'')){ctx.R.flags.du=true;const res=applyUserPolicy(L,L.nodes.CLIENT,d);
+    if(ctx.R.flags.gpout){setTimeout(()=>{if(res.sw.length)toast('📦 Installing managed software: '+res.sw.join(', '),'good');if(res.fr)toast('📁 Desktop redirected to '+res.fr,'good');res.errors.forEach(e=>toast('⚠ '+e,'bad'))},1300)}}
+   if(ev==='gpsignout')ctx.R.flags.gpout=true;if(ev==='rdpok')ctx.R.flags.rdp=true;ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
+COCS[3].tasks.push('c3_fr','c3_sw','c3_rdp','c3_test');
+(function(){const o=COCS[3].room.objs;const s=o.find(x=>x.label==='Server Console');if(s)s.tasks.push('c3_fr','c3_sw','c3_rdp');const c=o.find(x=>x.label==='Client PC');if(c)c.tasks.push('c3_test')})();
+COCS[3].sub='Windows Server 2016 · domain tesda.com · DHCP · OU & users · folder redirection · software deployment · Remote Desktop';
 
 /* ================= BOOT ================= */
 addEventListener('beforeunload',()=>{if(G.coc&&!$('#world').classList.contains('hidden'))pauseTimer();save()});
