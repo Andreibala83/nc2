@@ -455,6 +455,21 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 .pd-wire{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:700}.pd-wire.on{outline:3px solid #f5c518}
 .pd-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.pd-tools .on{background:#f5c518;color:#1a1400}
 .pdled{display:inline-block;padding:2px 6px;border-radius:5px;margin:2px;font-family:monospace}.pdled.ok{background:#1f7a45}.pdled.x{background:#a33}.pdled.off{background:#444}
+/* realistic patch panel rear */
+.pp-strip{display:flex;align-items:center;gap:6px;background:#111;border-radius:6px;padding:8px 10px;margin-bottom:10px;border-bottom:4px solid #000}
+.pp-mini{flex:1;height:38px;background:#eceff2;border:2px solid #333;border-radius:3px;position:relative;display:grid;grid-template-rows:1fr 1fr;padding:3px;gap:3px}
+.pp-mini span{background:repeating-linear-gradient(90deg,#fff 0 5px,#c9ced4 5px 7px)}.pp-mini em{position:absolute;right:3px;bottom:-1px;font-size:10px;color:#c33;font-style:normal;font-weight:800}
+.pp-mini.on{outline:3px solid #f5c518}.pp-mini.ok::after{content:"✔";position:absolute;left:4px;top:2px;color:#1f7a45;font-weight:900}.pp-mini:disabled{opacity:.55}
+.pp-cat{color:#3b82f6;font-weight:900;font-size:18px;margin-left:6px}
+.pp-back{background:linear-gradient(#f4f6f8,#e3e7eb);border:6px solid #141414;border-radius:6px;padding:10px;color:#222}
+.pp-hdr{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:6px}.pp-ab i{font-style:normal;background:#222;color:#fff;border-radius:3px;padding:0 4px}
+.pp-row{display:flex;gap:6px;justify-content:center}.pp-col{flex:1;max-width:84px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.pp-code{display:flex;flex-direction:column;align-items:center;gap:2px}.pp-code i{display:block;width:30px;height:9px;border-radius:2px;border:1px solid #0003}.pp-code b{font-size:11px}
+.pp-slot{width:100%;height:62px;background:#fff;border:2px solid #b9c0c8;border-radius:4px 4px 2px 2px;position:relative;overflow:hidden;box-shadow:inset 0 -8px 0 #dfe3e8}
+.pp-teeth{position:absolute;left:50%;top:0;bottom:12px;width:6px;transform:translateX(-50%);background:#9aa3ad;border-radius:0 0 3px 3px}
+.pp-w{position:absolute;left:8%;right:8%;top:16px;height:9px;border-radius:5px;box-shadow:0 1px 2px #0005}
+.pp-slot.hit{border-color:#c9a24a}.pp-slot.hit .pp-w{top:24px;left:30%;right:30%}.pp-slot.hit::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:#c9a24a}
+.pp-label{text-align:center;font-size:10px;letter-spacing:1px;color:#666;margin:6px 0;font-weight:700}
 
 </style>
 </head>
@@ -2148,7 +2163,7 @@ function c2link(L){
  const swUp=L.pw.sw,rtUp=L.pw.rt;
  const uplink=L.patch.some(([x,y])=>{const p=[x,y].sort();return p[0].startsWith('rt.LAN')&&p[1].startsWith('sw.')})&&swUp&&rtUp;
  L.router.up=rtUp;L.router.internet=rtUp&&L.patch.some(([x,y])=>[x,y].includes('rt.WAN')&&[x,y].some(p=>p.startsWith('ont.')));
- const viaPP=k=>L.patch.some(([x,y])=>{const pr=[x,y].find(q=>q.startsWith('pr.R')),o=[x,y].find(q=>q.startsWith(k+'.'));if(!pr||!o)return false;const n=pr.slice(4);return (L.punch[n]||{}).ok&&L.patch.some(([a,b])=>[a,b].includes('pp.F'+n)&&[a,b].some(q=>q.startsWith('sw.')))});
+ const viaPP=k=>L.patch.some(([x,y])=>{const pr=[x,y].find(q=>q.startsWith('pr.R')),o=[x,y].find(q=>q.startsWith(k+'.'));if(!pr||!o)return false;const n=pr.slice(4);return ((L.punch||{})[n]||{}).ok&&L.patch.some(([a,b])=>[a,b].includes('pp.F'+n)&&[a,b].some(q=>q.startsWith('sw.')))});
  [['pc1','PC-01'],['pc2','PC-02']].forEach(([k,nm])=>{const n=L.nodes[nm];const toSw=(has(k+'.','sw.')||viaPP(k))&&swUp,toRt=L.patch.some(([x,y])=>(x===k+'.NIC'&&y.startsWith('rt.LAN'))||(y===k+'.NIC'&&x.startsWith('rt.LAN')))&&rtUp;
   const was=n.media;n.media=toSw||toRt;n.seg=uplink||toRt?'lan':'sw';n.rtReach=uplink||toRt;if(n.media&&!was&&n.dhcp)dhcpRenew(L,n)});
  const lp=L.nodes.LAPTOP;lp.media=rtUp;lp.seg=uplink?'lan':'rt';lp.rtReach=true;if(lp.media&&lp.dhcp&&(!lp.ip||lp.apipa))dhcpRenew(L,lp);
@@ -2370,43 +2385,48 @@ TASKS.c2_crimp={id:'c2_crimp',coc:2,title:'Make and test 5 straight-through cabl
 /* ---------- Task 2: Patch the network ---------- */
 /* ---------- Task: punch down the patch panel (110 IDC block on the back) ---------- */
 TASKS.c2_punch={id:'c2_punch',coc:2,title:'Punch down the patch panel',where:'Network Rack',
- info:'Terminate the two cable runs on the back of the patch panel, ports 1 and 2.\n\n• Use the T568B colour row on the label (the panel shows A and B).\n• Lay each wire into its slot: tap a wire, then tap a slot.\n• Pick the punch-down tool and punch every slot. The blade side faces the cut-off end.\n• Test each port with the LAN tester before you finish.',
- objectives:[{id:'p1',text:'Patch panel port 1 punched down and tests OK',hint:'B row left→right: W/O, O, W/G, Bl, W/Bl, G, W/Br, Br. Punch all 8 slots.',check:L=>(L.punch['1']||{}).ok},
-  {id:'p2',text:'Patch panel port 2 punched down and tests OK',hint:'A wire that is laid in but not punched has no contact. The LAN tester shows it as open.',check:L=>(L.punch['2']||{}).ok}],
+ info:'Terminate the two cable runs on the back of the patch panel, ports 1 and 2.\n\n• Read the colour label on YOUR panel. Cat6 and Cat5e panels use different slot layouts.\n• Follow the B row (T568B).\n• Lay each wire into its slot: tap a wire, then tap a slot.\n• Pick the punch-down tool and punch every slot.\n• Test each port with the LAN tester before you finish.',
+ objectives:[{id:'p1',text:'Patch panel port 1 punched down and tests OK',hint:'Match each wire to the B colour printed next to the slot, not to the order you use on an RJ45.',check:L=>(L.punch||{})['1']&&L.punch['1'].ok},
+  {id:'p2',text:'Patch panel port 2 punched down and tests OK',hint:'A wire that is laid in but not punched has no contact. The LAN tester shows it as open.',check:L=>(L.punch||{})['2']&&L.punch['2'].ok}],
  start(ctx){
-  const L=ctx.L,f=ctx.R.flags;const S=f.pd||(f.pd={port:'1',tool:null,sel:null,p:{}});
+  const L=ctx.L,f=ctx.R.flags;L.punch=L.punch||{};
+  const S=f.pd2||(f.pd2={port:'1',tool:null,sel:null,type:Math.random()<.5?'cat6':'cat5e',p:{}});
+  const LAY={cat6:[[3,6,5,4],[1,2,7,8]],cat5e:[[5,4,1,2,3,6,7,8]]},A568=['wg','g','wo','bl','wb','o','wbr','br'];
+  const pins=()=>LAY[S.type].flat();
   const st=n=>S.p[n]||(S.p[n]={slot:Array(8).fill(null),hit:Array(8).fill(false),bad:Array(8).fill(false)});
-  const A568=['wg','g','wo','bl','wb','o','wbr','br'];
-  const dot=k=>{const c=COLORS[k];return `<i class="pdw" style="background:${c.s?`repeating-linear-gradient(45deg,#fff 0 4px,${c.c} 4px 8px)`:c.c}"></i>`};
-  const render=()=>{const P=st(S.port),left=T568B.filter(k=>!P.slot.includes(k));
+  const sw=k=>{const c=COLORS[k];return c.s?`repeating-linear-gradient(135deg,#fff 0 4px,${c.c} 4px 8px)`:c.c};
+  const anyWork=()=>Object.values(S.p).some(P=>P&&P.slot.some(Boolean));
+  const render=()=>{const P=st(S.port),left=T568B.filter(k=>!P.slot.includes(k)),pn=pins();let idx=0;
+   const rowHtml=row=>`<div class="pp-row">${row.map(pin=>{const i=idx++,k=P.slot[i];return `<div class="pp-col"><div class="pp-code"><i style="background:${sw(A568[pin-1])}"></i><i style="background:${sw(T568B[pin-1])}"></i><b>${pin}</b></div><button class="pp-slot ${P.hit[i]?'hit':''} ${k?'has':''}" data-s="${i}">${k?`<span class="pp-w" style="background:${sw(k)}"></span>`:''}<span class="pp-teeth"></span></button></div>`}).join('')}</div>`;
+   const rows=LAY[S.type];
    ctx.body.innerHTML=`<div class="stage"><div class="panel pd">
-    <div class="pd-top"><b>Patch panel · rear view</b><span class="pd-tabs">${['1','2'].map(n=>`<button class="${S.port===n?'on':''}" data-port="${n}">Port ${n}${(L.punch[n]||{}).ok?' ✔':''}</button>`).join('')}</span></div>
-    <div class="pd-block">
-     <div class="pd-lbl"><span>A</span>${A568.map(k=>`<em>${dot(k)}</em>`).join('')}</div>
-     <div class="pd-lbl"><span>B</span>${T568B.map(k=>`<em>${dot(k)}</em>`).join('')}</div>
-     <div class="pd-slots"><span></span>${P.slot.map((k,i)=>`<button class="pd-slot ${P.hit[i]?'hit':''}" data-s="${i}">${k?dot(k):''}<small>${i+1}</small></button>`).join('')}</div>
+    <div class="pp-strip">${['6','5','4','3','2','1'].map(n=>`<button class="pp-mini ${S.port===n?'on':''} ${(L.punch[n]||{}).ok?'ok':''}" ${n>'2'?'disabled':''} data-port="${n}"><span></span><span></span><em>${n}</em></button>`).join('')}<div class="pp-cat">${S.type==='cat6'?'CAT.6':'CAT.5e'}</div></div>
+    <div class="pp-back">
+     <div class="pp-hdr"><span>Port ${S.port} · rear view</span><span class="pp-ab"><i>A</i> top dot · <i>B</i> bottom dot</span></div>
+     ${S.type==='cat6'?rowHtml(rows[0])+'<div class="pp-label">COMMUNICATION CIRCUIT ACCESSORY</div>'+rowHtml(rows[1]):'<div class="pp-label">110 IDC · pairs left to right</div>'+rowHtml(rows[0])}
     </div>
-    <div class="pd-cable"><span class="small muted">Cable run ${S.port} (jacket stripped, pairs untwisted only at the slots):</span><div>${left.length?NATURAL.filter(k=>left.includes(k)).map(k=>`<button class="pd-wire ${S.sel===k?'on':''}" data-w="${k}">${dot(k)}${COLORS[k].a}</button>`).join(''):'<span class="small">All 8 wires are laid in.</span>'}</div></div>
+    <div class="pd-cable"><span class="small muted">Cable run ${S.port}: tap a wire, then the slot whose <b>B</b> colour matches it.</span><div>${left.length?NATURAL.filter(k=>left.includes(k)).map(k=>`<button class="pd-wire ${S.sel===k?'on':''}" data-w="${k}"><i class="pdw" style="background:${sw(k)}"></i>${COLORS[k].a}</button>`).join(''):'<span class="small">All 8 wires are laid in.</span>'}</div></div>
     <div class="pd-tools"><span class="small muted">Tool:</span>${[['punch','🔨 Punch-down tool'],['crimper','🗜️ Crimper'],['hand','✋ Hands only']].map(([k,l])=>`<button class="btn ghost sm ${S.tool===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
-    <div class="row"><button class="btn" id="pdTest">🧪 Test port ${S.port} with the LAN tester</button><button class="btn ghost" id="pdRedo">↺ Pull the wires out and redo</button></div>
+    <div class="row"><button class="btn" id="pdTest">🧪 Test port ${S.port} with the LAN tester</button><button class="btn ghost" id="pdRedo">↺ Pull the wires out and redo</button>${anyWork()?'':`<button class="btn ghost" id="pdType">Practice on a ${S.type==='cat6'?'Cat5e':'Cat6'} panel instead</button>`}</div>
     <div id="pdRes" class="small"></div>
-    <p class="small muted" style="margin:6px 0 0">${S.sel?`Tap a slot to lay the ${COLORS[S.sel].n} wire into it.`:S.tool==='punch'?'Tap a slot to punch the wire down.':'Tap a wire, then a slot. Or pick a tool and tap a slot.'}</p>
+    <p class="small muted" style="margin:6px 0 0">${S.sel?`Tap the slot for the ${COLORS[S.sel].n} wire.`:S.tool==='punch'?'Tap a slot to punch the wire down.':'Tap a wire, then a slot. Or pick a tool and tap a slot.'}</p>
    </div></div>`;
    $$('[data-port]',ctx.body).forEach(b=>b.onclick=()=>{S.port=b.dataset.port;S.sel=null;render()});
    $$('[data-w]',ctx.body).forEach(b=>b.onclick=()=>{S.sel=S.sel===b.dataset.w?null:b.dataset.w;S.tool=null;render()});
    $$('[data-t]',ctx.body).forEach(b=>b.onclick=()=>{S.tool=b.dataset.t;S.sel=null;render()});
    $$('[data-s]',ctx.body).forEach(b=>b.onclick=()=>slot(+b.dataset.s));
-   $('#pdTest',ctx.body).onclick=test;$('#pdRedo',ctx.body).onclick=()=>{S.p[S.port]=null;L.punch[S.port]={ok:false};ctx.penalty(1,'Redid a patch panel port (new cable end needed)');render()}};
+   if($('#pdType',ctx.body))$('#pdType',ctx.body).onclick=()=>{S.type=S.type==='cat6'?'cat5e':'cat6';render()};
+   $('#pdTest',ctx.body).onclick=test;$('#pdRedo',ctx.body).onclick=()=>{S.p[S.port]=null;L.punch[S.port]={ok:false};ctx.penalty(1,'Redid a patch panel port (re-strip the cable)');render()}};
   function slot(i){const P=st(S.port);
    if(S.sel){if(P.slot[i]){toast('That slot already has a wire.');return}P.slot[i]=S.sel;S.sel=null;return render()}
    if(!P.slot[i])return toast('Lay a wire into the slot first.');
    if(!S.tool)return toast('Pick a tool to seat the wire.');
-   if(S.tool==='crimper'){ctx.penalty(2,'A crimper cannot seat wires in a 110 block. Use the punch-down tool');return}
+   if(S.tool==='crimper'){ctx.penalty(2,'A crimper cannot seat wires in an IDC block. Use the punch-down tool');return}
    if(S.tool==='hand'){P.bad[i]=true;toast('Pressed in by hand. It looks seated, but the contact is loose.');return render()}
    P.hit[i]=true;P.bad[i]=false;toast('<i>Snap!</i> Wire seated and trimmed.');render()}
-  async function test(){const P=st(S.port),res=$('#pdRes',ctx.body);
-   const pins=P.slot.map((k,i)=>(!k||!P.hit[i]||P.bad[i])?null:k);
-   const map=pins.map(k=>k?T568B.indexOf(k)+1:null);
+  function test(){const P=st(S.port),res=$('#pdRes',ctx.body),pn=pins();
+   const at=pin=>{const i=pn.indexOf(pin),k=P.slot[i];return (!k||!P.hit[i]||P.bad[i])?null:T568B.indexOf(k)+1};
+   const map=[1,2,3,4,5,6,7,8].map(at);
    res.innerHTML='LAN tester: '+map.map((v,i)=>`<span class="pdled ${v===i+1?'ok':v?'x':'off'}">${i+1}→${v||'–'}</span>`).join(' ');
    const ok=map.every((v,i)=>v===i+1);L.punch[S.port]={ok};
    if(ok)toast(`✔ Port ${S.port} tests 1-1 … 8-8.`,'good');else{ctx.penalty(2,`Patch panel port ${S.port} failed the LAN tester`);toast('✖ The LEDs did not light 1-1 … 8-8.','bad')}
