@@ -1172,7 +1172,7 @@ function showTitle(){
  <div class="mm-tag">SHOW YOUR SKILLS.<br>EARN YOUR <b>NC II!</b></div></div>`;
  let ti=0;clearInterval(showTitle.tt);showTitle.tt=setInterval(()=>{if(t.classList.contains('hidden'))return clearInterval(showTitle.tt);ti=(ti+1)%MM_TIPS.length;const e=$('#mmTip');if(e)e.textContent=MM_TIPS[ti]},7000);
  let eg=0,egT=0;const lg=$('.mm-logo');if(lg)lg.onclick=()=>{clearTimeout(egT);egT=setTimeout(()=>eg=0,2500);if(++eg>=5){eg=0;easterEgg()}};
- $('#mmStart').onclick=mmStart;$('#mmProg').onclick=mmProgress;$('#mmAch').onclick=mmAch;$('#mmSet').onclick=$('#mmSet2').onclick=$('#mmCard').onclick=mmSettings;
+ $('#mmStart').onclick=welcome;$('#mmProg').onclick=mmProgress;$('#mmAch').onclick=mmAch;$('#mmSet').onclick=$('#mmSet2').onclick=$('#mmCard').onclick=mmSettings;
  if(showTitle.hero){try{showTitle.hero()}catch(e){}showTitle.hero=null}
  if(window.startHero&&!store.get('force2d',false)){try{showTitle.hero=window.startHero($('#mmHero'))}catch(e){console.error(e)}}
 }
