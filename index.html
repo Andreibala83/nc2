@@ -722,7 +722,7 @@ function typeIn(box,poses){typeStop();const root=box.querySelector('.npc-say>div
  const fin=()=>{nodes.forEach(x=>x[0].nodeValue=x[1]);root.classList.remove('typing')};
  _typeDone=()=>{fin();if(poses&&poses.length>1)npcSwap(poses[poses.length-1])};root.classList.add('typing');
  box.onclick=e=>{if(_typeT&&!e.target.closest('button'))typeStop(true)};
- _typeT=setInterval(()=>{shown=Math.min(total,shown+step);let left=shown;for(const [nd,t] of nodes){const k=Math.min(t.length,left);nd.nodeValue=t.slice(0,k);left-=k;if(left<=0)break}
+ let tk=0;_typeT=setInterval(()=>{shown=Math.min(total,shown+step);if(++tk%3===1&&typeof sfxTalk==='function')sfxTalk();let left=shown;for(const [nd,t] of nodes){const k=Math.min(t.length,left);nd.nodeValue=t.slice(0,k);left-=k;if(left<=0)break}
   if(poses&&poses.length>1){const want=Math.min(poses.length-1,Math.floor(shown/total*poses.length));if(want!==pi){pi=want;npcSwap(poses[pi])}}
   if(shown>=total){clearInterval(_typeT);_typeT=0;_typeDone=null;root.classList.remove('typing')}},22)}
 function modal(html,pose){typeStop();$('#modalBox').onclick=null;$('#modalBox').innerHTML=X(html);$('#modal').classList.remove('hidden');const m=/data-pose="(\w+)"/.exec(html),mp=/data-poses="([\w,]+)"/.exec(html);const poses=mp?mp[1].split(','):null;const p=pose||(poses&&poses[0])||(m&&m[1])||(html.includes('npc-say')?'present':null);$('#modal').classList.toggle('with-npc',!!p);if(p)npcShow(p,!!pose&&(pose==='laugh'||pose==='thumb'));else npcHide();
@@ -1189,9 +1189,10 @@ function mmSettings(){modal(`<h3>⚙️ Settings</h3><label class="small muted">
  <p class="small muted" style="margin-top:14px">Practice simulator based on the TESDA CSS NC II competencies. Not official TESDA material.</p>
  <div class="row" style="gap:8px;margin:8px 0"><button class="btn" id="mmEx" style="flex:1">📝 Exam details</button></div>
  <label class="radio"><input type="checkbox" id="mmHard" ${store.get('exhard',false)?'checked':''}> Hard mode: hide the exam details from the task sheet</label>
+ ${audioBox()}
  ${offlineBox()}
  <div class="row" style="justify-content:space-between"><button class="btn ghost" id="mmRs">🗑 Reset all progress</button><button class="btn" id="mmOk">Save</button></div>`);
- $('#mmOk').onclick=()=>{store.set('pname',$('#mmNm').value.trim()||'Student');store.set('force2d',$('#mm2d').checked);store.set('exhard',$('#mmHard').checked);offlineSave();closeModal();showTitle()};
+ $('#mmOk').onclick=()=>{store.set('pname',$('#mmNm').value.trim()||'Student');store.set('force2d',$('#mm2d').checked);store.set('exhard',$('#mmHard').checked);offlineSave();audioSave();closeModal();showTitle()};
  $('#mmEx').onclick=()=>exSetup(false);offlineBind();
  $('#mmRs').onclick=()=>{if(confirm('Erase all progress?')){[1,2,3].forEach(resetCoc);store.del('welcomed');closeModal();showTitle();setTimeout(welcome,350)}}}
 function mmQuit(){modal(`<h3>🚪 Quit the game?</h3><p class="muted">Your progress is saved on this device.</p><div class="row"><button class="btn" id="mmQ">Quit</button><button class="btn ghost" onclick="closeModal()">Stay</button></div>`);
@@ -3439,6 +3440,33 @@ async function syncFlush(){const u=store.get('syncurl',''),q=store.get('outbox',
  addEventListener('online',()=>{syncFlush();offlineBind.r&&offlineBind.r();toast('Back online.')});addEventListener('offline',()=>{offlineBind.r&&offlineBind.r();if(store.get('offline',false))toast('You are offline. The game keeps working and saves here.')});
  if(store.get('offline',false)&&'serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').then(()=>{OFFST.sw='ready'}).catch(()=>{OFFST.sw='missing'});
  setInterval(syncFlush,60000);setTimeout(syncFlush,4000)})();
+
+/* ---------- Sound: talking blips + background music (all synthesized, no files) ---------- */
+const AUD={ctx:null,mus:null,on:false,timer:0,step:0,next:0};
+const audOn=k=>store.get(k,true)!==false;
+function audCtx(){if(!AUD.ctx){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AUD.ctx=new C();AUD.mus=AUD.ctx.createGain();AUD.mus.gain.value=0;const lp=AUD.ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;AUD.mus.connect(lp);lp.connect(AUD.ctx.destination)}catch(e){return null}}
+ if(AUD.ctx.state==='suspended')AUD.ctx.resume().catch(()=>0);return AUD.ctx}
+function sfxTalk(){if(!audOn('voice'))return;const c=audCtx();if(!c||c.state!=='running')return;const t=c.currentTime,o=c.createOscillator(),g=c.createGain();
+ o.type='square';o.frequency.setValueAtTime(190+Math.random()*90,t);o.frequency.exponentialRampToValueAtTime(150+Math.random()*60,t+.06);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.045,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.07);
+ o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.08)}
+/* chill loop: Am - F - C - G, 72 bpm, soft pads + a gentle arpeggio */
+const CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],hz=m=>440*Math.pow(2,(m-69)/12);
+function note(m,t,d,type,v){const c=AUD.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=hz(m);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+Math.min(.12,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AUD.mus);o.start(t);o.stop(t+d+.05)}
+function audSched(){const c=AUD.ctx;if(!c||!AUD.on)return;const sp=60/72/2;
+ while(AUD.next<c.currentTime+.5){const s=AUD.step%32,ch=CH[Math.floor(s/8)%4],t=AUD.next;
+  if(s%8===0){ch.forEach(m=>note(m,t,sp*8,'triangle',.16));note(ch[0]-12,t,sp*7,'sine',.3)}
+  if(s%2===0||s%8===3){const m=ch[(s/2|0)%3]+12*((s%8)>4?1:0);note(m,t,sp*3,'sine',.12)}
+  AUD.next+=sp;AUD.step++}}
+function musicStart(){if(AUD.on||!audOn('music'))return;const c=audCtx();if(!c)return;AUD.on=true;AUD.next=c.currentTime+.05;AUD.mus.gain.cancelScheduledValues(c.currentTime);AUD.mus.gain.setTargetAtTime(.5,c.currentTime,.8);AUD.timer=setInterval(audSched,200);audSched()}
+function musicStop(){if(!AUD.on)return;AUD.on=false;clearInterval(AUD.timer);if(AUD.ctx)AUD.mus.gain.setTargetAtTime(0,AUD.ctx.currentTime,.25)}
+function audRefresh(){audOn('music')?musicStart():musicStop()}
+function audioBox(){return `<div class="offbox"><label><input type="checkbox" id="mmMus" ${audOn('music')?'checked':''}> 🎵 Background music</label><label style="display:block;margin-top:6px"><input type="checkbox" id="mmVox" ${audOn('voice')?'checked':''}> 💬 Assessor talking sound</label></div>`}
+function audioSave(){const m=$('#mmMus'),v=$('#mmVox');if(m)store.set('music',m.checked);if(v)store.set('voice',v.checked);audRefresh()}
+/* browsers only allow sound after a tap: start on the first one */
+['pointerdown','keydown','touchend'].forEach(ev=>document.addEventListener(ev,function f(){audRefresh()},{passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!AUD.ctx)return;if(document.hidden){AUD.ctx.suspend().catch(()=>0)}else AUD.ctx.resume().catch(()=>0)});
 
 /* ================= BOOT ================= */
 addEventListener('beforeunload',()=>{if(G.coc&&!$('#world').classList.contains('hidden'))pauseTimer();save()});
