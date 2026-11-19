@@ -693,7 +693,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store={get(k,d){try{const v=localStorage.getItem('nc2sim_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('nc2sim_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('nc2sim_'+k)}catch(e){}}};
 /* ===== exam details: what the assessor gave you. @@TOKENS@@ in task text are replaced with these ===== */
-const EXD={cu:'Client',cp:'',au:'Administrator',ap:'admin.123',rp:'admin.123',rip:'192.168.100.12',sip:'192.168.100.13',cip:'192.168.100.14'};
+const EXD={cu:'Client',cp:'',au:'Administrator',ap:'admin.123',rp:'admin',rip:'192.168.100.12',sip:'192.168.100.13',cip:'192.168.100.14'};
 const EX=Object.assign({},EXD,store.get('exam',{}));
 const exNet=()=>EX.rip.split('.').slice(0,3).join('.');
 const _exV=()=>({CU:EX.cu,CP:EX.cp===''?'no password':EX.cp,AU:EX.au,AP:EX.ap,RP:EX.rp,RIP:EX.rip,SIP:EX.sip,CIP:EX.cip,NET:exNet()});
@@ -2841,7 +2841,7 @@ function routerPage(body,D){
   for(let i=0;i<=100;i+=5){await sleep(70);const b=$('#rbb',body);if(!b)return;b.style.width=i+'%';$('#rbt',body).textContent=i+'%'}R.rebooted=true;after()};
  const render=()=>{
   if(page==='create'){body.innerHTML=`<div class="ra tp">${top}<div class="rlogin"><h3 style="font-weight:400">Create Login Password</h3><p style="color:#888;font-size:12px">For security, please create a login password for management.</p><input id="p1" type="password" placeholder="Password"><input id="p2" type="password" placeholder="Confirm Password"><div class="rerr" id="re"></div><button class="rbtn tpb" style="width:100%" id="go">Let's Get Started</button></div></div>`;
-   $('#go',body).onclick=()=>{const a=$('#p1',body).value,b=$('#p2',body).value;if(a.length<6)return $('#re',body).textContent='Use at least 6 characters.';if(a!==b)return $('#re',body).textContent='The passwords do not match.';R.admin=a;D.changed('rcreate',a);page='admin';render()};return}
+   $('#go',body).onclick=()=>{const a=$('#p1',body).value,b=$('#p2',body).value;if(a.length<4&&a!==XV('@@RP@@'))return $('#re',body).textContent='Use at least 4 characters.';if(a!==b)return $('#re',body).textContent='The passwords do not match.';R.admin=a;D.changed('rcreate',a);page='admin';render()};return}
   if(page==='login'){body.innerHTML=`<div class="ra tp">${top}<div class="rlogin"><input id="rp" type="password" placeholder="Password"><div class="rerr" id="re"></div><button class="rbtn tpb" style="width:100%" id="rl">Log In</button></div></div>`;
    const go=()=>{if($('#rp',body).value===R.admin){page='admin';D.changed('rlogin',R.ip);render()}else{$('#re',body).textContent='Incorrect password.';D.changed('rloginfail')}};$('#rl',body).onclick=go;$('#rp',body).onkeydown=e=>{if(e.key==='Enter')go()};return}
   let f='';const modes=[['router','Wireless Router'],['wisp','WISP'],['ap','Access Point'],['re','Range Extender']];
@@ -2863,7 +2863,7 @@ function routerPage(body,D){
  function save(t){const err=m=>{$('#re',body)&&($('#re',body).textContent=m)},q=x=>$(x,body),inNet=x=>validIP(x)&&sameNet(x,R.ip,R.mask);
   if(t==='mode'){R.mode=$('input[name=om]:checked',body).value;D.changed('rsave','mode');return restart('The device is restarting...',()=>{page='login';render()})}
   if(t==='wl'){const v=q('#wS').value.trim();if(!v)return err('The wireless network name cannot be empty.');R.ssid=v;R.broadcast=q('#wB').checked}
-  if(t==='sec'){const sv=$('input[name=sec]:checked',body).value,k=q('#wK').value;if(sv==='wpa2'&&(k.length<8||k.length>63))return err('The password must be 8–63 characters.');R.sec=sv;R.key=k}
+  if(t==='sec'){const sv=$('input[name=sec]:checked',body).value,k=q('#wK').value;if(sv==='wpa2'&&k!==XV('@@RP@@')&&(k.length<8||k.length>63))return err('The password must be 8–63 characters.');R.sec=sv;R.key=k}
   if(t==='lan'){const ip=q('#lI').value.trim(),m=q('#lM').value.trim(),g=q('#lG').value.trim();if(!validIP(ip))return err('Invalid IP address.');if(!validIP(m))return err('Invalid subnet mask.');if(g&&!validIP(g))return err('Invalid gateway.');
    const old=R.ip;Object.assign(R,{ip,mask:m,lgw:g});if(!sameNet(R.dhcp.start,ip,m)){const base=ip.split('.').slice(0,3).join('.');R.dhcp.start=base+'.100';R.dhcp.end=base+'.199';R.dhcp.gw=ip;R.dhcp.dns=ip}
    D.changed('rsave','lan');const lp=D.L.nodes.LAPTOP;if(lp&&lp.dhcp&&typeof dhcpRenew==='function'){lp.ip='';dhcpRenew(D.L,lp)}
@@ -3346,7 +3346,7 @@ function exCheck(o){
  if(o.cu.toLowerCase()===o.au.toLowerCase())return 'The client and admin user names must be different.';
  if(/[<>&"']/.test(o.cp+o.ap+o.rp))return 'Passwords cannot contain < > & " \'.';
  if(!pwComplex(o.ap))return 'The admin password needs at least 8 characters with 3 of: lowercase, UPPERCASE, number, symbol (Windows Server asks for this).';
- if(o.rp.length<6)return 'The router password needs at least 6 characters.';
+ if(o.rp.length<4)return 'The router password needs at least 4 characters.';
  const ip=s=>{const m=/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(s);return m&&m.slice(1).every(n=>+n<=255&&String(+n)===n)?m.slice(1).map(Number):null};
  const R=ip(o.rip),S=ip(o.sip),C=ip(o.cip);
  if(!R)return 'The router IP is not a valid IPv4 address.';if(!S)return 'The admin IP is not a valid IPv4 address.';if(!C)return 'The client IP is not a valid IPv4 address.';
