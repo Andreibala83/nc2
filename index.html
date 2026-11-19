@@ -6,6 +6,9 @@
 <title>Road to NC II · CSS Hands-on Assessment Simulator</title>
 <meta name="description" content="Walk-around simulator for TESDA Computer Systems Servicing NC II: COC1 assemble & install, COC2 networking, COC3 Windows Server.">
 <meta name="theme-color" content="#0b111b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
 *{box-sizing:border-box}
 :root{--bg:#0b111b;--panel:#121b29;--panel2:#18243a;--line:#253550;--text:#e7eef8;--muted:#8da2bf;--accent:#22c3a6;--accent2:#3b82f6;--good:#35d07f;--bad:#ff5d62;--warn:#f5a524}
@@ -658,6 +661,14 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 .tb3 .fp:not(.tbfull) #tbExit{display:none}.tb3 .fp.tbfull #tbFull{display:none}
 .tb3 .fp.tbfull .tbfull-bar{z-index:7}
 
+.exg{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:8px 0}.exl{display:flex;flex-direction:column;gap:3px;font-size:.78em;color:#9fb0c8;font-weight:700}
+.exl input{padding:9px;border-radius:8px;border:1.5px solid #3c4f70;background:#0f1726;color:#fff;font-size:1.15em;font-weight:600}.exl input:focus{outline:2px solid #3aa0ff}
+.exerr{color:#ff9a9a;font-weight:700;font-size:.85em;min-height:1.2em;margin:4px 0}
+.extab{width:100%;border-collapse:collapse;margin:8px 0}.extab td{padding:7px 8px;border-bottom:1px solid #2a3a58}.extab td:first-child{color:#9fb0c8;font-size:.85em;white-space:nowrap}
+.offbox{margin:10px 0;padding:10px;border:1.5px solid #3c4f70;border-radius:10px;background:#0f172633}
+.exnb{float:right;margin:0 0 6px 8px}
+@media(max-width:560px),(max-height:430px){.exg{grid-template-columns:1fr 1fr;gap:6px 8px}.exl input{padding:7px;font-size:1em}}
+
 </style>
 </head>
 <body>
@@ -680,8 +691,17 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store={get(k,d){try{const v=localStorage.getItem('nc2sim_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('nc2sim_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('nc2sim_'+k)}catch(e){}}};
+/* ===== exam details: what the assessor gave you. @@TOKENS@@ in task text are replaced with these ===== */
+const EXD={cu:'Client',cp:'',au:'Administrator',ap:'admin.123',rp:'admin.123',rip:'192.168.100.12',sip:'192.168.100.13',cip:'192.168.100.14'};
+const EX=Object.assign({},EXD,store.get('exam',{}));
+const exNet=()=>EX.rip.split('.').slice(0,3).join('.');
+const _exV=()=>({CU:EX.cu,CP:EX.cp===''?'no password':EX.cp,AU:EX.au,AP:EX.ap,RP:EX.rp,RIP:EX.rip,SIP:EX.sip,CIP:EX.cip,NET:exNet()});
+const _exH={CU:'the client user name',CP:'the client password',AU:'the admin user name',AP:'the admin password',RP:'the router password',RIP:'the router IP',SIP:'the admin (server) IP',CIP:'the client IP',NET:'the network'};
+/* XV = real values (for checking what the player typed). X = what we show (hidden in hard mode) */
+function XV(s){const v=_exV();return String(s).replace(/@@(\w+)@@/g,(m,k)=>v[k]==null?m:v[k])}
+function X(s){if(!store.get('exhard',false))return XV(s);const v=_exV();return String(s).replace(/@@NET@@\.(\d+)/g,'x.x.x.$1').replace(/@@(\w+)@@/g,(m,k)=>_exH[k]||m)}
 function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild}
-function toast(msg,type=''){const t=$('#toast');t.className='show '+type;t.innerHTML=msg;clearTimeout(t._h);t._h=setTimeout(()=>t.className='',3200)}
+function toast(msg,type=''){const t=$('#toast');t.className='show '+type;t.innerHTML=X(msg);clearTimeout(t._h);t._h=setTimeout(()=>t.className='',3200)}
 let _npcEl=null;
 function npcPlace(){const e=_npcEl;if(!e)return;const R=document.documentElement.style;if(innerHeight>innerWidth){R.removeProperty('--xr');R.removeProperty('--ov');return}
  const big=e.classList.contains('big'),h=e.offsetHeight,ph=innerHeight<500;R.setProperty('--xr',Math.round(Math.min(h*.7+6,innerWidth*.5))+'px');R.setProperty('--ov',Math.round(h*(big?.15:.06)*(ph?.7:1))+'px')}
@@ -704,7 +724,7 @@ function typeIn(box,poses){typeStop();const root=box.querySelector('.npc-say>div
  _typeT=setInterval(()=>{shown=Math.min(total,shown+step);let left=shown;for(const [nd,t] of nodes){const k=Math.min(t.length,left);nd.nodeValue=t.slice(0,k);left-=k;if(left<=0)break}
   if(poses&&poses.length>1){const want=Math.min(poses.length-1,Math.floor(shown/total*poses.length));if(want!==pi){pi=want;npcSwap(poses[pi])}}
   if(shown>=total){clearInterval(_typeT);_typeT=0;_typeDone=null;root.classList.remove('typing')}},22)}
-function modal(html,pose){typeStop();$('#modalBox').onclick=null;$('#modalBox').innerHTML=html;$('#modal').classList.remove('hidden');const m=/data-pose="(\w+)"/.exec(html),mp=/data-poses="([\w,]+)"/.exec(html);const poses=mp?mp[1].split(','):null;const p=pose||(poses&&poses[0])||(m&&m[1])||(html.includes('npc-say')?'present':null);$('#modal').classList.toggle('with-npc',!!p);if(p)npcShow(p,!!pose&&(pose==='laugh'||pose==='thumb'));else npcHide();
+function modal(html,pose){typeStop();$('#modalBox').onclick=null;$('#modalBox').innerHTML=X(html);$('#modal').classList.remove('hidden');const m=/data-pose="(\w+)"/.exec(html),mp=/data-poses="([\w,]+)"/.exec(html);const poses=mp?mp[1].split(','):null;const p=pose||(poses&&poses[0])||(m&&m[1])||(html.includes('npc-say')?'present':null);$('#modal').classList.toggle('with-npc',!!p);if(p)npcShow(p,!!pose&&(pose==='laugh'||pose==='thumb'));else npcHide();
  if(html.includes('npc-say')){const x=document.createElement('button');x.className='mx';x.setAttribute('aria-label','Close');x.textContent='✕';x.onclick=()=>{const ok=$('#sayOk')||$('#modalBox .btn');ok?ok.click():closeModal()};$('#modalBox').appendChild(x);typeIn($('#modalBox'),poses)}}
 function closeModal(){typeStop();$('#modal').classList.add('hidden');$('#modal').classList.remove('with-npc');npcHide()}
 const ASR_SVG=`<svg viewBox="0 0 200 270" class="asr-svg" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="asP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26376e"/><stop offset="1" stop-color="#16224a"/></linearGradient><linearGradient id="asH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2c1d"/><stop offset="1" stop-color="#2b170e"/></linearGradient></defs><path d="M18 270c2-46 22-70 52-80l30 14 30-14c30 10 50 34 52 80z" fill="url(#asP)"/><path d="M36 205c14-10 26-14 34-15l30 14 30-14c8 1 20 5 34 15l-8 22c-18-8-36-10-56-10s-38 2-56 10z" fill="#d6deef"/><path d="M76 188l24 22 24-22 8 6-32 30-32-30z" fill="#fff"/><path d="M100 210v60" stroke="#0f1838" stroke-width="2"/><rect x="88" y="160" width="24" height="34" rx="10" fill="#e7b896"/><ellipse cx="100" cy="112" rx="40" ry="48" fill="#f3cbab"/><ellipse cx="60" cy="118" rx="7" ry="10" fill="#eab995"/><ellipse cx="140" cy="118" rx="7" ry="10" fill="#eab995"/><circle cx="100" cy="46" r="20" fill="url(#asH)"/><path d="M58 118c-6-42 14-66 42-66s50 22 42 66c-4-16-10-28-18-34-14 10-36 14-58 12-4 6-6 14-8 22z" fill="url(#asH)"/><path d="M60 120c-4 22 0 40 8 52M140 120c4 22 0 40-8 52" stroke="#2b170e" stroke-width="6" fill="none" stroke-linecap="round"/><g fill="none" stroke="#3a2a22" stroke-width="3"><rect x="70" y="104" width="25" height="19" rx="7"/><rect x="105" y="104" width="25" height="19" rx="7"/><path d="M95 112h10"/></g><ellipse cx="83" cy="114" rx="3.4" ry="4.2" fill="#2a1d18"/><ellipse cx="117" cy="114" rx="3.4" ry="4.2" fill="#2a1d18"/><path d="M76 98q7-5 14 0M110 98q7-5 14 0" stroke="#3a2418" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="74" cy="134" rx="7" ry="4" fill="#f2a0a0" opacity=".5"/><ellipse cx="126" cy="134" rx="7" ry="4" fill="#f2a0a0" opacity=".5"/><path d="M99 120q-3 9 2 12" stroke="#d49a7a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M88 142q12 9 24 0" stroke="#b05d4f" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M78 192l22 48 22-48" stroke="#1f6fe0" stroke-width="5" fill="none"/><rect x="86" y="236" width="28" height="30" rx="3" fill="#fff" stroke="#9aa6bd"/><rect x="86" y="236" width="28" height="8" fill="#1f4fa8"/><text x="100" y="242.5" font-size="5.5" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="700">TESDA</text><circle cx="100" cy="252" r="5" fill="#c9d3ea"/><text x="100" y="263" font-size="4.6" text-anchor="middle" fill="#1f2d5c" font-family="Arial" font-weight="700">ASSESSOR</text><g transform="rotate(-8 160 236)"><rect x="132" y="206" width="52" height="66" rx="4" fill="#8a5a2f"/><rect x="138" y="214" width="40" height="54" fill="#fbfbf6"/><rect x="149" y="202" width="18" height="9" rx="2" fill="#b9bfc6"/><path d="M143 226h30M143 234h30M143 242h24M143 250h28" stroke="#9aa6bd" stroke-width="2"/><path d="M143 226l3 3 5-6" stroke="#22a06b" stroke-width="2" fill="none"/></g><path d="M126 252c8-10 18-14 26-12 6 2 6 10 0 13-8 4-16 6-22 10z" fill="#f3cbab"/></svg>`;
@@ -1117,7 +1137,7 @@ const TASKS={};
 const G={mode:null,coc:null,inTask:false,prog:store.get('prog',{}),labs:store.get('labs',{}),rs:store.get('rs',{}),timers:store.get('timers',{})};
 function save(){store.set('prog',G.prog);store.set('labs',G.labs);store.set('rs',G.rs);store.set('timers',G.timers)}
 function lab(c){return G.labs[c]||(G.labs[c]=COCS[c].lab())}
-function resetCoc(c){delete G.labs[c];COCS[c].tasks.forEach(t=>{delete G.prog[t];delete G.rs[t]});delete G.timers[c];save()}
+function resetCoc(c){if(G.rs&&G.rs._briefed)delete G.rs._briefed[c];delete G.labs[c];COCS[c].tasks.forEach(t=>{delete G.prog[t];delete G.rs[t]});delete G.timers[c];save()}
 const cocDone=c=>COCS[c].tasks.every(t=>G.prog[t]);
 const nextTask=c=>COCS[c].tasks.find(t=>!G.prog[t]);
 const cocScore=c=>Math.round(COCS[c].tasks.reduce((s,t)=>s+(G.prog[t]?G.prog[t].score:0),0)/COCS[c].tasks.length);
@@ -1154,7 +1174,7 @@ function showTitle(){
  if(window.startHero&&!store.get('force2d',false)){try{showTitle.hero=window.startHero($('#mmHero'))}catch(e){console.error(e)}}
 }
 function mmLeave(){if(showTitle.hero){try{showTitle.hero()}catch(e){}showTitle.hero=null}$('#title').classList.remove('mm-on')}
-function mmStart(){const st=c=>cocDone(c)?`<span class="bd ok">✔ ${cocScore(c)}</span>`:COCS[c].tasks.some(x=>G.prog[x])?`<span class="bd">${COCS[c].tasks.filter(x=>G.prog[x]).length}/${COCS[c].tasks.length}</span>`:'<span class="bd">New</span>';const all=[1,2,3].every(cocDone);
+function mmStart(){if(!store.get('welcomed',false))return welcome();if(!store.get('exam_set',false))return exSetup(true);const st=c=>cocDone(c)?`<span class="bd ok">✔ ${cocScore(c)}</span>`:COCS[c].tasks.some(x=>G.prog[x])?`<span class="bd">${COCS[c].tasks.filter(x=>G.prog[x]).length}/${COCS[c].tasks.length}</span>`:'<span class="bd">New</span>';const all=[1,2,3].every(cocDone);
  modal(`<h3>▶ Start Game</h3><div class="t-modes"><button class="mode main" data-go="full"><span class="ic">🎓</span><div><b>${all?'Retake':'Start'} Full Assessment</b><span>COC 1 → COC 2 → COC 3, in order, like the real NC II assessment</span></div>${all?'<span class="bd ok">Competent</span>':''}</button>
  ${[1,2,3].map(c=>`<button class="mode" data-go="${c}"><span class="ic">${COCS[c].icon}</span><div><b>COC ${c} · ${COCS[c].title}</b><span>${COCS[c].sub}</span></div>${st(c)}</button>`).join('')}</div>
  <div class="t-how small" style="margin-top:10px"><b>How to play:</b> walk with WASD / arrows or the joystick, tap a station or press E / USE. In 3D stations, drag to look around and pinch or scroll to zoom.</div><div class="row" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Back</button></div>`);
@@ -1164,9 +1184,13 @@ function mmAch(){modal(`<h3>🏆 Achievements</h3><div class="mm-ach">${MM_ACH.m
 function mmSettings(){modal(`<h3>⚙️ Settings</h3><label class="small muted">Player name</label><input id="mmNm" value="${esc(store.get('pname','Student'))}" maxlength="18" style="width:100%;padding:8px;border-radius:8px;margin:4px 0 12px">
  <label class="radio"><input type="checkbox" id="mm2d" ${store.get('force2d',false)?'checked':''}> Use the simple 2D stations (for slow phones)</label>
  <p class="small muted" style="margin-top:14px">Practice simulator based on the TESDA CSS NC II competencies. Not official TESDA material.</p>
+ <div class="row" style="gap:8px;margin:8px 0"><button class="btn" id="mmEx" style="flex:1">📝 Exam details</button></div>
+ <label class="radio"><input type="checkbox" id="mmHard" ${store.get('exhard',false)?'checked':''}> Hard mode: hide the exam details from the task sheet</label>
+ ${offlineBox()}
  <div class="row" style="justify-content:space-between"><button class="btn ghost" id="mmRs">🗑 Reset all progress</button><button class="btn" id="mmOk">Save</button></div>`);
- $('#mmOk').onclick=()=>{store.set('pname',$('#mmNm').value.trim()||'Student');store.set('force2d',$('#mm2d').checked);closeModal();showTitle()};
- $('#mmRs').onclick=()=>{if(confirm('Erase all progress?')){[1,2,3].forEach(resetCoc);closeModal();showTitle()}}}
+ $('#mmOk').onclick=()=>{store.set('pname',$('#mmNm').value.trim()||'Student');store.set('force2d',$('#mm2d').checked);store.set('exhard',$('#mmHard').checked);offlineSave();closeModal();showTitle()};
+ $('#mmEx').onclick=()=>exSetup(false);offlineBind();
+ $('#mmRs').onclick=()=>{if(confirm('Erase all progress?')){[1,2,3].forEach(resetCoc);store.del('welcomed');closeModal();showTitle();setTimeout(welcome,350)}}}
 function mmQuit(){modal(`<h3>🚪 Quit the game?</h3><p class="muted">Your progress is saved on this device.</p><div class="row"><button class="btn" id="mmQ">Quit</button><button class="btn ghost" onclick="closeModal()">Stay</button></div>`);
  $('#mmQ').onclick=()=>{closeModal();mmLeave();try{window.close()}catch(e){}$('#title').innerHTML='<div class="mm-bye"><h2>See you next time! 👋</h2><p class="muted">Show your skills. Earn your NC II.</p><button class="btn" onclick="showTitle()">Back to the menu</button></div>'}}
 function startFull(){
@@ -1373,8 +1397,8 @@ function openTask(id,practice){
  const ov=$('#taskov');ov.classList.remove('hidden');
  ov.innerHTML=`<div class="tk-top"><button id="tkBack">← Step away</button><div class="tt">${practice?'🔁 Practice: ':''}${T.title} <small>· COC ${T.coc} · ${T.where}</small></div><button id="tkSheetB">📋 Task Sheet</button></div><div class="tk-main"><div class="tk-body" id="tkBody"></div><aside class="tk-sheet${innerWidth<=900?' closed':''}" id="tkSheet"></aside></div>`;
  const ctx=CTX={T,L,R,practice:!!practice,body:$('#tkBody'),cleanup:[],finished:false,
-  penalty(p,msg){R.pen+=p;R.log.push(['bad',msg+(p?` (−${p})`:'')]);toast('✖ '+msg+(p?` <b>(−${p})</b>`:''),'bad');npcPop(p>=3?'point':'think');renderSheet();if(!ctx.practice)save()},
-  good(msg){if(!R.log.some(l=>l[1]===msg))R.log.push(['good',msg])},
+  penalty(p,msg){msg=X(msg);R.pen+=p;R.log.push(['bad',msg+(p?` (−${p})`:'')]);toast('✖ '+msg+(p?` <b>(−${p})</b>`:''),'bad');npcPop(p>=3?'point':'think');renderSheet();if(!ctx.practice)save()},
+  good(msg){msg=X(msg);if(!R.log.some(l=>l[1]===msg))R.log.push(['good',msg])},
   flag(k,v=true){R.flags[k]=v;ctx.check()},
   check(){if(ctx.finished)return;let ch=false;T.objectives.forEach(o=>{if(!R.done[o.id]&&o.check(L,R.flags,ctx)){R.done[o.id]=true;ch=true;toast('✔ '+o.text,'good');if(!T.objectives.every(q=>R.done[q.id]))npcPop('thumb')}});
    if(ch)renderSheet();if(!ctx.practice)save();
@@ -1387,11 +1411,11 @@ function openTask(id,practice){
 }
 function renderSheet(){
  const ctx=CTX;if(!ctx)return;const {T,R}=ctx,sh=$('#tkSheet');if(!sh)return;
- sh.innerHTML=`<button class="sheet-x" onclick="$('#tkSheet').classList.add('closed')">✕ Back to the game</button><h4>📋 Task Sheet</h4><div class="sub">COC ${T.coc} · Task ${COCS[T.coc].tasks.indexOf(T.id)+1}: ${T.title}</div>${T.info?`<div class="info">${T.info}</div>`:''}
+ sh.innerHTML=X(`<button class="sheet-x" onclick="$('#tkSheet').classList.add('closed')">✕ Back to the game</button><h4>📋 Task Sheet</h4>${store.get('exhard',false)?'':'<button class="hb exnb" onclick="exNotepad()">📝 Exam details</button>'}<div class="sub">COC ${T.coc} · Task ${COCS[T.coc].tasks.indexOf(T.id)+1}: ${T.title}</div>${T.info?`<div class="info">${T.info}</div>`:''}
  ${T.objectives.map(o=>`<div class="obj ${R.done[o.id]?'ok':''}"><span class="ck">${R.done[o.id]?'✓':''}</span><span>${o.text}${R.hints[o.id]?`<span class="hint">💡 ${o.hint}</span>`:''}</span>${!R.done[o.id]&&!R.hints[o.id]&&o.hint?`<button class="hb" onclick="useHint('${o.id}')">Hint −3</button>`:''}</div>`).join('')}
- <div class="tk-score">Deductions so far: <b>−${R.pen}</b></div>`;
+ <div class="tk-score">Deductions so far: <b>−${R.pen}</b></div>`);
 }
-function useHint(oid){const ctx=CTX;ctx.R.hints[oid]=true;ctx.R.pen+=3;ctx.R.log.push(['bad',`Used a hint: "${ctx.T.objectives.find(o=>o.id===oid).text}" (−3)`]);renderSheet();save()}
+function useHint(oid){const ctx=CTX;ctx.R.hints[oid]=true;ctx.R.pen+=3;ctx.R.log.push(['bad',X(`Used a hint: "${ctx.T.objectives.find(o=>o.id===oid).text}" (−3)`)]);renderSheet();save()}
 function closeTask(){
  if(CTX){CTX.cleanup.forEach(f=>{try{f()}catch(e){}});if(CTX.T.stop)CTX.T.stop(CTX)}
  CTX=null;G.inTask=false;$('#taskov').classList.add('hidden');$('#taskov').innerHTML='';save();updHud();
@@ -1507,7 +1531,7 @@ class Desktop{
  lockScreen(){
   this.closeAll();const n=this.n,D=this;const dc=dcOf(this.L);
   const users=[];
-  if(n.isDC)users.push({id:'TESDA\\Administrator',name:'Administrator',dom:true,admin:true});else Object.keys(n.accounts).forEach(u=>users.push({id:u,name:u}));
+  if(n.isDC)users.push({id:'TESDA\\'+EX.au,name:EX.au,dom:true,admin:true});else Object.keys(n.accounts).forEach(u=>users.push({id:u,name:u}));
   if(n.domain&&!n.isDC)users.push({id:'_other',name:'Other user'});
   let sel=users[n.domain&&!n.isDC&&this.user.includes('\\')?users.length-1:0];
   const lk=el(`<div class="lock"></div>`);this.root.appendChild(lk);
@@ -1531,11 +1555,11 @@ class Desktop{
    const net=dc?dc.domain.split('.')[0]:'';u=u.replace(net+'\\','').replace('@'+(dc?dc.domain:''),'');
    if(u.includes('\\'))return retry('The user name or password is incorrect.');
    if(!dc||!canDC(this.L,n))return retry("We can't sign you in with this credential because your domain isn't available. Make sure your device is connected to your organization's network and try again.");
-   const rec=(dc.adUsers||[]).find(x=>x.logon.toLowerCase()===u)||(u==='administrator'?{logon:'Administrator',pw:dc.accounts.Administrator.pw}:null);
+   const rec=(dc.adUsers||[]).find(x=>x.logon.toLowerCase()===u)||(u===EX.au.toLowerCase()?{logon:EX.au,pw:dc.accounts[EX.au].pw}:null);
    if(!rec||rec.pw!==pw)return retry('The user name or password is incorrect. Try again.');
    const id=net.toUpperCase()+'\\'+rec.logon;if(rec.mustChange)return changePw({id,rec});return done(id);
   }
-  if(sel.admin&&n.isDC){if(n.accounts.Administrator.pw!==pw)return retry('The password is incorrect. Try again.');return done('TESDA\\Administrator')}
+  if(sel.admin&&n.isDC){if(n.accounts[EX.au].pw!==pw)return retry('The password is incorrect. Try again.');return done('TESDA\\'+EX.au)}
   const a=n.accounts[sel.id];if(!a||a.pw!==pw)return retry('The password is incorrect. Try again.');done(sel.id);
  }
  afterLogin(){this.changed('login',this.user);(this.o.startup||[]).forEach(a=>this.open(a))}
@@ -1641,7 +1665,7 @@ function nameDlg(D,after){
    const cred=await credDlg(D,`Enter the name and password of an account with permission to join the domain.`);if(!cred)return;
    if(!ok){D.changed('joinfail');return D.msg('Computer Name/Domain Changes',`An Active Directory Domain Controller (AD DC) for the domain "${esc(dom)}" could not be contacted.<br><br>Ensure that the domain name is typed correctly.<br><br>If the name is correct, check that this computer's <b>preferred DNS server</b> points to the domain controller and that the network is working.`,{icon:'⛔'})}
    const u=cred.u.toLowerCase().replace(/^tesda\\/,'').replace('@'+dc.domain,'');
-   const rec=u==='administrator'?{pw:dc.accounts.Administrator.pw}:null;
+   const rec=u===EX.au.toLowerCase()?{pw:dc.accounts[EX.au].pw}:null;
    if(!rec)return D.msg('Computer Name/Domain Changes','Access is denied. Use an account with permission to join computers to the domain (e.g. the domain Administrator).',{icon:'⛔'});
    if(rec.pw!==cred.p)return D.msg('Computer Name/Domain Changes','The user name or password is incorrect.',{icon:'⛔'});
    if(nameChanged)n.pendingName=nm;n.pendingDomain=dc.domain;w.close();
@@ -1823,7 +1847,7 @@ function devProps(D,i,after){const d=D.n.devices[i],bad=d.problem&&!d.done,w=D.w
 function updDriver(D,i,after){
  if(i==null)return;const n=D.n,d=n.devices[i];const w=D.win('Update Drivers - '+devName(d),{dialog:true,w:520,icon:''});
  if(!d.drvPath){w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;color:#1e3287">The best drivers for your device are already installed</h3><p>Windows has determined that the best driver for this device is already installed.</p></div><div class="dbtns"><button class="wb pri">Close</button></div>`;$('.wb',w.body).onclick=()=>w.close();return}
- let path='C:\\Users\\'+(D.user||'student')+'\\Documents',sub=true;
+ let path='C:\\Users\\'+(D.user||EX.cu)+'\\Documents',sub=true;
  const p1=()=>{w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;color:#1e3287">How do you want to search for drivers?</h3><button class="choice" id="udA" style="width:100%;background:#fff;color:#111;border:1px solid #ccc;margin-bottom:8px">➜ <b>Search automatically for drivers</b><br><small>Windows will search your computer for the best available driver and install it on your device.</small></button><button class="choice" id="udB" style="width:100%;background:#fff;color:#111;border:1px solid #ccc">➜ <b>Browse my computer for drivers</b><br><small>Locate and install a driver manually.</small></button></div><div class="dbtns"><button class="wb">Cancel</button></div>`;
   $('#udA',w.body).onclick=async()=>{w.body.innerHTML='<div class="dp"><p>Searching online for drivers...</p><div class="spinner" style="border-color:#ccc;border-top-color:#0078d7"></div></div>';await sleep(1600);if(w.closed)return;w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;color:#1e3287">Windows was unable to install your ${esc(d.name)}</h3><p>Windows could not find drivers for your device. This computer is not connected to the internet.<br><br>If you know the manufacturer of your device, you can visit its website or use the driver disc that came with the motherboard.</p></div><div class="dbtns"><button class="wb pri">Close</button></div>`;$('.wb',w.body).onclick=()=>w.close();D.changed('drvfail')};
   $('#udB',w.body).onclick=p2;$('.dbtns .wb',w.body).onclick=()=>w.close()};
@@ -1958,7 +1982,7 @@ APPS.adpromo={title:'Active Directory Domain Services Configuration Wizard',icon
 /* ---------- Active Directory Users and Computers ---------- */
 const AD_BUILT=['Builtin','Computers','Domain Controllers','ForeignSecurityPrincipals','Managed Service Accounts','Users'];
 function adObjects(L,dc,c){
- if(c==='Users')return [['Administrator','User','Built-in account for administering the domain'],['Guest','User','Built-in account for guest access'],['krbtgt','User','Key Distribution Center Service Account'],['Domain Admins','Security Group - Global','Designated administrators of the domain'],['Domain Computers','Security Group - Global','All workstations and servers joined to the domain'],['Domain Users','Security Group - Global','All domain users'],['Enterprise Admins','Security Group - Universal','Designated administrators of the enterprise']].concat(dc.adUsers.filter(u=>u.ou==='Users').map(u=>[u.full,'User','',u]));
+ if(c==='Users')return [[EX.au,'User','Built-in account for administering the domain'],['Guest','User','Built-in account for guest access'],['krbtgt','User','Key Distribution Center Service Account'],['Domain Admins','Security Group - Global','Designated administrators of the domain'],['Domain Computers','Security Group - Global','All workstations and servers joined to the domain'],['Domain Users','Security Group - Global','All domain users'],['Enterprise Admins','Security Group - Universal','Designated administrators of the enterprise']].concat(dc.adUsers.filter(u=>u.ou==='Users').map(u=>[u.full,'User','',u]));
  if(c==='Computers')return nodesOf(L).filter(o=>o.domain===dc.domain&&!o.isDC).map(o=>[o.hostname,'Computer','']);
  if(c==='Domain Controllers')return [[dc.hostname,'Computer','']];
  if(c==='Builtin')return [['Administrators','Security Group - Domain Local',''],['Users','Security Group - Domain Local',''],['Guests','Security Group - Domain Local',''],['Remote Desktop Users','Security Group - Domain Local','']];
@@ -2351,7 +2375,7 @@ TASKS.c1_win={id:'c1_win',coc:1,title:'Install Windows 10 Pro',where:'Test Bench
   {id:'ed',text:'Choose the Windows 10 Pro edition',hint:'Select "Windows 10 Pro" exactly, not Pro N or Home.',check:(L,f)=>f.ed},
   {id:'disk',text:'Delete the old partitions, create a new one and install on Drive 0',hint:'Custom install › select each old Drive 0 partition › Delete (repeat) › Unallocated Space › New › Apply › select the Primary partition › Next.',check:(L,f)=>f.disk},
   {id:'nokey',text:'After the restart, boot the new Windows from the SSD',hint:'When the Ventoy menu appears again, press F4 (Localboot), or remove the flash drive and restart. Do not pick the ISO again.',check:(L,f)=>f.nokey},
-  {id:'acct',text:'Create the local account "student" with the given password',hint:'No internet: click "I don\'t have internet" then "Continue with limited setup".',check:(L,f)=>f.acct},
+  {id:'acct',text:'Create the local account "@@CU@@" with its password (@@CP@@)',hint:'No internet: click "I don\'t have internet" then "Continue with limited setup".',check:(L,f)=>f.acct},
   {id:'desk',text:'Reach the Windows desktop',hint:'Finish the OOBE screens (security questions, privacy).',check:(L,f)=>f.desk}],
  start(ctx){
   const L=ctx.L,P=L.pc,f=ctx.R.flags,n=L.nodes.PC;let tmr=null,s=P.inst;
@@ -2421,10 +2445,10 @@ TASKS.c1_win={id:'c1_win',coc:1,title:'Install Windows 10 Pro',where:'Test Bench
    if(s==='region'){$$('#ol div',scr).forEach(d=>d.onclick=()=>{$$('#ol div',scr).forEach(x=>x.classList.toggle('sel',x===d))});nx.onclick=()=>{const r=$('#ol .sel',scr).textContent;if(r!=='Philippines')toast('Region set to '+r+'. (Most of you in the lab would pick Philippines.)');set('kb')}}
    if(s==='kb')nx.onclick=()=>set('kb2');if(s==='kb2')nx.onclick=()=>set('net');
    if(s==='net')q('#noinet').onclick=()=>set('limited');if(s==='limited')nx.onclick=()=>set('name');
-   if(s==='name')nx.onclick=()=>{const v=q('#an').value.trim();if(!v)return;if(v.toLowerCase()!=='student'){ctx.penalty(3,`Typed account name "${esc(v)}". The task sheet says "student"`);return}acct.name='student';set('pw')};
-   if(s==='pw')nx.onclick=()=>{const v=q('#ap').value;if(v!=='Css@2026'){ctx.penalty(3,'Password does not match the task sheet (Css@2026)');return}acct.pw=v;set('pw2')};
+   if(s==='name')nx.onclick=()=>{const v=q('#an').value.trim();if(!v)return;if(v.toLowerCase()!==EX.cu.toLowerCase()){ctx.penalty(3,`Typed account name "${esc(v)}". Your exam details say "@@CU@@"`);return}acct.name=EX.cu;set('pw')};
+   if(s==='pw')nx.onclick=()=>{const v=q('#ap').value;if(v!==EX.cp){ctx.penalty(3,EX.cp===''?'This account has no password in your exam details. Leave the password box empty':'Password does not match your exam details');return}acct.pw=v;if(v===''){n.accounts={[EX.cu]:{pw:''}};ctx.flag('acct');return set('privacy')}set('pw2')};
    if(s==='pw2')nx.onclick=()=>{if(q('#ap2').value!==acct.pw)return toast('The passwords don\'t match. Try again.','bad');set('secq')};
-   if(s==='secq')nx.onclick=()=>{const qs=[0,1,2].map(i=>$('#sq'+i,scr).value),as=[0,1,2].map(i=>$('#sa'+i,scr).value.trim());if(qs.some(x=>!x)||as.some(x=>!x))return toast('Choose 3 questions and type an answer for each.');if(new Set(qs).size<3)return toast('Choose 3 different questions.');n.accounts={student:{pw:acct.pw}};ctx.flag('acct');set('privacy')};
+   if(s==='secq')nx.onclick=()=>{const qs=[0,1,2].map(i=>$('#sq'+i,scr).value),as=[0,1,2].map(i=>$('#sa'+i,scr).value.trim());if(qs.some(x=>!x)||as.some(x=>!x))return toast('Choose 3 questions and type an answer for each.');if(new Set(qs).size<3)return toast('Choose 3 different questions.');n.accounts={[EX.cu]:{pw:acct.pw}};ctx.flag('acct');set('privacy')};
    if(s==='privacy')nx.onclick=()=>{set('hi');const msgs=['Hi','We\'re getting everything ready for you','This might take several minutes','Leave everything to us','Let\'s start'];let i=0;const t=ctx.every(()=>{i++;const e=$('#hiT',scr);if(e&&msgs[i])e.textContent=msgs[i];if(i>=msgs.length){clearInterval(t);set('done');desktop()}},900)};
   }
   async function copy(){const steps=['Copying Windows files','Getting files ready for installation','Installing features','Installing updates','Finishing up'];let i=0,pct=0,fast=false;
@@ -2440,7 +2464,7 @@ TASKS.c1_win={id:'c1_win',coc:1,title:'Install Windows 10 Pro',where:'Test Bench
   function pickIso(){if(vsel===1){ctx.penalty(3,'Picked the Windows Server 2016 ISO. This PC needs Windows 10');return}if(f.copied){ctx.penalty(10,'Picked the Windows 10 ISO again after setup restarted. Setup would start over! Use F4 Localboot or remove the flash drive');return}set('vmode')}
   function localboot(){if(!f.copied){toast('There is no operating system on the SSD yet.','bad');return}bootSSD()}
   function bootSSD(){ctx.flag('nokey');ctx.good('Booted the new Windows from the SSD after the restart.');set('getready')}
-  function desktop(){if(!CTX)return;ctx.flag('desk');scr.innerHTML='';const D=new Desktop(scr,{L,key:'PC',user:'student'});ctx.cleanup.push(()=>D.destroy())}
+  function desktop(){if(!CTX)return;ctx.flag('desk');scr.innerHTML='';const D=new Desktop(scr,{L,key:'PC',user:EX.cu});ctx.cleanup.push(()=>D.destroy())}
   function key(k){if(k==='Power'){if(s==='off'||s==='plug'){if(!P.usbIn)return toast('Insert the flash drive first.');set('post')}return}
    if((k==='F11'||k==='F12'||k==='F10')&&(s==='post'||s==='noboot')){bsel=0;return set('bootmenu')}
    if(k==='ArrowDown'||k==='ArrowUp'){const d=k==='ArrowDown'?1:-1;if(s==='ventoy'){vsel=(vsel+d+2)%2;draw()}else if(s==='bootmenu'){bsel=Math.max(0,Math.min(P.usbIn?2:1,bsel+d));draw()}return}
@@ -2457,15 +2481,15 @@ TASKS.c1_win={id:'c1_win',coc:1,title:'Install Windows 10 Pro',where:'Test Bench
  }};
 /* ---------- Task 5: Drivers ---------- */
 TASKS.c1_drv={id:'c1_drv',coc:1,title:'Install device drivers',where:'Test Bench PC',
- info:'Windows is installed but some devices have no drivers. The motherboard driver disc is in the DVD drive (D:).\n\nSign in as: student / Css@2026\n\nUse Device Manager. No internet is available.',
- objectives:[{id:'login',text:'Sign in to Windows',hint:'Click the lock screen, type the password Css@2026, press Enter.',check:(L,f)=>f.login},
+ info:'Windows is installed but some devices have no drivers. The motherboard driver disc is in the DVD drive (D:).\n\nSign in as: @@CU@@ / @@CP@@\n\nUse Device Manager. No internet is available.',
+ objectives:[{id:'login',text:'Sign in to Windows',hint:'Click the lock screen, type the password (@@CP@@) and press Enter.',check:(L,f)=>f.login},
   {id:'lan',text:'Install the Ethernet (network) driver',hint:'Device Manager › Other devices › Ethernet Controller › Update driver › Browse my computer › D:\\Drivers (include subfolders).',check:L=>L.nodes.PC.devices[0].done},
   {id:'aud',text:'Install the audio driver',hint:'Same steps for "Multimedia Audio Controller". Browse to D:\\ or D:\\Drivers with "Include subfolders" checked.',check:L=>L.nodes.PC.devices[1].done},
   {id:'vga',text:'Replace the "Microsoft Basic Display Adapter" with the real display driver',hint:'Display adapters › Microsoft Basic Display Adapter › Update driver › Browse › D:\\Drivers.',check:L=>L.nodes.PC.devices[2].done},
   {id:'net',text:'Verify the Ethernet adapter now appears in Network Connections',hint:'Right-click Start (or Start › More) › Network Connections, or run ncpa.cpl.',check:(L,f)=>f.ncpa}],
  start(ctx){
   const L=ctx.L,scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'PC',user:'student',locked:true,onChange:(ev,d)=>{if(ev==='login')ctx.flag('login');if(ev==='open'&&d==='ncpa'&&L.nodes.PC.nic)ctx.flag('ncpa');if(ev==='driver'&&L.nodes.PC.nic&&D.wins.some(w=>w.app==='ncpa'))ctx.flag('ncpa');if(ev==='drvfail')ctx.R.flags.fails=(ctx.R.flags.fails||0)+1;ctx.check()}});
+  const D=new Desktop(scr,{L,key:'PC',user:EX.cu,locked:true,onChange:(ev,d)=>{if(ev==='login')ctx.flag('login');if(ev==='open'&&d==='ncpa'&&L.nodes.PC.nic)ctx.flag('ncpa');if(ev==='driver'&&L.nodes.PC.nic&&D.wins.some(w=>w.app==='ncpa'))ctx.flag('ncpa');if(ev==='drvfail')ctx.R.flags.fails=(ctx.R.flags.fails||0)+1;ctx.check()}});
   ctx.cleanup.push(()=>D.destroy());
  }};
 
@@ -2476,7 +2500,7 @@ COCS[2]={icon:'🔌',title:'Set Up Computer Networks',sub:'Crimp & test cables �
  tasks:['c2_crimp','c2_punch','c2_patch','c2_router','c2_pc1','c2_pc2'],
  lab:()=>{const L={made:0,punch:{},patch:[],pw:{rt:false,sw:false},
   router:TPL0(),
-  nodes:{'PC-01':mkNode({hostname:'DESKTOP-PC4K1AB',accounts:{student:{pw:'Css@2026'}},mac:'B4-2E-99-31-0A-11'}),'PC-02':mkNode({hostname:'DESKTOP-9QW2LZE',accounts:{student:{pw:'Css@2026'}},mac:'B4-2E-99-31-0A-12'}),LAPTOP:mkNode({hostname:'TECH-LAPTOP',accounts:{tech:{pw:'tech'}},mac:'3C-52-82-1A-7F-0E',seg:'rt'})}};c2link(L);return L},
+  nodes:{'PC-01':mkNode({hostname:'DESKTOP-PC4K1AB',accounts:{[EX.au]:{pw:EX.ap}},mac:'B4-2E-99-31-0A-11'}),'PC-02':mkNode({hostname:'DESKTOP-9QW2LZE',accounts:{[EX.cu]:{pw:EX.cp}},mac:'B4-2E-99-31-0A-12'}),LAPTOP:mkNode({hostname:'TECH-LAPTOP',accounts:{tech:{pw:'tech'}},mac:'3C-52-82-1A-7F-0E',seg:'rt'})}};c2link(L);return L},
  room:{floor:['#24343a','#2a3b42'],wall:['#3d5a5f','#2c4549'],start:{x:470,y:560},objs:[
   {type:'board',wall:1,solid:false,x:250,y:18,w:300,h:60,text:['COC 2','Set Up Computer Networks']},
   {type:'window',wall:1,solid:false,x:620,y:22,w:110,h:56},{type:'clock',wall:1,solid:false,x:880,y:44,w:1,h:1},{type:'ac',wall:1,solid:false,x:770,y:30,w:80,h:24},
@@ -2850,14 +2874,14 @@ function routerPage(body,D){
 }
 /* ---------- Task 3: Router ---------- */
 TASKS.c2_router={id:'c2_router',coc:2,title:'Configure the TP-Link router',where:'Router & Tech Laptop',
- info:'Router: TP-Link TL-WR840N. First reset it to factory settings: press and hold the RESET button with a pin for about 8 seconds until all lights flash.\n\nThen your laptop (plugged into the router with a LAN cable): open Microsoft Edge and go to 192.168.0.1.\n\n1. Create the login password: admin.123\n2. Operation Mode › Access Point › Save (it restarts)\n3. Wireless › change the wireless network name › Save\n4. Wireless Security › WPA2-PSK, AES, password admin.123 › Save\n5. Network › LAN › IP 192.168.100.12, mask 255.255.255.0 › Save (it restarts)\n6. Log in again at 192.168.100.12\n7. DHCP › Start 192.168.100.1, End 192.168.100.99, gateway and DNS 192.168.100.12 › Save\n8. System Tools › Time Settings › Get from PC › Save',
+ info:'Router: TP-Link TL-WR840N. First reset it to factory settings: press and hold the RESET button with a pin for about 8 seconds until all lights flash.\n\nThen your laptop (plugged into the router with a LAN cable): open Microsoft Edge and go to 192.168.0.1.\n\n1. Create the login password: @@RP@@\n2. Operation Mode › Access Point › Save (it restarts)\n3. Wireless › change the wireless network name › Save\n4. Wireless Security › WPA2-PSK, AES, password @@RP@@ › Save\n5. Network › LAN › IP @@RIP@@, mask 255.255.255.0 › Save (it restarts)\n6. Log in again at @@RIP@@\n7. DHCP › Start @@NET@@.1, End @@NET@@.99, gateway and DNS @@RIP@@ › Save\n8. System Tools › Time Settings › Get from PC › Save',
  objectives:[{id:'reset',text:'Factory-reset the router (hold RESET about 8 seconds)',hint:'Pick up the paper clip, then press and hold the hole marked WPS/RESET on the back of the router until all lights flash.',check:L=>L.router.reset},
-  {id:'pw',text:'Create the router login password admin.123',hint:'Edge › 192.168.0.1 › type admin.123 twice › Let\'s Get Started.',check:L=>L.router.admin==='admin.123'},
+  {id:'pw',text:'Create the router login password @@RP@@',hint:'Edge › 192.168.0.1 › type @@RP@@ twice › Let\'s Get Started.',check:L=>L.router.admin===XV('@@RP@@')},
   {id:'ap',text:'Set Operation Mode to Access Point',hint:'Operation Mode › Access Point › Save. The router restarts.',check:L=>L.router.mode==='ap'},
   {id:'ssid',text:'Change the wireless network name (SSID)',hint:'Wireless › Wireless Network Name › Save.',check:L=>L.router.ssid&&L.router.ssid!=='TP-Link_E00C'},
-  {id:'sec',text:'Set wireless security WPA2-PSK (AES), password admin.123',hint:'Wireless Security › WPA/WPA2/WPA3 - Personal › WPA2-PSK, AES › password admin.123 › Save.',check:L=>L.router.sec==='wpa2'&&L.router.key==='admin.123'},
-  {id:'lan',text:'Change the router LAN IP to 192.168.100.12 and log in again',hint:'Network › LAN › 192.168.100.12 / 255.255.255.0 › Save. Then type 192.168.100.12 in Edge.',check:(L,f)=>L.router.ip==='192.168.100.12'&&L.router.mask==='255.255.255.0'&&f.newlogin},
-  {id:'dhcp',text:'Set DHCP: 192.168.100.1 – 192.168.100.99, gateway and DNS 192.168.100.12',hint:'DHCP › DHCP Settings › fill in the values › Save.',check:L=>{const d=L.router.dhcp;return d.on&&d.start==='192.168.100.1'&&d.end==='192.168.100.99'&&d.gw==='192.168.100.12'&&d.dns==='192.168.100.12'}},
+  {id:'sec',text:'Set wireless security WPA2-PSK (AES), password @@RP@@',hint:'Wireless Security › WPA/WPA2/WPA3 - Personal › WPA2-PSK, AES › password @@RP@@ › Save.',check:L=>L.router.sec==='wpa2'&&L.router.key===XV('@@RP@@')},
+  {id:'lan',text:'Change the router LAN IP to @@RIP@@ and log in again',hint:'Network › LAN › @@RIP@@ / 255.255.255.0 › Save. Then type @@RIP@@ in Edge.',check:(L,f)=>L.router.ip===XV('@@RIP@@')&&L.router.mask==='255.255.255.0'&&f.newlogin},
+  {id:'dhcp',text:'Set DHCP: @@NET@@.1 – @@NET@@.99, gateway and DNS @@RIP@@',hint:'DHCP › DHCP Settings › fill in the values › Save.',check:L=>{const d=L.router.dhcp;return d.on&&d.start===XV('@@NET@@.1')&&d.end===XV('@@NET@@.99')&&d.gw===XV('@@RIP@@')&&d.dns===XV('@@RIP@@')}},
   {id:'time',text:'Set the router time (System Tools › Time Settings)',hint:'Click Get from PC, then Save.',check:L=>L.router.time}],
  start(ctx){
   const L=ctx.L;if(!L.router.v2){Object.assign(L.router,TPL0());L.nodes.LAPTOP.ip=''}c2link(L);if(!L.router.reset&&typeof startRouterReset==='function'&&L.router.up){TASKS.c2_router._r3d=1}const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
@@ -2865,26 +2889,26 @@ TASKS.c2_router={id:'c2_router',coc:2,title:'Configure the TP-Link router',where
   if(!L.router.reset&&typeof startRouterReset==='function'){let ok=false;try{ok=!!document.createElement('canvas').getContext('webgl2')}catch(e){}
    if(ok){const keep=ctx.body.innerHTML;startRouterReset(ctx,()=>{Object.assign(L.router,TPL0(),{up:true,reset:true});L.nodes.LAPTOP.ip='';c2link(L);ctx.check();ctx.cleanup.forEach(f=>{try{f()}catch(e){}});ctx.cleanup=[];TASKS.c2_router.start(ctx)});return}
    Object.assign(L.router,TPL0(),{up:true,reset:true});ctx.check()}
-  const D=new Desktop(scr,{L,key:'LAPTOP',user:'tech',startup:['edge'],onChange:(ev,d)=>{if(ev==='rlogin'&&d==='192.168.100.12')ctx.R.flags.newlogin=true;
-   if(ev==='rcreate'&&d!=='admin.123')ctx.penalty(2,'The task sheet asks for the router password admin.123');
+  const D=new Desktop(scr,{L,key:'LAPTOP',user:'tech',startup:['edge'],onChange:(ev,d)=>{if(ev==='rlogin'&&d===XV('@@RIP@@'))ctx.R.flags.newlogin=true;
+   if(ev==='rcreate'&&d!==XV('@@RP@@'))ctx.penalty(2,'The task sheet asks for the router password @@RP@@');
    if(ev==='rloginfail'&&!ctx.R.flags.lf){ctx.R.flags.lf=1;ctx.penalty(2,'Wrong router password')}if(ev==='rdiscard')ctx.penalty(3,'Left a router page without saving');ctx.check()}});
   ctx.cleanup.push(()=>D.destroy());
  }};
 /* ---------- Task 4 & 5: PCs ---------- */
 function pcTask(id,nm,label,ip,gw,extra){return {id,coc:2,title:`Configure the ${label}`,where:label,
- info:`${label} (${nm}). Sign in: student / Css@2026\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: ${ip}\n• Subnet mask: 255.255.255.0\n• Default gateway: ${gw}\n• Preferred DNS server: 192.168.100.13\n`+extra.info,
- objectives:[{id:'login',text:'Sign in to Windows',hint:'Password: Css@2026',check:(L,f)=>f.login},
-  {id:'ip',text:`Set IP ${ip}, mask 255.255.255.0, gateway ${gw}, DNS 192.168.100.13`,hint:'Run ncpa.cpl › Ethernet › Properties › Internet Protocol Version 4 (TCP/IPv4) › Properties › "Use the following IP address".',check:L=>{const n=L.nodes[nm];return !n.dhcp&&n.ip===ip&&n.mask==='255.255.255.0'&&n.gw===gw&&n.dns1==='192.168.100.13'}},
+ info:`${label} (${nm}). Sign in: ${nm==='PC-01'?'@@AU@@ / @@AP@@':'@@CU@@ / @@CP@@'}\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: ${ip}\n• Subnet mask: 255.255.255.0\n• Default gateway: ${gw}\n• Preferred DNS server: @@SIP@@\n`+extra.info,
+ objectives:[{id:'login',text:'Sign in to Windows',hint:'Password: '+(nm==='PC-01'?'@@AP@@':'@@CP@@'),check:(L,f)=>f.login},
+  {id:'ip',text:`Set IP ${ip}, mask 255.255.255.0, gateway ${gw}, DNS @@SIP@@`,hint:'Run ncpa.cpl › Ethernet › Properties › Internet Protocol Version 4 (TCP/IPv4) › Properties › "Use the following IP address".',check:L=>{const n=L.nodes[nm];return !n.dhcp&&n.ip===XV(ip)&&n.mask==='255.255.255.0'&&n.gw===XV(gw)&&n.dns1===XV('@@SIP@@')}},
   ...extra.obj],
  start(ctx){const L=ctx.L;c2link(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:nm,user:'student',locked:true,onChange:(ev,d)=>{if(ev==='login')ctx.flag('login');extra.ev&&extra.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
-TASKS.c2_pc1=pcTask('c2_pc1','PC-01','Server PC','192.168.100.13','192.168.100.12',{info:'\nTest: ping the router 192.168.100.12.\nTurn on file and printer sharing so the Client PC can ping this PC.',
+  const D=new Desktop(scr,{L,key:nm,user:nm==='PC-01'?EX.au:EX.cu,locked:true,onChange:(ev,d)=>{if(ev==='login')ctx.flag('login');extra.ev&&extra.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
+TASKS.c2_pc1=pcTask('c2_pc1','PC-01','Server PC','@@SIP@@','@@RIP@@',{info:'\nTest: ping the router @@RIP@@.\nTurn on file and printer sharing so the Client PC can ping this PC.',
  obj:[{id:'disc',text:'Turn on network discovery and file & printer sharing',hint:'Control Panel › Network and Sharing Center › Change advanced sharing settings › turn both on › Save changes.',check:L=>L.nodes['PC-01'].discovery&&L.nodes['PC-01'].fileShare},
-  {id:'ping',text:'Ping the router (192.168.100.12) successfully',hint:'Command Prompt: ping 192.168.100.12. The router must already use its new IP.',check:(L,f)=>f.ping}],
- ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.100.12')ctx.R.flags.ping=true}});
-TASKS.c2_pc2=pcTask('c2_pc2','PC-02','Client PC','192.168.100.14','192.168.100.13',{info:'\nTest: ping the Server PC 192.168.100.13.',
- obj:[{id:'ping',text:'Ping the Server PC (192.168.100.13) successfully',hint:'Command Prompt: ping 192.168.100.13. If it times out, turn on file & printer sharing on the Server PC.',check:(L,f)=>f.ping}],
- ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip==='192.168.100.13')ctx.R.flags.ping=true}});
+  {id:'ping',text:'Ping the router (@@RIP@@) successfully',hint:'Command Prompt: ping @@RIP@@. The router must already use its new IP.',check:(L,f)=>f.ping}],
+ ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip===XV('@@RIP@@'))ctx.R.flags.ping=true}});
+TASKS.c2_pc2=pcTask('c2_pc2','PC-02','Client PC','@@CIP@@','@@SIP@@',{info:'\nTest: ping the Server PC @@SIP@@.',
+ obj:[{id:'ping',text:'Ping the Server PC (@@SIP@@) successfully',hint:'Command Prompt: ping @@SIP@@. If it times out, turn on file & printer sharing on the Server PC.',check:(L,f)=>f.ping}],
+ ev:(ctx,ev,d,L)=>{if(ev==='ping'&&d.ok&&d.ip===XV('@@SIP@@'))ctx.R.flags.ping=true}});
 
 /* ================= 3D crimping task (replaces the 2D bench when WebGL2 is available) ================= */
 (function(){
@@ -3079,9 +3103,9 @@ T2.start=function(ctx){
 COCS[3]={icon:'🗄️',title:'Set Up Computer Servers',sub:'Windows Server 2016 · static IP · domain tesda.com · DHCP · firewall · OU & users · join client',
  brief:'This is COC 3. Following your instructor\'s guide, set up the Windows Server 2016 machine as the domain controller for <b>tesda.com</b>, configure DHCP, turn off the firewall, create the OU and user Client A, then join the client PC to the domain.',
  tasks:['c3_srv','c3_adds','c3_dhcp','c3_fw','c3_users','c3_join'],
- lab:()=>{const L={v2:1,router:{ip:'192.168.100.12',up:true,internet:false,dhcp:{on:false,start:'192.168.100.1',end:'192.168.100.99'}},
-  nodes:{SRV:mkNode({hostname:'WIN-4G8K2LQ7R1M',os:'server',media:true,seg:'lan',roles:{},accounts:{Administrator:{pw:'Admin.123'}},adUsers:[],ous:[],mac:'00-15-5D-01-0A-10'}),
-   CLIENT:mkNode({hostname:'CLIENT-01',media:true,seg:'lan',accounts:{student:{pw:'Css@2026'}},mac:'00-15-5D-01-0A-21'})}};
+ lab:()=>{const L={v2:1,router:{ip:XV('@@RIP@@'),up:true,internet:false,dhcp:{on:false,start:XV('@@NET@@.1'),end:XV('@@NET@@.99')}},
+  nodes:{SRV:mkNode({hostname:'WIN-4G8K2LQ7R1M',os:'server',media:true,seg:'lan',roles:{},accounts:{[EX.au]:{pw:EX.ap}},adUsers:[],ous:[],mac:'00-15-5D-01-0A-10'}),
+   CLIENT:mkNode({hostname:'CLIENT-01',media:true,seg:'lan',accounts:{[EX.cu]:{pw:EX.cp}},mac:'00-15-5D-01-0A-21'})}};
   nodesOf(L).forEach(n=>dhcpRenew(L,n));return L},
  room:{floor:['#2b2d3d','#303345'],wall:['#4a4560','#38344b'],start:{x:470,y:560},objs:[
   {type:'board',wall:1,solid:false,x:250,y:18,w:300,h:60,text:['COC 3','Set Up Computer Servers']},
@@ -3093,37 +3117,37 @@ COCS[3]={icon:'🗄️',title:'Set Up Computer Servers',sub:'Windows Server 2016
   {type:'plant',x:24,y:540,w:30,h:30},{type:'plant',x:906,y:100,w:30,h:30},{type:'extinguisher',x:210,y:108,w:14,h:28},
   {type:'door',exit:1,solid:false,x:944,y:250,w:16,h:90}]}};
 const c3mig=L=>{if(!L.v2&&!Object.keys(G.prog).some(k=>k.startsWith('c3_'))){const f=COCS[3].lab();Object.keys(L).forEach(k=>delete L[k]);Object.assign(L,f)}};
-function srvTask(id,title,info,objectives,o={}){return {id,coc:3,title,where:'Server Console',info:'Server login: Administrator / Admin.123\n\n'+info,objectives,
+function srvTask(id,title,info,objectives,o={}){return {id,coc:3,title,where:'Server Console',info:'Server login: @@AU@@ / @@AP@@\n\n'+info,objectives,
  start(ctx){const L=ctx.L;c3mig(L);o.start&&o.start(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'SRV',user:'Administrator',locked:true,startup:['servermanager'],expect:{domain:'tesda.com'},onChange:(ev,d)=>{if(ev==='login')ctx.flag('login'+(L.nodes.SRV.isDC?'dc':''));o.ev&&o.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
+  const D=new Desktop(scr,{L,key:'SRV',user:EX.au,locked:true,startup:['servermanager'],expect:{domain:'tesda.com'},onChange:(ev,d)=>{if(ev==='login')ctx.flag('login'+(L.nodes.SRV.isDC?'dc':''));o.ev&&o.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
 const S=L=>L.nodes.SRV;
-TASKS.c3_srv=srvTask('c3_srv','Server IP configuration','Internet Protocol Version 4 (TCP/IPv4) on the server:\n• IP address: 192.168.100.13\n• Subnet mask: 255.255.255.0\n• Default gateway: 192.168.100.12\n• Preferred DNS server: 192.168.100.13',[
- {id:'login',text:'Sign in as Administrator',hint:'Click "Press Ctrl+Alt+Delete to unlock", type Admin.123.',check:(L,f)=>f.login||f.logindc},
- {id:'ip',text:'Set IP 192.168.100.13, mask 255.255.255.0, gateway 192.168.100.12, DNS 192.168.100.13',hint:'Server Manager › Local Server › click the Ethernet link › Ethernet › Properties › IPv4.',check:L=>{const n=S(L);return !n.dhcp&&n.ip==='192.168.100.13'&&n.mask==='255.255.255.0'&&n.gw==='192.168.100.12'&&['192.168.100.13','127.0.0.1'].includes(n.dns1)}}]);
-TASKS.c3_adds=srvTask('c3_adds','Promote to a domain network','• Add Roles and Features: Active Directory Domain Services (and DHCP Server)\n• Promote this server to a domain controller\n• Add a new forest, root domain name: tesda.com\n• DSRM password: Admin.123\n• Install, then the server restarts',[
+TASKS.c3_srv=srvTask('c3_srv','Server IP configuration','Internet Protocol Version 4 (TCP/IPv4) on the server:\n• IP address: @@SIP@@\n• Subnet mask: 255.255.255.0\n• Default gateway: @@RIP@@\n• Preferred DNS server: @@SIP@@',[
+ {id:'login',text:'Sign in as @@AU@@',hint:'Click "Press Ctrl+Alt+Delete to unlock", type @@AP@@.',check:(L,f)=>f.login||f.logindc},
+ {id:'ip',text:'Set IP @@SIP@@, mask 255.255.255.0, gateway @@RIP@@, DNS @@SIP@@',hint:'Server Manager › Local Server › click the Ethernet link › Ethernet › Properties › IPv4.',check:L=>{const n=S(L);return !n.dhcp&&n.ip===XV('@@SIP@@')&&n.mask==='255.255.255.0'&&n.gw===XV('@@RIP@@')&&[XV('@@SIP@@'),'127.0.0.1'].includes(n.dns1)}}]);
+TASKS.c3_adds=srvTask('c3_adds','Promote to a domain network','• Add Roles and Features: Active Directory Domain Services (and DHCP Server)\n• Promote this server to a domain controller\n• Add a new forest, root domain name: tesda.com\n• DSRM password: @@AP@@\n• Install, then the server restarts',[
  {id:'role',text:'Install the Active Directory Domain Services role',hint:'Server Manager › Manage › Add Roles and Features › Next › Next › Next › check Active Directory Domain Services › Add Features › Next... › Install.',check:L=>S(L).roles&&S(L).roles.adds},
- {id:'promo',text:'Promote to a domain controller: new forest "tesda.com"',hint:'Click the 🚩 flag › "Promote this server to a domain controller" › Add a new forest › tesda.com › DSRM password Admin.123 › Next... › Install.',check:L=>S(L).isDC&&S(L).domain==='tesda.com'},
- {id:'dclogin',text:'After the restart, sign in as TESDA\\Administrator',hint:'Unlock and type Admin.123.',check:(L,f)=>f.logindc}]);
-TASKS.c3_dhcp=srvTask('c3_dhcp','DHCP configuration','• Install the DHCP Server role and complete the post-install configuration\n• Tools › DHCP › IPv4 › New Scope (any name)\n• Start IP: 192.168.100.10\n• End IP: 192.168.100.20\n• Subnet mask: 255.255.255.0\n• Skip exclusions\n• Router (default gateway): 192.168.100.12\n• Activate the scope',[
+ {id:'promo',text:'Promote to a domain controller: new forest "tesda.com"',hint:'Click the 🚩 flag › "Promote this server to a domain controller" › Add a new forest › tesda.com › DSRM password @@AP@@ › Next... › Install.',check:L=>S(L).isDC&&S(L).domain==='tesda.com'},
+ {id:'dclogin',text:'After the restart, sign in as TESDA\\@@AU@@',hint:'Unlock and type @@AP@@.',check:(L,f)=>f.logindc}]);
+TASKS.c3_dhcp=srvTask('c3_dhcp','DHCP configuration','• Install the DHCP Server role and complete the post-install configuration\n• Tools › DHCP › IPv4 › New Scope (any name)\n• Start IP: @@NET@@.10\n• End IP: @@NET@@.20\n• Subnet mask: 255.255.255.0\n• Skip exclusions\n• Router (default gateway): @@RIP@@\n• Activate the scope',[
  {id:'role',text:'Install the DHCP Server role',hint:'Manage › Add Roles and Features › check DHCP Server › Add Features › ... › Install.',check:L=>S(L).dhcpRole},
  {id:'auth',text:'Complete the DHCP configuration (authorize the server)',hint:'Click the 🚩 flag › "Complete DHCP configuration" › Next › Commit.',check:L=>S(L).dhcpAuth},
- {id:'scope',text:'Create a scope 192.168.100.10 – 192.168.100.20 (255.255.255.0)',hint:'Tools › DHCP › expand the server › right-click IPv4 › New Scope...',check:L=>{const s=S(L).scope;return s&&s.start==='192.168.100.10'&&s.end==='192.168.100.20'&&s.mask==='255.255.255.0'}},
- {id:'opt',text:'Set the router (default gateway) 192.168.100.12',hint:'In the wizard: "Yes, I want to configure these options now" › Router: 192.168.100.12 › Add.',check:L=>{const s=S(L).scope;return s&&s.router==='192.168.100.12'}},
+ {id:'scope',text:'Create a scope @@NET@@.10 – @@NET@@.20 (255.255.255.0)',hint:'Tools › DHCP › expand the server › right-click IPv4 › New Scope...',check:L=>{const s=S(L).scope;return s&&s.start===XV('@@NET@@.10')&&s.end===XV('@@NET@@.20')&&s.mask==='255.255.255.0'}},
+ {id:'opt',text:'Set the router (default gateway) @@RIP@@',hint:'In the wizard: "Yes, I want to configure these options now" › Router: @@RIP@@ › Add.',check:L=>{const s=S(L).scope;return s&&s.router===XV('@@RIP@@')}},
  {id:'act',text:'Activate the scope',hint:'Last page of the wizard: "Yes, I want to activate this scope now".',check:L=>{const s=S(L).scope;return s&&s.active}}]);
 TASKS.c3_fw=srvTask('c3_fw','Turn off Windows Firewall','• Control Panel › System and Security › Windows Defender Firewall\n• Turn Windows Defender Firewall on or off\n• Turn off for Domain, Private and Public networks › OK',[
  {id:'fw',text:'Turn off Windows Defender Firewall for all network types',hint:'Run firewall.cpl › "Turn Windows Defender Firewall on or off" › Turn off on all three › OK.',check:L=>{const f=S(L).fw;return f&&!f.domain&&!f.priv&&!f.pub}}]);
-TASKS.c3_users=srvTask('c3_users','Active Directory Users and Computers','In Active Directory Users and Computers (tesda.com):\n• New Organizational Unit: COMPUTERS DOMAIN\n• Inside it, New › User:\n   First name: Client A\n   User logon name: Client A\n   Password: Admin.123\n   ☑ User cannot change password\n   ☑ Password never expires',[
+TASKS.c3_users=srvTask('c3_users','Active Directory Users and Computers','In Active Directory Users and Computers (tesda.com):\n• New Organizational Unit: COMPUTERS DOMAIN\n• Inside it, New › User:\n   First name: Client A\n   User logon name: Client A\n   Password: @@AP@@\n   ☑ User cannot change password\n   ☑ Password never expires',[
  {id:'ou',text:'Create the Organizational Unit "COMPUTERS DOMAIN"',hint:'Tools › Active Directory Users and Computers › right-click tesda.com › New › Organizational Unit.',check:L=>S(L).ous.some(o=>o.toUpperCase()==='COMPUTERS DOMAIN')},
  {id:'u1',text:'Create user "Client A" inside COMPUTERS DOMAIN',hint:'Click the COMPUTERS DOMAIN OU first, then New › User. First name and logon name: Client A.',check:L=>S(L).adUsers.some(u=>u.logon.toLowerCase()==='client a'&&(u.ou||'').toUpperCase()==='COMPUTERS DOMAIN')},
- {id:'pw',text:'Password Admin.123, "User cannot change password" and "Password never expires"',hint:'Second page of the New User wizard: tick the two boxes. Do not tick "must change password".',check:L=>S(L).adUsers.some(u=>u.logon.toLowerCase()==='client a'&&u.pw==='Admin.123'&&u.cant&&u.never)}]);
+ {id:'pw',text:'Password @@AP@@, "User cannot change password" and "Password never expires"',hint:'Second page of the New User wizard: tick the two boxes. Do not tick "must change password".',check:L=>S(L).adUsers.some(u=>u.logon.toLowerCase()==='client a'&&u.pw===EX.ap&&u.cant&&u.never)}]);
 TASKS.c3_join={id:'c3_join',coc:3,title:'Configure the client and join the domain',where:'Client PC',
- info:'Local login: student / Css@2026\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: 192.168.100.14\n• Subnet mask: 255.255.255.0\n• Default gateway: 192.168.100.13\n• Preferred DNS server: 192.168.100.13\n\n• Join the domain: tesda.com (TESDA\\Administrator / Admin.123)\n• Restart, then sign in as TESDA\\Client A / Admin.123',
- objectives:[{id:'login',text:'Sign in with the local account',hint:'Password Css@2026.',check:(L,f)=>f.login},
-  {id:'ip',text:'Set IP 192.168.100.14, mask 255.255.255.0, gateway 192.168.100.13, DNS 192.168.100.13',hint:'Run ncpa.cpl › Ethernet › Properties › IPv4 › "Use the following IP address".',check:L=>{const n=L.nodes.CLIENT;return !n.dhcp&&n.ip==='192.168.100.14'&&n.mask==='255.255.255.0'&&n.gw==='192.168.100.13'&&n.dns1==='192.168.100.13'}},
+ info:'Local login: @@CU@@ / @@CP@@\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: @@CIP@@\n• Subnet mask: 255.255.255.0\n• Default gateway: @@SIP@@\n• Preferred DNS server: @@SIP@@\n\n• Join the domain: tesda.com (TESDA\\@@AU@@ / @@AP@@)\n• Restart, then sign in as TESDA\\Client A / @@AP@@',
+ objectives:[{id:'login',text:'Sign in with the local account',hint:'Password: @@CP@@.',check:(L,f)=>f.login},
+  {id:'ip',text:'Set IP @@CIP@@, mask 255.255.255.0, gateway @@SIP@@, DNS @@SIP@@',hint:'Run ncpa.cpl › Ethernet › Properties › IPv4 › "Use the following IP address".',check:L=>{const n=L.nodes.CLIENT;return !n.dhcp&&n.ip===XV('@@CIP@@')&&n.mask==='255.255.255.0'&&n.gw===XV('@@SIP@@')&&n.dns1===XV('@@SIP@@')}},
   {id:'join',text:'Join the computer to tesda.com and restart',hint:'Run sysdm.cpl › Change... › Member of: Domain › tesda.com › credentials › Welcome › Restart.',check:L=>L.nodes.CLIENT.domain==='tesda.com'},
-  {id:'du',text:'Sign in as the domain user TESDA\\Client A',hint:'On the lock screen choose "Other user" and type TESDA\\Client A with password Admin.123.',check:(L,f)=>f.du}],
+  {id:'du',text:'Sign in as the domain user TESDA\\Client A',hint:'On the lock screen choose "Other user" and type TESDA\\Client A with password @@AP@@.',check:(L,f)=>f.du}],
  start(ctx){const L=ctx.L;c3mig(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'CLIENT',user:'student',locked:true,onChange:(ev,d)=>{if(ev==='login'){ctx.flag('login');if(/client a/i.test(d))ctx.flag('du')}if(ev==='joinfail'&&!ctx.R.flags.jf){ctx.R.flags.jf=1;ctx.penalty(3,'Domain join failed: the client could not find the domain controller')}ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
+  const D=new Desktop(scr,{L,key:'CLIENT',user:EX.cu,locked:true,onChange:(ev,d)=>{if(ev==='login'){ctx.flag('login');if(/client a/i.test(d))ctx.flag('du')}if(ev==='joinfail'&&!ctx.R.flags.jf){ctx.R.flags.jf=1;ctx.penalty(3,'Domain join failed: the client could not find the domain controller')}ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
 
 /* ================= COC 3: Group Policy (folder redirection, software deployment) + Remote Desktop ================= */
 const dcNode=L=>nodesOf(L).find(o=>o.isDC);
@@ -3264,7 +3288,7 @@ APPS.mstsc={title:'Remote Desktop Connection',icon:'🖥️',w:460,h:300,open(w,
   if(!tg||lreach(D.L,n,ip,true)!=='ok'||!tg.rdp||!tg.rdp.on){await D.msg('Remote Desktop Connection','Remote Desktop can\'t connect to the remote computer for one of these reasons:<br><br>1) Remote access to the server is not enabled<br>2) The remote computer is turned off<br>3) The remote computer is not available on the network<br><br>Make sure the remote computer is turned on and connected to the network, and that remote access is enabled.',{icon:'⛔'});D.changed('rdpfail');w.close();return}
   w.body.innerHTML=`<div class="dp"><b>Enter your credentials</b><p style="font-size:12px">These credentials will be used to connect to ${esc(t)}.</p><input id="mU" style="width:100%" value="${esc(D.user)}" autocapitalize="off"><input id="mP" type="password" style="width:100%;margin-top:6px" placeholder="Password"><div id="mE" style="color:#c00;font-size:12px"></div></div><div class="dbtns"><button class="wb pri" id="mO">OK</button><button class="wb" id="mX">Cancel</button></div>`;
   $('#mX',w.body).onclick=()=>w.close();$('#mO',w.body).onclick=async()=>{const u=$('#mU',w.body).value.trim().replace(/^tesda\\/i,''),p=$('#mP',w.body).value;const dc2=dcNode(D.L);
-   const rec=lcEq(u,'administrator')?{logon:'Administrator',pw:tg.accounts.Administrator.pw,admin:1}:(dc2.adUsers||[]).find(x=>lcEq(x.logon,u));
+   const rec=lcEq(u,EX.au)?{logon:EX.au,pw:tg.accounts[EX.au].pw,admin:1}:(dc2.adUsers||[]).find(x=>lcEq(x.logon,u));
    if(!rec||rec.pw!==p)return $('#mE',w.body).textContent='The user name or password is incorrect.';
    const allowed=rec.admin||(tg.rdp.users||[]).some(x=>lcEq(x,'Domain Users')||lcEq(x,rec.logon)||lcEq(x,'Authenticated Users')||lcEq(x,'Everyone'));
    if(!allowed){await D.msg('Remote Desktop Connection','The connection was denied because the user account is not authorized for remote login.',{icon:'⛔'});return}
@@ -3296,20 +3320,116 @@ TASKS.c3_rdp=srvTask('c3_rdp','Remote Desktop','1. Server Manager › Local Serv
  {id:'on',text:'Allow remote connections to this computer',hint:'Server Manager › Local Server › Remote Desktop: Disabled › Allow remote connections.',check:L=>S3(L).rdp&&S3(L).rdp.on},
  {id:'du',text:'Add Domain Users to the Remote Desktop users',hint:'In the Remote tab › Select Users... › Add... › Domain Users › Check Names › OK.',check:L=>S3(L).rdp&&S3(L).rdp.on&&(S3(L).rdp.users||[]).some(u=>lcEq(u,DU))}],{start:srvSetup});
 TASKS.c3_test={id:'c3_test',coc:3,title:'Test the policies and Remote Desktop on the client',where:'Client PC',
- info:'On the client, sign in as TESDA\\Client A (password Admin.123).\n\n1. Open Command Prompt › gpupdate /force › type Y to sign out\n2. Sign in again as Client A: the Desktop is redirected and the software installs\n3. Open Remote Desktop Connection (mstsc) › Computer: tesda.com or the server IP › Connect › sign in as Client A',
- objectives:[{id:'login',text:'Sign in as TESDA\\Client A',hint:'Lock screen › Other user › TESDA\\Client A / Admin.123.',check:(L,f)=>f.du},
+ info:'On the client, sign in as TESDA\\Client A (password @@AP@@).\n\n1. Open Command Prompt › gpupdate /force › type Y to sign out\n2. Sign in again as Client A: the Desktop is redirected and the software installs\n3. Open Remote Desktop Connection (mstsc) › Computer: tesda.com or the server IP › Connect › sign in as Client A',
+ objectives:[{id:'login',text:'Sign in as TESDA\\Client A',hint:'Lock screen › Other user › TESDA\\Client A / @@AP@@.',check:(L,f)=>f.du},
   {id:'gpu',text:'Run gpupdate /force and sign out (Y)',hint:'Command Prompt: gpupdate /force, then type Y.',check:(L,f)=>f.gpout},
   {id:'fr',text:'After signing in again, the Desktop is redirected to the server',hint:'If it failed, check the share and Security permissions and the root path on the server.',check:L=>!!L.nodes.CLIENT.redirect},
   {id:'sw',text:'The assigned software installs at logon',hint:'If it is missing, check that the package path is \\\\server\\Softwares and "Install this application at logon" is ticked.',check:L=>(L.nodes.CLIENT.installed||[]).length>0},
   {id:'rdp',text:'Connect to the server with Remote Desktop Connection',hint:'Start › Remote Desktop Connection › tesda.com › Connect › TESDA\\Client A.',check:(L,f)=>f.rdp}],
  start(ctx){const L=ctx.L;c3mig(L);srvSetup(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'CLIENT',user:'student',locked:true,onChange:(ev,d)=>{
+  const D=new Desktop(scr,{L,key:'CLIENT',user:EX.cu,locked:true,onChange:(ev,d)=>{
    if(ev==='login'&&/client a/i.test(d||'')){ctx.R.flags.du=true;const res=applyUserPolicy(L,L.nodes.CLIENT,d);
     if(ctx.R.flags.gpout){setTimeout(()=>{if(res.sw.length)toast('📦 Installing managed software: '+res.sw.join(', '),'good');if(res.fr)toast('📁 Desktop redirected to '+res.fr,'good');res.errors.forEach(e=>toast('⚠ '+e,'bad'))},1300)}}
    if(ev==='gpsignout')ctx.R.flags.gpout=true;if(ev==='rdpok')ctx.R.flags.rdp=true;ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
 COCS[3].tasks.push('c3_fr','c3_sw','c3_rdp','c3_test');
 (function(){const o=COCS[3].room.objs;const s=o.find(x=>x.label==='Server Console');if(s)s.tasks.push('c3_fr','c3_sw','c3_rdp');const c=o.find(x=>x.label==='Client PC');if(c)c.tasks.push('c3_test')})();
 COCS[3].sub='Windows Server 2016 · domain tesda.com · DHCP · OU & users · folder redirection · software deployment · Remote Desktop';
+
+/* ================= EXAM DETAILS (credentials + IPs from your assessor) ================= */
+const EX_BAD=/[<>&"'\\\/\[\]:;|=,+*?%]/;
+function exCheck(o){
+ const nm=(x,w)=>!x?`Enter the ${w}.`:x.length>20?`The ${w} is too long (20 max).`:EX_BAD.test(x)?`The ${w} has a character Windows does not allow.`:'';
+ let e=nm(o.cu,'client user name')||nm(o.au,'admin user name');if(e)return e;
+ if(o.cu.toLowerCase()===o.au.toLowerCase())return 'The client and admin user names must be different.';
+ if(/[<>&"']/.test(o.cp+o.ap+o.rp))return 'Passwords cannot contain < > & " \'.';
+ if(!pwComplex(o.ap))return 'The admin password needs at least 8 characters with 3 of: lowercase, UPPERCASE, number, symbol (Windows Server asks for this).';
+ if(o.rp.length<6)return 'The router password needs at least 6 characters.';
+ const ip=s=>{const m=/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(s);return m&&m.slice(1).every(n=>+n<=255&&String(+n)===n)?m.slice(1).map(Number):null};
+ const R=ip(o.rip),S=ip(o.sip),C=ip(o.cip);
+ if(!R)return 'The router IP is not a valid IPv4 address.';if(!S)return 'The admin IP is not a valid IPv4 address.';if(!C)return 'The client IP is not a valid IPv4 address.';
+ for(const [a,w] of [[R,'router'],[S,'admin'],[C,'client']]){if(a[3]<1||a[3]>254)return `The ${w} IP must end in 1 to 254.`;if(a[0]===127||a[0]>=224)return `The ${w} IP is not a normal LAN address.`}
+ if([R,S,C].some(a=>a[0]!==R[0]||a[1]!==R[1]||a[2]!==R[2]))return 'The router, admin and client IPs must be in the same network (the first three numbers match), because the subnet mask is 255.255.255.0.';
+ if(new Set([o.rip,o.sip,o.cip]).size<3)return 'The router, admin and client IPs must all be different.';
+ if(o.rip==='192.168.0.1')return 'The router IP must be a new one. 192.168.0.1 is the TP-Link factory address that you change in COC 2.';
+ return '';
+}
+/* labs that already exist keep working: refresh their accounts, and rebuild the ones nobody started */
+function exApply(){
+ const acc=(n,u,p)=>{if(n&&n.accounts&&Object.keys(n.accounts).length<=1)n.accounts={[u]:{pw:p}}};
+ [1,2,3].forEach(c=>{const L=G.labs[c];if(!L)return;
+  if(!COCS[c].tasks.some(t=>G.prog[t])&&!(G.rs&&COCS[c].tasks.some(t=>G.rs[t]))){delete G.labs[c];return}
+  const N=L.nodes||{};if(c===2){acc(N['PC-01'],EX.au,EX.ap);acc(N['PC-02'],EX.cu,EX.cp)}
+  if(c===3){acc(N.SRV,EX.au,EX.ap);acc(N.CLIENT,EX.cu,EX.cp)}if(c===1)acc(N.PC,EX.cu,EX.cp)});
+ save();
+}
+function exNotepad(){
+ modal(`<h3>📝 Exam details</h3><table class="extab"><tr><td>Client PC</td><td><b>${esc(EX.cu)}</b> / ${EX.cp===''?'<i>no password</i>':'<b>'+esc(EX.cp)+'</b>'}</td></tr>
+ <tr><td>Admin / Server</td><td><b>${esc(EX.au)}</b> / <b>${esc(EX.ap)}</b></td></tr><tr><td>Router login &amp; Wi-Fi</td><td><b>${esc(EX.rp)}</b></td></tr>
+ <tr><td>Router IP</td><td><b>${EX.rip}</b></td></tr><tr><td>Admin (server) IP</td><td><b>${EX.sip}</b></td></tr><tr><td>Client IP</td><td><b>${EX.cip}</b></td></tr><tr><td>Subnet mask</td><td><b>255.255.255.0</b></td></tr></table>
+ <div class="row" style="justify-content:flex-end"><button class="btn ghost" id="exCh">Change…</button><button class="btn" onclick="closeModal()">Close</button></div>`);
+ $('#exCh').onclick=()=>exSetup(false,true);
+}
+function exSetup(first,fromPad){
+ const f=(id,l,v,ph='')=>`<label class="exl">${l}<input id="${id}" value="${esc(v)}" placeholder="${ph}" autocomplete="off" autocapitalize="off" spellcheck="false"></label>`;
+ modal(`<h3>📝 Exam details</h3><p class="small muted">${first?'Before you start: ':''}Type what <b>your assessor</b> gave you. The game checks everything you type in the tasks against these details.</p>
+ <div class="exg">${f('exCu','Client user name',EX.cu)}${f('exCp','Client password',EX.cp,'empty = no password')}${f('exAu','Admin user name',EX.au)}${f('exAp','Admin password',EX.ap)}${f('exRp','Router password (login + Wi-Fi)',EX.rp)}
+ ${f('exRip','Router IP',EX.rip)}${f('exSip','Admin (server) IP',EX.sip)}${f('exCip','Client IP',EX.cip)}</div>
+ <div class="small muted" style="margin:6px 0">Subnet mask is always 255.255.255.0. Router, admin and client IPs must be in the same network.</div><div id="exErr" class="exerr"></div>
+ <div class="row" style="justify-content:space-between;flex-wrap:wrap"><button class="btn ghost" id="exDef">↺ Our exam (default)</button><span><button class="btn ghost" id="exX">${first?'Back':'Cancel'}</button> <button class="btn" id="exSv">${first?'Save &amp; continue':'Save'}</button></span></div>`);
+ const g=id=>$('#'+id).value.trim(),gp=id=>$('#'+id).value;
+ $('#exDef').onclick=()=>{[['exCu','cu'],['exCp','cp'],['exAu','au'],['exAp','ap'],['exRp','rp'],['exRip','rip'],['exSip','sip'],['exCip','cip']].forEach(([i,k])=>$('#'+i).value=EXD[k]);$('#exErr').textContent=''};
+ $('#exX').onclick=()=>fromPad?exNotepad():closeModal();
+ $('#exSv').onclick=()=>{const o={cu:g('exCu'),cp:gp('exCp'),au:g('exAu'),ap:gp('exAp'),rp:gp('exRp'),rip:g('exRip'),sip:g('exSip'),cip:g('exCip')};const e=exCheck(o);if(e)return $('#exErr').textContent='⚠ '+e;
+  const changed=JSON.stringify(o)!==JSON.stringify(Object.fromEntries(Object.keys(EXD).map(k=>[k,EX[k]])));
+  Object.assign(EX,o);store.set('exam',o);store.set('exam_set',true);if(changed)exApply();closeModal();toast('Exam details saved.','good');if(first)mmStart()};
+}
+
+/* the assessor greets you the first time you play, and again after you reset all progress */
+function welcome(){const nm=esc(store.get('pname','Student'));
+ modal(`<div class="npc-say" data-poses="present,clip,point"><div class="av asr">${ASR_SVG}</div><div><h3>Welcome, ${nm}!</h3><div>I am your assessor for the <b>NC II hands-on assessment</b>. You will do three competencies: <b>COC 1</b> assemble and install, <b>COC 2</b> networking, <b>COC 3</b> servers.<br><br>First tell me the <b>credentials and IP addresses</b> that apply to your exam. I will check everything you type against them. Work safely, and good luck!</div></div></div><div class="row" style="justify-content:flex-end"><button class="btn" id="wOk">${store.get('exam_set',false)?'Let\'s go!':'Okay, sir!'}</button></div>`);
+ $('#wOk').onclick=()=>{store.set('welcomed',true);closeModal();mmStart()}}
+
+/* ================= OFFLINE MODE + PROGRESS SYNC ================= */
+const OFFST={sw:'',msg:''};
+function offlineText(){const on=store.get('offline',false),net=navigator.onLine;
+ if(!('serviceWorker' in navigator))return 'This browser cannot save the game for offline use.';
+ if(!on)return net?'Off. Turn on to save the game on this device.':'You are offline. Turn this on while online first.';
+ if(OFFST.sw==='ready')return net?'✅ Saved on this device. You can play with no internet.':'✅ Offline now. Everything works, progress is saved here.';
+ if(OFFST.sw==='working')return '⏳ Downloading the game for offline use…';
+ if(OFFST.sw==='missing')return '⚠ sw.js was not found next to index.html. Upload sw.js to the same folder, then turn this on again.';
+ return net?'Starting…':'Needs internet once to download the game.'}
+function offlineBox(){return `<div class="offbox"><label class="radio"><input type="checkbox" id="mmOff" ${store.get('offline',false)?'checked':''}> ✈️ Offline mode (play without internet)</label>
+ <div class="small muted" id="offSt">${offlineText()}</div>
+ <label class="small muted" style="display:block;margin-top:8px">Send my progress to (optional, used when online)</label><input id="mmSync" value="${esc(store.get('syncurl',''))}" placeholder="https://script.google.com/macros/s/…/exec" style="width:100%;padding:8px;border-radius:8px">
+ <div class="small muted" id="syncSt">${syncText()}</div>
+ <div class="row" style="gap:8px;margin-top:6px"><button class="btn ghost" id="mmExp">⬇ Save progress file</button><button class="btn ghost" id="mmImp">⬆ Load progress file</button></div></div>`}
+function syncText(){const q=store.get('outbox',[]).length,u=store.get('syncurl','');if(!u)return 'Progress is always saved on this device. Add a link to also send it online.';
+ return q?(navigator.onLine?'Sending…':`📤 ${q} update waiting. It is sent when the internet is back.`):'✅ Progress is sent online.'}
+function offlineBind(){const refresh=()=>{const a=$('#offSt'),b=$('#syncSt');if(a)a.textContent=offlineText();if(b)b.textContent=syncText()};offlineBind.r=refresh;
+ const o=$('#mmOff');if(o)o.onchange=()=>{store.set('offline',o.checked);o.checked?offlineOn():offlineOff();refresh()};
+ $('#mmExp').onclick=progExport;$('#mmImp').onclick=progImport}
+function offlineSave(){const s=$('#mmSync');if(s){store.set('syncurl',s.value.trim());syncQueue();syncFlush()}}
+async function offlineOn(){if(!('serviceWorker' in navigator)){OFFST.sw='';return}
+ OFFST.sw='working';offlineBind.r&&offlineBind.r();
+ try{const reg=await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;
+  const w=reg.active||reg.waiting||reg.installing;if(w)w.postMessage({cmd:'precache'});
+  OFFST.sw='ready';toast('Offline mode is ready. The game is saved on this device.','good')}
+ catch(e){OFFST.sw='missing'}offlineBind.r&&offlineBind.r()}
+async function offlineOff(){try{const rs=await navigator.serviceWorker.getRegistrations();for(const r of rs)await r.unregister();if(window.caches){for(const k of await caches.keys())if(k.startsWith('nc2-'))await caches.delete(k)}}catch(e){}OFFST.sw='';offlineBind.r&&offlineBind.r()}
+/* ---- progress file (works with no server at all) ---- */
+function progExport(){const d={app:'road-to-nc2',v:1,when:new Date().toISOString(),name:store.get('pname','Student'),exam:EX,prog:G.prog,labs:G.labs,rs:G.rs,timers:G.timers};
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='road-to-nc2-progress.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Progress file saved.','good')}
+function progImport(){const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=='road-to-nc2')throw 0;
+  if(!confirm('Replace the progress on this device with the file?'))return;store.set('prog',d.prog||{});store.set('labs',d.labs||{});store.set('rs',d.rs||{});store.set('timers',d.timers||{});if(d.name)store.set('pname',d.name);if(d.exam){store.set('exam',d.exam);store.set('exam_set',true)}location.reload()}catch(e){toast('That is not a Road to NC II progress file.','bad')}};r.readAsText(f)};i.click()}
+/* ---- queue progress, send when online ---- */
+let _syncT=0;
+function syncQueue(){if(!store.get('syncurl',''))return;store.set('outbox',[{t:Date.now(),name:store.get('pname','Student'),prog:G.prog,scores:[1,2,3].map(c=>({coc:c,done:cocDone(c),score:cocScore(c)}))}])}
+async function syncFlush(){const u=store.get('syncurl',''),q=store.get('outbox',[]);if(!u||!q.length||!navigator.onLine)return;
+ try{await fetch(u,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(q[q.length-1])});store.set('outbox',[])}catch(e){}offlineBind.r&&offlineBind.r()}
+(function(){const _s=save;save=function(){_s();clearTimeout(_syncT);_syncT=setTimeout(()=>{syncQueue();syncFlush()},2500)};
+ addEventListener('online',()=>{syncFlush();offlineBind.r&&offlineBind.r();toast('Back online.')});addEventListener('offline',()=>{offlineBind.r&&offlineBind.r();if(store.get('offline',false))toast('You are offline. The game keeps working and saves here.')});
+ if(store.get('offline',false)&&'serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').then(()=>{OFFST.sw='ready'}).catch(()=>{OFFST.sw='missing'});
+ setInterval(syncFlush,60000);setTimeout(syncFlush,4000)})();
 
 /* ================= BOOT ================= */
 addEventListener('beforeunload',()=>{if(G.coc&&!$('#world').classList.contains('hidden'))pauseTimer();save()});
