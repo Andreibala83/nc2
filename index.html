@@ -715,14 +715,14 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 </div>
 </div>
 <script>
-(function(){var K='nc2_access',ok=false;try{ok=localStorage.getItem(K)==='1'}catch(e){}
-if(ok)return;window.NC2_LOCKED=true;var L=document.getElementById('nc2Lock');L.style.display='flex';
+(function(){try{localStorage.removeItem('nc2_access')}catch(e){}
+window.NC2_LOCKED=true;var L=document.getElementById('nc2Lock');L.style.display='flex';
 var g=function(i){return document.getElementById(i)},pin=g('lkPin'),inp=g('lkIn'),err=g('lkErr'),box=g('lkBox');
 ['pointerdown','click','keydown','touchstart','touchend','wheel'].forEach(function(t){L.addEventListener(t,function(e){e.stopPropagation()})});
 function open(){pin.classList.add('on');err.textContent='';inp.value='';setTimeout(function(){inp.focus()},50)}
 function close(){pin.classList.remove('on')}
 function chk(v){try{return btoa(v.trim().toUpperCase()).split('').reverse().join('')==='=QzMwgDR'}catch(e){return false}}
-function go(){if(chk(inp.value)){try{localStorage.setItem(K,'1')}catch(e){}window.NC2_LOCKED=false;L.remove()}else{err.textContent='Invalid code';box.classList.remove('bad');void box.offsetWidth;box.classList.add('bad');inp.select()}}
+function go(){if(chk(inp.value)){window.NC2_LOCKED=false;L.remove()}else{err.textContent='Invalid code';box.classList.remove('bad');void box.offsetWidth;box.classList.add('bad');inp.select()}}
 g('lkDot').onclick=open;g('lkNo').onclick=close;g('lkGo').onclick=go;
 inp.addEventListener('keydown',function(e){if(e.key==='Enter')go();if(e.key==='Escape')close()});
 pin.addEventListener('click',function(e){if(e.target===pin)close()});})();
