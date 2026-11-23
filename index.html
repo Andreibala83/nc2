@@ -670,6 +670,117 @@ code{font-family:ui-monospace,Consolas,monospace;background:#0003;padding:1px 5p
 @media(max-width:560px),(max-height:430px){.exg{grid-template-columns:1fr 1fr;gap:6px 8px}.exl input{padding:7px;font-size:1em}}
 .modal-box{position:relative}
 
+/* ===== Windows Server 2012 R2 look (COC 3 server) ===== */
+.ds.server{font-family:"Segoe UI",Tahoma,sans-serif}
+.ds.server .ds-area{background:radial-gradient(ellipse at 60% 45%,#4a4658 0%,#33303f 45%,#1d1b25 100%)}
+.ds.server .ds-area::before{display:none}
+.w12-wm{position:absolute;right:3%;bottom:3%;text-align:right;color:#fff;pointer-events:none;z-index:0}
+.w12-wm b{display:flex;align-items:center;gap:10px;justify-content:flex-end;font-weight:300;font-size:clamp(16px,2.4vw,26px);opacity:.92;letter-spacing:.2px}
+.w12-wm small{display:block;margin-top:10px;font-size:11px;opacity:.85;line-height:1.35}
+.w12-logo{display:inline-grid;grid-template-columns:1fr 1fr;gap:2px;width:1em;height:1em;transform:perspective(40px) rotateY(-14deg)}.w12-logo u{background:#fff;display:block}
+.ds.server .ds-icons .dico{color:#fff}
+.ds.server .ds-bar{height:40px;background:linear-gradient(#bfe3f2e8,#9fd2e8e8);color:#111;border-top:1px solid #e6f6fd}
+.ds.server .ds-bar>button{color:#111}
+.ds.server .ds-bar>button:hover{background:#ffffff66}
+.ds.server .ds-st{font-size:0!important;width:52px;display:flex;align-items:center;justify-content:center}
+.ds.server .ds-st::before{content:'';width:20px;height:20px;background:conic-gradient(from 0deg,#fff 0 0) ;-webkit-mask:linear-gradient(#000 0 0) 0 0/9px 9px no-repeat,linear-gradient(#000 0 0) 11px 0/9px 9px no-repeat,linear-gradient(#000 0 0) 0 11px/9px 9px no-repeat,linear-gradient(#000 0 0) 11px 11px/9px 9px no-repeat;mask:linear-gradient(#000 0 0) 0 0/9px 9px no-repeat,linear-gradient(#000 0 0) 11px 0/9px 9px no-repeat,linear-gradient(#000 0 0) 0 11px/9px 9px no-repeat,linear-gradient(#000 0 0) 11px 11px/9px 9px no-repeat;background:#1b6ac9;transform:perspective(40px) rotateY(-14deg)}
+.ds.server .ds-search{display:none}
+.ds.server .ds-tasks button{color:#111}
+.ds.server .ds-tasks button.act{background:#ffffff70;border-bottom-color:transparent;box-shadow:inset 0 0 0 1px #ffffffaa}
+.ds.server .ds-tray{color:#111;text-align:center;font-size:11px}
+.ds.server .dw{border:6px solid #4cc2f0;border-top:0;box-shadow:0 6px 24px #0007}
+.ds.server .dw.inact{border-color:#e6e6e6}
+.ds.server .dw-t{background:#4cc2f0;border-bottom:0;height:30px;justify-content:center}
+.ds.server .dw.inact .dw-t{background:#e6e6e6}
+.ds.server .dw-t .ti{text-align:center;flex:1}
+.ds.server .dw-t button{width:30px;color:#111}
+.ds.server .dw-t .cl{background:#c7372f;color:#fff;width:44px;height:20px;align-self:flex-start}
+.ds.server .sm-nav{background:#fff;color:#222;border-right:1px solid #e3e3e3;width:170px;padding:2px 0}
+.ds.server .sm-nav button{padding:6px 12px;font-size:12.5px}
+.ds.server .sm-nav button:hover{background:#e5f1fb}
+.ds.server .sm-nav button.on{background:#1f6cc6;color:#fff}
+.ds.server .sm-top{background:linear-gradient(#3d3d3d,#2b2b2b);color:#fff;border-bottom:0;padding:8px 10px}
+.ds.server .sm-top .h{color:#fff;font-size:19px}
+.ds.server .sm-top button{color:#fff}.ds.server .sm-top button:hover{background:#ffffff26}
+.w12-nv{color:#9ab;font-size:12px;margin-right:6px;letter-spacing:2px}.w12-ar{font-size:13px;opacity:.8;margin:0 4px}
+.ds.server .sm-body{background:#fff;padding:14px 16px}
+.w12-wel{border:1px solid #dcdcdc;margin-bottom:16px}
+.w12-h{font-size:12px;font-weight:600;color:#555;padding:8px 12px 6px;letter-spacing:.3px}
+.w12-wb{display:flex;position:relative;padding:0 12px 10px}
+.w12-qs{width:150px;flex:none;display:flex;flex-direction:column;font-size:10.5px;color:#fff}
+.w12-qs>div{padding:6px 8px;display:flex;align-items:flex-end;height:58px}
+.w12-qs .q1{background:#e53f1d}.w12-qs .q2{background:#f08a1c}.w12-qs .q3{background:#f6a72c}
+.w12-st{padding:10px 24px;display:flex;flex-direction:column;gap:10px;color:#6b6b6b}
+.w12-st>div{display:flex;align-items:center;gap:12px;padding-left:34px}
+.w12-st i{font-style:normal;color:#9a9a9a;font-size:12px;width:16px;text-align:center}
+.w12-st a{color:#1f6cc6;cursor:pointer}
+.w12-st .s1{padding-left:0;font-size:19px;font-weight:300;margin-bottom:4px}
+.w12-st .s1 i{width:30px;height:30px;border-radius:50%;background:#e53f1d;color:#fff;font-size:15px;line-height:30px}
+.w12-st .s1 a{color:#1f6cc6}
+.w12-hide{position:absolute;right:12px;bottom:8px;font-size:11px;color:#777}
+.w12-rg{font-size:12px;font-weight:600;color:#555;letter-spacing:.3px}
+.w12-rgs{font-size:11px;color:#777;margin:2px 0 10px}
+.w12-tiles{display:flex;flex-wrap:wrap;gap:12px}
+.w12-tl{width:170px;border:1px solid #dcdcdc;font-size:12px}
+.w12-tl .th{display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:3px solid #3aa84a;font-size:12.5px}
+.w12-tl .th b{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.w12-tl .th em{font-style:normal;color:#555}
+.w12-tl .tr{padding:6px 8px 8px 22px;display:flex;flex-direction:column;gap:4px;color:#555}
+.w12-tl .tr .ok{position:relative;color:#222}.w12-tl .tr .ok::before{content:'';position:absolute;left:-16px;top:3px;width:10px;height:10px;border-radius:50%;background:#3aa84a;box-shadow:0 0 0 2px #fff,0 0 0 3px #3aa84a}
+
+.wf-mid{display:flex;flex-direction:column}
+.wf-mh{background:#eef3fa;border-bottom:1px solid #ccd;padding:5px 8px;font-weight:600;font-size:12.5px}
+.wf-ov{padding:8px 12px;font-size:12.5px}
+.wf-sec{border-bottom:1px solid #9cb6d6;color:#1e3f7a;margin:10px 0 6px;font-weight:600}
+.wf-pr{margin:6px 0 8px 6px}.wf-pr>div{display:flex;gap:6px;align-items:center;margin:2px 0 2px 10px}
+.wf-pr i,.wf-tbl i{font-style:normal;width:16px;text-align:center;display:inline-block}
+.wf-pr i.ok,.wf-tbl i.ok{color:#2a9a3a}.wf-pr i.no{color:#c33}.wf-tbl i.off{color:#bbb;font-size:9px}
+.wf-lnk{margin:4px 0 6px 6px}
+.wf-tbl{flex:1;overflow:auto;outline:none;min-height:0}
+.wf-tbl table{border-collapse:collapse;font-size:12px;white-space:nowrap}
+.wf-tbl th{position:sticky;top:0;background:#f3f3f3;text-align:left;font-weight:400;padding:3px 8px;border-right:1px solid #ddd}
+.wf-tbl td{padding:2px 8px;user-select:none;cursor:default}
+.wf-tbl tr.sel td{background:#cce4f7}
+.wf-act{width:190px;flex:none;border-left:1px solid #ccc;background:#fff;overflow:auto;font-size:12px}
+.wf-ah0{background:#e8eef7;padding:4px 8px;font-weight:600;border-bottom:1px solid #ccd}
+.wf-ah{background:#f2f5fa;padding:4px 8px;font-weight:600;border-bottom:1px solid #e3e7ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wf-act button{display:block;width:100%;text-align:left;background:none;border:0;padding:3px 8px 3px 18px;font-size:12px;color:#123}
+.wf-act button:hover{background:#e5f1fb}
+@media(max-width:760px){.wf-act{width:130px}}
+.mmc-list.wf-mid{overflow:hidden}.mmc-tree{min-width:0}
+
+.lock.w12l{background:linear-gradient(180deg,#8b8f98 0%,#5b6270 45%,#2f3644 100%);align-items:flex-start;justify-content:space-between;text-align:left;padding:2% 3%;cursor:pointer}
+.lock.w12l .w12c{font-size:13px;opacity:.95}
+.lock.w12l .w12t .clock{font-size:clamp(46px,9vw,92px);font-weight:200;line-height:1}
+.lock.w12l .w12t .dt{font-size:clamp(16px,2.6vw,28px);font-weight:300}
+.lock.w12l .w12k{position:absolute;right:3%;bottom:4%;font-size:12px;padding:5px 12px}
+.lock.w12s{background:#1d5fae}
+.lock.w12s .w12u{display:flex;gap:18px;align-items:center;text-align:left}
+.lock.w12s .pic{width:110px;height:110px;background:#9fb4cc;display:grid;place-items:center;font-size:60px;flex:none}
+.lock.w12s .nm{font-size:20px;font-weight:300;margin:0 0 8px}
+.lock.w12s .pw{display:flex;align-items:center}
+.lock.w12s .pw input{width:200px;border:0;margin:0;padding:6px 8px}
+.lock.w12s .pw .go{margin:0;padding:6px 10px;background:#2b88d8;border:0}
+.lock.w12s .w12wm{position:absolute;bottom:5%;left:0;right:0;text-align:center;font-weight:300;font-size:15px;opacity:.9}
+.lock.w10hi{background:linear-gradient(160deg,#0a4fa0,#1572d1)}
+.ds.server .wiz-nav{background:#fff;padding-top:18px}
+.ds.server .wiz-nav div{color:#444;padding:6px 14px}
+.ds.server .wiz-nav div.on{background:#1f6cc6;color:#fff;font-weight:400;border-left:0}
+.ds.server .wiz-body h3{font-size:22px;color:#1e1e1e}
+.ds.server .wb{background:#eaeaea;border-color:#acacac}
+.ds.server .wb.pri{box-shadow:none;border:1px solid #3c7fb1;background:#e5f1fb}
+.ds.server .mmc-menu{background:#fff}
+.ds.server .mmc-tree div.sel,.ds.server .mmc-list tr.sel td{background:#cce4f7}
+
+.ds.server .ds-menu.w12m{left:0;right:0;top:0;bottom:40px;width:auto;max-height:none;background:linear-gradient(135deg,#1b3f8f,#2456b5);padding:2% 3%;box-shadow:none}
+.w12m .w12sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.w12m .w12sh .t{font-size:clamp(24px,4vw,40px);font-weight:200}.w12m .w12sh .u{font-size:14px}
+.ds.server .w12m .ms{padding:0 0 12px;max-width:340px}
+.ds.server .w12m .ml{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;align-content:start;overflow:auto}
+.ds.server .w12m .ml button{flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:6px;height:96px;padding:8px;background:#2a7bd4;font-size:11.5px;line-height:1.2;width:auto}
+.ds.server .w12m .ml button:nth-child(3n+2){background:#1f9dad}.ds.server .w12m .ml button:nth-child(4n+3){background:#3368c4}
+.ds.server .w12m .ml button span{font-size:26px}
+.ds.server .w12m .ml button:hover{outline:2px solid #fff;background:#3a8be0}
+.ds.server .w12m .pw{border:0;max-width:420px;margin-top:10px}
+
 </style>
 </head>
 <body>
@@ -817,6 +928,9 @@ function lreach(L,n,ip,ignoreFw){
  return L.router.internet?'ok':'timeout';
 }
 function dcOf(L){return nodesOf(L).find(o=>o.isDC)}
+function nbOf(L){const d=dcOf(L);return d?(d.nb||d.domain.split('.')[0].toUpperCase()):''}
+/* strip DOMAIN\ or @domain from a typed user name; returns null if the domain part is wrong */
+function stripDom(L,u){const d=dcOf(L);u=(u||'').trim();if(!d)return u;const m=/^([^\\]+)\\(.+)$/.exec(u);if(m){const p=m[1].toLowerCase();if(![nbOf(L).toLowerCase(),d.domain.toLowerCase(),d.domain.split('.')[0].toLowerCase()].includes(p))return null;u=m[2]}const a=u.toLowerCase().lastIndexOf('@');if(a>0){if(u.slice(a+1).toLowerCase()!==d.domain.toLowerCase())return null;u=u.slice(0,a)}return u}
 function dnsServers(n){return [n.dns1,n.dns2].filter(validIP)}
 function canDC(L,n){const dc=dcOf(L);if(!dc||!dc.media)return false;return dnsServers(n).some(s=>(s===dc.ip&&lreach(L,n,s,true)==='ok')||(n===dc&&s.startsWith('127.')))}
 function publicDNS(L,n){return dnsServers(n).some(s=>{if(PUBLIC_DNS.includes(s))return lreach(L,n,s)==='ok';if(L.router&&s===L.router.ip)return lreach(L,n,s)==='ok'&&L.router.internet;const dc=dcOf(L);if(dc&&(s===dc.ip||(n===dc&&s.startsWith('127.'))))return canDC(L,n)&&L.router&&L.router.internet;return false})}
@@ -920,7 +1034,7 @@ function makeTerm(host,L,n,hooks={}){
  const out=$('.term-out',host),form=$('form',host),inp=$('input',host),prompt=$('.term-in span',host).textContent;
  const hist=[];let hi=0,busy=false;
  const print=(t,cls='')=>{const d=document.createElement('div');if(cls)d.className=cls;d.textContent=t===''?' ':t;out.appendChild(d);out.scrollTop=out.scrollHeight};
- print(n.os==='server'?'Microsoft Windows [Version 10.0.17763.6532]':'Microsoft Windows [Version 10.0.19045.5131]');print('(c) Microsoft Corporation. All rights reserved.');print('');print('Type "help" for the list of commands in this simulator.','dim');print('');
+ print(n.os==='server'?'Microsoft Windows [Version 6.3.9600]':'Microsoft Windows [Version 10.0.19045.5131]');print(n.os==='server'?'(c) 2013 Microsoft Corporation. All rights reserved.':'(c) Microsoft Corporation. All rights reserved.');print('');print('Type "help" for the list of commands in this simulator.','dim');print('');
  out.addEventListener('click',()=>{if(!window.getSelection().toString())inp.focus()});
  $$('.term-chips button',host).forEach(b=>b.onclick=()=>{const c=b.dataset.c;if(c.endsWith(' ')){inp.value=c;inp.focus()}else run(c)});
  inp.addEventListener('keydown',ev=>{if(ev.key==='ArrowUp'){if(hi>0){hi--;inp.value=hist[hi]}ev.preventDefault()}else if(ev.key==='ArrowDown'){if(hi<hist.length-1){hi++;inp.value=hist[hi]}else{hi=hist.length;inp.value=''}ev.preventDefault()}});
@@ -1494,6 +1608,7 @@ const START_ITEMS=[
  {a:'cmd',l:'Command Prompt',i:'⬛',k:'cmd command prompt terminal'},
  {a:'control',l:'Control Panel',i:'🛠️',k:'control panel'},
  {a:'firewall',l:'Windows Defender Firewall',i:'🛡️',k:'firewall.cpl windows defender firewall'},
+ {a:'wfas',l:'Windows Firewall with Advanced Security',i:'🧱',k:'wf.msc windows firewall with advanced security inbound rules'},
  {a:'devmgmt',l:'Device Manager',i:'🖥️',k:'devmgmt.msc device manager drivers'},
  {a:'ncpa',l:'Network Connections',i:'🖧',k:'ncpa.cpl network connections adapter ethernet'},
  {a:'sysdm',l:'System Properties',i:'💻',k:'sysdm.cpl system properties computer name rename domain'},
@@ -1505,7 +1620,7 @@ class Desktop{
  get n(){return this.L.nodes[this.key]}
  get server(){return this.n.os==='server'}
  render(){
-  this.host.innerHTML=`<div class="ds ${this.n.os}"><div class="ds-area"><div class="ds-icons"><button class="dico" data-a="explorer"><span class="em">💻</span>This PC</button><button class="dico" data-a="recycle"><span class="em">🗑️</span>Recycle Bin</button>${this.server?'':'<button class="dico" data-a="edge"><span class="em">🌐</span>Microsoft Edge</button>'}<button class="dico" data-a="control"><span class="em">🛠️</span>Control Panel</button></div></div>
+  this.host.innerHTML=`<div class="ds ${this.n.os}"><div class="ds-area">${this.server?'<div class="w12-wm"><b><i class="w12-logo"><u></u><u></u><u></u><u></u></i>Windows Server 2012 R2</b><small>Windows Server 2012 R2 Standard<br>Build 9600</small></div>':''}<div class="ds-icons"><button class="dico" data-a="explorer"><span class="em">💻</span>This PC</button><button class="dico" data-a="recycle"><span class="em">🗑️</span>Recycle Bin</button>${this.server?'':'<button class="dico" data-a="edge"><span class="em">🌐</span>Microsoft Edge</button>'}<button class="dico" data-a="control"><span class="em">🛠️</span>Control Panel</button></div></div>
   <div class="ds-bar"><button class="ds-st" title="Start (right-click for the power user menu)">⊞</button><div class="ds-search"><span>🔍</span><input placeholder="Type here to search"></div>${this.server?'<button class="ds-sm" title="Server Manager" style="font-size:18px">🗄️</button>':''}<button class="ds-ex" title="File Explorer" style="font-size:18px">📁</button><div class="ds-tasks"></div><div class="ds-tray"><span class="net"></span><span class="dt"></span></div></div></div>`;
   const r=this.root=$('.ds',this.host);this.area=$('.ds-area',r);
   $$('.dico',r).forEach(b=>{b.onclick=()=>{$$('.dico',r).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};b.ondblclick=()=>this.open(b.dataset.a);b.addEventListener('touchend',e=>{if(b._t&&Date.now()-b._t<450){this.open(b.dataset.a);b._t=0}else b._t=Date.now()})});
@@ -1525,10 +1640,10 @@ class Desktop{
  items(){const n=this.n,it=START_ITEMS.slice();if(this.server){it.unshift({a:'servermanager',l:'Server Manager',i:'🗄️',k:'server manager servermanager roles features'});if(n.isDC)it.push({a:'aduc',l:'Active Directory Users and Computers',i:'👥',k:'dsa.msc active directory users computers aduc ou'});if(n.dhcpRole)it.push({a:'dhcp',l:'DHCP',i:'🔢',k:'dhcpmgmt.msc dhcp scope'});if(n.isDC)it.push({a:'dns',l:'DNS',i:'🔤',k:'dnsmgmt.msc dns'});if(n.isDC)it.push({a:'gpmc',l:'Group Policy Management',i:'📜',k:'gpmc.msc group policy management gpo'})}it.push({a:'mstsc',l:'Remote Desktop Connection',i:'🖥️',k:'mstsc remote desktop connection rdp'});if(this.n.installed)this.n.installed.forEach(x=>it.push({a:'_app',l:x,i:'📦',k:x.toLowerCase()}));return it}
  startMenu(search){
   if($('.ds-menu',this.root)){this.closeMenus();if(!search)return}
-  const m=el(`<div class="ds-menu"><div class="ms"><input placeholder="Type here to search (e.g. ncpa.cpl, cmd, device manager)"></div><div class="ml"></div><div class="pw"><button data-p="winx">⚙ More (Win+X)</button><button data-p="restart">⟳ Restart</button><button data-p="signout">👤 Sign out</button></div></div>`);
+  const m=el(`<div class="ds-menu${this.server?' w12m':''}">${this.server?`<div class="w12sh"><span class="t">Start</span><span class="u">${esc(this.user||EX.au)} 👤</span></div>`:''}<div class="ms"><input placeholder="${this.server?'Search (e.g. ncpa.cpl, cmd, wf.msc)':'Type here to search (e.g. ncpa.cpl, cmd, device manager)'}"></div><div class="ml"></div><div class="pw"><button data-p="winx">⚙ More (Win+X)</button><button data-p="restart">⟳ Restart</button><button data-p="signout">👤 Sign out</button></div></div>`);
   this.root.appendChild(m);const inp=$('input',m),ml=$('.ml',m);
   const draw=()=>{const q=inp.value.toLowerCase().trim();let it=this.items();if(q)it=it.filter(x=>(x.l+' '+x.k).toLowerCase().includes(q));
-   ml.innerHTML=(q?'<div class="mh">Best match</div>':'<div class="mh">Apps</div>')+it.map(x=>`<button data-a="${x.a}"><span>${x.i}</span>${x.l}</button>`).join('')+(q&&!it.length?`<button data-run="${esc(q)}"><span>🏃</span>Run "${esc(q)}"</button>`:'');
+   ml.innerHTML=(this.server?'':(q?'<div class="mh">Best match</div>':'<div class="mh">Apps</div>'))+it.map(x=>`<button data-a="${x.a}"><span>${x.i}</span>${x.l}</button>`).join('')+(q&&!it.length?`<button data-run="${esc(q)}"><span>🏃</span>Run "${esc(q)}"</button>`:'');
    $$('button[data-a]',ml).forEach(b=>b.onclick=()=>{this.closeMenus();this.open(b.dataset.a)});$$('button[data-run]',ml).forEach(b=>b.onclick=()=>{this.closeMenus();this.runCmd(b.dataset.run)})};
   draw();inp.oninput=draw;inp.onkeydown=e=>{if(e.key==='Enter'){const b=$('button',ml);if(b)b.click()}};
   $$('.pw button',m).forEach(b=>b.onclick=()=>{this.closeMenus();const p=b.dataset.p;if(p==='winx')this.winX();if(p==='restart')this.confirmRestart();if(p==='signout')this.lockScreen()});
@@ -1546,7 +1661,7 @@ class Desktop{
  runCmd(c){
   const raw=c.trim(),q=raw.toLowerCase(),n=this.n;
   if(q.startsWith('\\\\'))return this.open('explorer',{path:raw});
-  const map={cmd:'cmd','cmd.exe':'cmd',control:'control','control panel':'control','ncpa.cpl':'ncpa','firewall.cpl':'firewall','sysdm.cpl':'sysdm','devmgmt.msc':'devmgmt',explorer:'explorer','explorer.exe':'explorer',msedge:'edge',edge:'edge',servermanager:'servermanager','servermanager.exe':'servermanager','dsa.msc':'aduc','gpmc.msc':'gpmc',mstsc:'mstsc','mstsc.exe':'mstsc','dhcpmgmt.msc':'dhcp','dnsmgmt.msc':'dns','control netconnections':'ncpa'};
+  const map={cmd:'cmd','cmd.exe':'cmd',control:'control','control panel':'control','ncpa.cpl':'ncpa','firewall.cpl':'firewall','sysdm.cpl':'sysdm','devmgmt.msc':'devmgmt',explorer:'explorer','explorer.exe':'explorer',msedge:'edge',edge:'edge',servermanager:'servermanager','servermanager.exe':'servermanager','dsa.msc':'aduc','gpmc.msc':'gpmc',mstsc:'mstsc','mstsc.exe':'mstsc','dhcpmgmt.msc':'dhcp','dnsmgmt.msc':'dns','control netconnections':'ncpa','wf.msc':'wfas'};
   if(/^gpupdate(\s|$)/.test(q))return this.open('cmd',{cmd:raw});
   const a=map[q];if(!a||(a==='gpmc'&&!n.isDC)||(a==='servermanager'&&!this.server)||(a==='aduc'&&!n.isDC)||(a==='dhcp'&&!n.dhcpRole)||(a==='dns'&&!n.isDC)){this.msg('Run',`Windows cannot find '${esc(raw)}'. Make sure you typed the name correctly, and then try again.`,{icon:'⛔'});return}
   if(a==='firewall')return this.open('control',{page:'fw'});
@@ -1589,13 +1704,15 @@ class Desktop{
  lockScreen(){
   this.closeAll();const n=this.n,D=this;const dc=dcOf(this.L);
   const users=[];
-  if(n.isDC)users.push({id:'TESDA\\'+EX.au,name:EX.au,dom:true,admin:true});else Object.keys(n.accounts).forEach(u=>users.push({id:u,name:u}));
+  if(n.isDC)users.push({id:nbOf(this.L)+'\\'+EX.au,name:EX.au,dom:true,admin:true});else Object.keys(n.accounts).forEach(u=>users.push({id:u,name:u}));
   if(n.domain&&!n.isDC)users.push({id:'_other',name:'Other user'});
   let sel=users[n.domain&&!n.isDC&&this.user.includes('\\')?users.length-1:0];
   const lk=el(`<div class="lock"></div>`);this.root.appendChild(lk);
-  const stage1=()=>{const d=new Date();lk.innerHTML=`<div class="clock">${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).replace(/ [AP]M/,'')}</div><div style="font-size:22px;font-weight:300">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div><p style="margin-top:40px;opacity:.85">${this.server?'<button class="go">Press Ctrl+Alt+Delete to unlock</button>':'Click or tap anywhere to sign in'}</p>`;lk.onclick=()=>{lk.onclick=null;stage2()}};
+  const stage1=()=>{const d=new Date();if(this.server){lk.className='lock w12l';lk.innerHTML=`<div class="w12c">Press Ctrl+Alt+Delete to sign in.</div><div class="w12t"><div class="clock">${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).replace(/ [AP]M/,'')}</div><div class="dt">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div></div><button class="go w12k">Ctrl+Alt+Delete</button>`;lk.onclick=()=>{lk.onclick=null;stage2()};return}lk.innerHTML=`<div class="clock">${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).replace(/ [AP]M/,'')}</div><div style="font-size:22px;font-weight:300">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div><p style="margin-top:40px;opacity:.85">${this.server?'<button class="go">Press Ctrl+Alt+Delete to unlock</button>':'Click or tap anywhere to sign in'}</p>`;lk.onclick=()=>{lk.onclick=null;stage2()}};
   const stage2=(err='')=>{const other=sel.id==='_other';
-   lk.innerHTML=`<div class="av">👤</div><div class="nm">${other?'Other user':esc(sel.id.replace('_other',''))}</div>${other?`<input id="lkU" placeholder="User name" autocapitalize="off" autocomplete="off">`:''}<input id="lkP" type="password" placeholder="Password"><button class="go" id="lkGo">Sign in ➜</button>${other&&dc?`<div style="font-size:13px;margin-top:8px;opacity:.85">Sign in to: ${dc.domain.split('.')[0].toUpperCase()}</div>`:''}${err?`<div class="err">${err}</div>`:''}
+   if(this.server){lk.className='lock w12s';lk.innerHTML=`<div class="w12u"><div class="pic">👤</div><div class="fm"><div class="nm">${esc(sel.id)}</div><div class="pw"><input id="lkP" type="password" placeholder="Password"><button class="go" id="lkGo">➜</button></div>${err?`<div class="err">${err}</div>`:''}</div></div><div class="w12wm">Windows Server 2012 R2</div>`;
+    const go=()=>this.tryLogin(sel,null,$('#lkP',lk).value,stage2,stage3,done);$('#lkGo',lk).onclick=go;$('#lkP',lk).onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>{const f=$('#lkP',lk);if(f&&matchMedia('(pointer:fine)').matches)f.focus()},30);return}
+   lk.innerHTML=`<div class="av">👤</div><div class="nm">${other?'Other user':esc(sel.id.replace('_other',''))}</div>${other?`<input id="lkU" placeholder="User name" autocapitalize="off" autocomplete="off">`:''}<input id="lkP" type="password" placeholder="Password"><button class="go" id="lkGo">Sign in ➜</button>${other&&dc?`<div style="font-size:13px;margin-top:8px;opacity:.85">Sign in to: ${nbOf(this.L)}</div>`:''}${err?`<div class="err">${err}</div>`:''}
    <div class="users">${users.map((u,i)=>`<button data-i="${i}" class="${u===sel?'on':''}">👤 ${esc(u.name==='Other user'?'Other user':u.id)}</button>`).join('')}</div>`;
    $$('.users button',lk).forEach(b=>b.onclick=()=>{sel=users[+b.dataset.i];stage2()});
    const go=()=>this.tryLogin(sel,other?$('#lkU',lk).value.trim():null,$('#lkP',lk).value,stage2,stage3,done);
@@ -1603,21 +1720,23 @@ class Desktop{
    setTimeout(()=>{const f=$('input',lk);if(f&&matchMedia('(pointer:fine)').matches)f.focus()},30)};
   const stage3=(u)=>{lk.innerHTML=`<div class="av">👤</div><div class="nm">${esc(u.id)}</div><p>The user's password must be changed before signing in.</p><input id="np1" type="password" placeholder="New password"><input id="np2" type="password" placeholder="Confirm password"><button class="go" id="npGo">➜</button><div id="npE"></div>`;
    $('#npGo',lk).onclick=()=>{const a=$('#np1',lk).value,b=$('#np2',lk).value;if(a!==b)return $('#npE',lk).innerHTML='<div class="err">The passwords don\'t match.</div>';if(!pwComplex(a)||a===u.rec.pw)return $('#npE',lk).innerHTML='<div class="err">Unable to update the password. The value provided for the new password does not meet the length, complexity, or history requirements of the domain.</div>';u.rec.pw=a;u.rec.mustChange=false;lk.innerHTML='<div class="nm">Your password has been changed.</div>';setTimeout(()=>done(u.id),900)}};
-  const done=(id)=>{lk.innerHTML='<div class="spinner"></div><div class="nm">Welcome</div>';setTimeout(()=>{lk.remove();this.user=id;this.afterLogin()},1100)};
+  const done=(id)=>{lk.className='lock'+(this.server?' w12s':'');if(this.server){lk.innerHTML='<div class="w12u"><div class="pic">👤</div><div class="fm"><div class="nm">'+esc(id)+'</div><div style="display:flex;align-items:center;gap:10px"><div class="spinner" style="width:22px;height:22px;border-width:3px;margin:0"></div>Preparing Windows</div></div></div>'}else lk.innerHTML='<div class="spinner"></div><div class="nm">Welcome</div>';
+   const prof=n.profiles||(n.profiles={});const first=!this.server&&id.includes('\\')&&!prof[id.toLowerCase()];prof[id.toLowerCase()]=1;
+   if(first){const st=['Hi','We\'re setting things up for you','This might take several minutes',"Almost there"];let i=0;const nx=()=>{if(i>=st.length){lk.remove();this.user=id;this.afterLogin();return}lk.className='lock w10hi';lk.innerHTML=`<div class="nm" style="font-size:30px">${st[i]}</div>${i>=2?'<div style="opacity:.8;margin-top:14px">Don\'t turn off your PC</div>':''}`;i++;setTimeout(nx,1100)};setTimeout(nx,900);return}
+   setTimeout(()=>{lk.remove();this.user=id;this.afterLogin()},1100)};
   stage1();
  }
  tryLogin(sel,uname,pw,retry,changePw,done){
   const n=this.n,dc=dcOf(this.L);
   if(sel.id==='_other'||(sel.dom&&!sel.admin)){
-   let u=(uname||'').toLowerCase();if(!u)return retry('Enter a user name.');
-   const net=dc?dc.domain.split('.')[0]:'';u=u.replace(net+'\\','').replace('@'+(dc?dc.domain:''),'');
-   if(u.includes('\\'))return retry('The user name or password is incorrect.');
+   if(!(uname||'').trim())return retry('Enter a user name.');
+   let u=stripDom(this.L,uname);if(u===null)return retry('The user name or password is incorrect. Try again.');u=u.toLowerCase();const net=nbOf(this.L);
    if(!dc||!canDC(this.L,n))return retry("We can't sign you in with this credential because your domain isn't available. Make sure your device is connected to your organization's network and try again.");
    const rec=(dc.adUsers||[]).find(x=>x.logon.toLowerCase()===u)||(u===EX.au.toLowerCase()?{logon:EX.au,pw:dc.accounts[EX.au].pw}:null);
    if(!rec||rec.pw!==pw)return retry('The user name or password is incorrect. Try again.');
-   const id=net.toUpperCase()+'\\'+rec.logon;if(rec.mustChange)return changePw({id,rec});return done(id);
+   if(rec.disabled)return retry('Your account has been disabled. Please see your system administrator.');const id=net+'\\'+rec.logon;if(rec.mustChange)return changePw({id,rec});return done(id);
   }
-  if(sel.admin&&n.isDC){if(n.accounts[EX.au].pw!==pw)return retry('The password is incorrect. Try again.');return done('TESDA\\'+EX.au)}
+  if(sel.admin&&n.isDC){if(n.accounts[EX.au].pw!==pw)return retry('The password is incorrect. Try again.');return done(nbOf(this.L)+'\\'+EX.au)}
   const a=n.accounts[sel.id];if(!a||a.pw!==pw)return retry('The password is incorrect. Try again.');done(sel.id);
  }
  afterLogin(){this.changed('login',this.user);(this.o.startup||[]).forEach(a=>this.open(a))}
@@ -1722,10 +1841,11 @@ function nameDlg(D,after){
    const dc=dcOf(D.L);const ok=dc&&(dom===dc.domain||dom===dc.domain.split('.')[0])&&canDC(D.L,n);
    const cred=await credDlg(D,`Enter the name and password of an account with permission to join the domain.`);if(!cred)return;
    if(!ok){D.changed('joinfail');return D.msg('Computer Name/Domain Changes',`An Active Directory Domain Controller (AD DC) for the domain "${esc(dom)}" could not be contacted.<br><br>Ensure that the domain name is typed correctly.<br><br>If the name is correct, check that this computer's <b>preferred DNS server</b> points to the domain controller and that the network is working.`,{icon:'⛔'})}
-   const u=cred.u.toLowerCase().replace(/^tesda\\/,'').replace('@'+dc.domain,'');
-   const rec=u===EX.au.toLowerCase()?{pw:dc.accounts[EX.au].pw}:null;
-   if(!rec)return D.msg('Computer Name/Domain Changes','Access is denied. Use an account with permission to join computers to the domain (e.g. the domain Administrator).',{icon:'⛔'});
-   if(rec.pw!==cred.p)return D.msg('Computer Name/Domain Changes','The user name or password is incorrect.',{icon:'⛔'});
+   const u0=stripDom(D.L,cred.u),u=(u0||'').toLowerCase();
+   const rec=u===EX.au.toLowerCase()?{pw:dc.accounts[EX.au].pw}:(dc.adUsers||[]).find(x=>x.logon.toLowerCase()===u);
+   if(!u||!rec||rec.pw!==cred.p){D.changed('joinbad');return D.msg('Computer Name/Domain Changes','The following error occurred attempting to join the domain "'+esc(dom)+'":<br><br>The user name or password is incorrect.',{icon:'⛔'})}
+   if(rec.disabled)return D.msg('Computer Name/Domain Changes','The following error occurred attempting to join the domain "'+esc(dom)+'":<br><br>The referenced account is currently disabled and may not be logged on to.',{icon:'⛔'});
+   if(rec.mustChange)return D.msg('Computer Name/Domain Changes','The following error occurred attempting to join the domain "'+esc(dom)+'":<br><br>The user\'s password must be changed before logging on the first time.',{icon:'⛔'});
    if(nameChanged)n.pendingName=nm;n.pendingDomain=dc.domain;w.close();
    await D.msg('Computer Name/Domain Changes',`Welcome to the ${dc.domain} domain.`,{icon:'ℹ️'});
   }else{
@@ -1762,13 +1882,13 @@ APPS.control={title:'Control Panel',icon:'🛠️',w:700,h:460,single:true,open(
    <div class="dbtns"><button class="wb pri" id="advS">🛡️ Save changes</button><button class="wb" id="advC">Cancel</button></div></div>`}
   const fw=n.fw||(n.fw={domain:true,priv:true,pub:true});
   if(page==='fw'){const row=(k,l)=>`<tr><td style="padding:6px 10px">${fw[k]?'🛡️':'⛔'}</td><td><b>${l}</b><br><span style="color:${fw[k]?'#1b7f3a':'#b00020'}">Windows Defender Firewall is ${fw[k]?'on':'OFF'}</span></td></tr>`;
-   h=`<div style="display:flex;min-height:100%"><div style="width:220px;background:#f3f6fb;padding:12px;font-size:12.5px;flex:none"><span class="sm-link" data-p="home">Control Panel Home</span><br><br><span class="sm-link" data-p="fwset">Turn Windows Defender Firewall on or off</span></div><div class="dp" style="flex:1"><h3 style="font-weight:400;color:#1e3287;margin:0 0 12px">Help protect your PC with Windows Defender Firewall</h3><table>${row('domain','Domain networks')}${row('priv','Private networks')}${row('pub','Guest or public networks')}</table></div></div>`}
+   h=`<div style="display:flex;min-height:100%"><div style="width:220px;background:#f3f6fb;padding:12px;font-size:12.5px;flex:none"><span class="sm-link" data-p="home">Control Panel Home</span><br><br><span class="sm-link" data-p="fwset">Turn Windows Defender Firewall on or off</span><br><br><span class="sm-link" data-go="wfas">🛡️ Advanced settings</span></div><div class="dp" style="flex:1"><h3 style="font-weight:400;color:#1e3287;margin:0 0 12px">Help protect your PC with Windows Defender Firewall</h3><table>${row('domain','Domain networks')}${row('priv','Private networks')}${row('pub','Guest or public networks')}</table></div></div>`}
   if(page==='fwset'){const grp=(k,l)=>`<fieldset class="wfs"><legend><b>${l}</b></legend><label class="radio"><input type="radio" name="f${k}" value="1" ${fw[k]?'checked':''}> 🛡️ Turn on Windows Defender Firewall</label><label class="radio"><input type="radio" name="f${k}" value="0" ${fw[k]?'':'checked'}> ⛔ Turn off Windows Defender Firewall (not recommended)</label></fieldset>`;
    h=`<div class="dp"><h3 style="font-weight:400;color:#1e3287;margin:0 0 6px">Customize settings for each type of network</h3>${grp('domain','Domain network settings')}${grp('priv','Private network settings')}${grp('pub','Public network settings')}<div class="dbtns"><button class="wb pri" id="fwOk">OK</button><button class="wb" id="fwC">Cancel</button></div></div>`}
-  w.body.innerHTML=`<div class="ex-bar"><button data-p="home">↑</button><input value="Control Panel${page==='home'?'':page==='fw'||page==='fwset'?' › System and Security › Windows Defender Firewall':' › Network and Internet › '+(page==='nsc'?'Network and Sharing Center':'Network and Sharing Center › Advanced sharing settings')}" readonly></div>`+h;
+  w.body.innerHTML=(`<div class="ex-bar"><button data-p="home">↑</button><input value="Control Panel${page==='home'?'':page==='fw'||page==='fwset'?' › System and Security › Windows Defender Firewall':' › Network and Internet › '+(page==='nsc'?'Network and Sharing Center':'Network and Sharing Center › Advanced sharing settings')}" readonly></div>`+h).replace(/Windows Defender Firewall/g,D.server?'Windows Firewall':'Windows Defender Firewall');
   if(page==='fwset'){$('#fwOk',w.body).onclick=()=>{['domain','priv','pub'].forEach(k=>fw[k]=$(`input[name=f${k}]:checked`,w.body).value==='1');if(!fw.domain&&!fw.priv&&!fw.pub)n.icmp=true;D.changed('firewall');page='fw';render()};$('#fwC',w.body).onclick=()=>{page='fw';render()}}
   $$('[data-p]',w.body).forEach(a=>a.onclick=()=>{page=a.dataset.p;render()});
-  $$('[data-go]',w.body).forEach(a=>a.onclick=()=>{const g=a.dataset.go;if(g==='sys')D.open('sysdm');if(g==='dev')D.open('devmgmt');if(g==='ncpa')D.open('ncpa');if(g==='status')ethStatus(D)});
+  $$('[data-go]',w.body).forEach(a=>a.onclick=()=>{const g=a.dataset.go;if(g==='wfas')D.open('wfas');if(g==='sys')D.open('sysdm');if(g==='dev')D.open('devmgmt');if(g==='ncpa')D.open('ncpa');if(g==='status')ethStatus(D)});
   if(page==='adv'){$('#advS',w.body).onclick=()=>{n.discovery=$('input[name=nd]:checked',w.body).value==='1';n.fileShare=$('input[name=fs]:checked',w.body).value==='1';n.icmp=n.fileShare||n.isDC;D.changed('sharing');page='nsc';render();toast('Sharing settings saved.')};$('#advC',w.body).onclick=()=>{page='nsc';render()}}
  };
  render();w.sub((ev)=>{if(ev==='ip'||ev==='restart')render()});
@@ -1856,7 +1976,7 @@ function pickPrincipal(D,title,cb){
  const w=D.win('Select Users, Computers, Service Accounts, or Groups',{dialog:true,w:460,icon:''}),dc=dcOf(D.L);let ok=null;
  w.body.innerHTML=`<div class="dp"><p>Select this object type:</p><input value="Users, Groups, or Built-in security principals" disabled style="width:100%"><p>From this location:</p><input value="${dc?esc(dc.domain):esc(D.n.hostname)}" disabled style="width:100%"><p>Enter the object names to select (<u>examples</u>):</p><div style="display:flex;gap:6px"><input id="ppN" style="flex:1" autocapitalize="off" autocomplete="off"><button class="wb" id="ppC">Check Names</button></div><div id="ppE" style="color:#c00;font-size:12px;margin-top:6px"></div></div><div class="dbtns"><button class="wb pri" id="ppO">OK</button><button class="wb" id="ppX">Cancel</button></div>`;
  const known=['Domain Users','Authenticated Users','Everyone','Administrators','Users','Domain Admins','Remote Desktop Users'];
- const check=()=>{const v=$('#ppN',w.body).value.trim().replace(/^tesda\\/i,'');if(!v){$('#ppE',w.body).textContent='Type a name first.';return null}
+ const check=()=>{const v=(stripDom(D.L,$('#ppN',w.body).value)||'').trim();if(!v){$('#ppE',w.body).textContent='Type a name first.';return null}
   let hit=known.find(k=>k.toLowerCase()===v.toLowerCase());if(hit&&/^domain /i.test(hit)&&!dc)hit=null;
   if(!hit&&dc)hit=((dc.adUsers||[]).find(u=>u.logon.toLowerCase()===v.toLowerCase())||{}).logon;
   if(!hit){$('#ppE',w.body).textContent=`An object named "${v}" cannot be found. Check the selected object types and location, and that you typed the object name correctly.`;return null}
@@ -1877,12 +1997,12 @@ function permDlg(D,sn,perm,cb){
  aclDlg(D,'Permissions for '+sn,acl,[],A=>{const ev=A.Everyone||{};const o={full:!!ev.full,change:!!ev.change,read:!!ev.read,acl:{}};Object.keys(A).forEach(k=>{if(k!=='Everyone')o.acl[k]=A[k]});if(!A.Everyone){o.noEveryone=true}cb(o)})}
 function simpleShare(D,p,after){
  const n=D.n,name=p.split('\\').pop(),w=D.win('Network access',{dialog:true,w:440,icon:'👥'});let list=[{u:'Owner ('+(D.user||'you')+')',lv:'Owner'}];
- const render=()=>{w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;margin:0 0 8px">Choose people to share with</h3><p>Type a name and then click Add, or click the arrow to find someone.</p><div style="display:flex;gap:6px"><select id="ssU" style="flex:1"><option>Everyone</option><option>Guest</option></select><button class="wb" id="ssAdd">Add</button></div>
+ const render=()=>{w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400;margin:0 0 8px">Choose people to share with</h3><p>Type a name and then click Add, or click the arrow to find someone.</p><div style="display:flex;gap:6px"><select id="ssU" style="flex:1"><option>Everyone</option>${n.isDC?'<option>Domain Users</option><option>Authenticated Users</option>':''}<option>Guest</option></select><button class="wb" id="ssAdd">Add</button></div>
   <table style="width:100%;margin-top:10px;background:#fff;border:1px solid #ccc;font-size:13px">${list.map((x,i)=>`<tr><td style="padding:5px">👤 ${esc(x.u)}</td><td>${x.lv==='Owner'?'Owner':`<select data-i="${i}"><option ${x.lv==='Read'?'selected':''}>Read</option><option ${x.lv==='Read/Write'?'selected':''}>Read/Write</option></select>`}</td></tr>`).join('')}</table></div><div class="dbtns"><button class="wb pri" id="ssGo">🛡️ Share</button><button class="wb" id="ssC">Cancel</button></div>`;
   $('#ssAdd',w.body).onclick=()=>{const u=$('#ssU',w.body).value;if(!list.some(x=>x.u===u))list.push({u,lv:'Read'});render()};
   $$('select[data-i]',w.body).forEach(s=>s.onchange=()=>{list[+s.dataset.i].lv=s.value});
   $('#ssC',w.body).onclick=()=>w.close();
-  $('#ssGo',w.body).onclick=()=>{const ev=list.find(x=>x.u==='Everyone');Object.keys(n.shares).forEach(k=>{if(n.shares[k].path===p)delete n.shares[k]});n.shares[name]={path:p,full:!!ev&&ev.lv==='Read/Write',change:!!ev&&ev.lv==='Read/Write',read:!!ev};D.changed('share');w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400">Your folder is shared.</h3><p>${esc('\\\\'+n.hostname+'\\'+name)}</p></div><div class="dbtns"><button class="wb pri">Done</button></div>`;$('.wb',w.body).onclick=()=>{w.close();after&&after()}}};
+  $('#ssGo',w.body).onclick=()=>{const ev=list.find(x=>x.u==='Everyone');Object.keys(n.shares).forEach(k=>{if(n.shares[k].path===p)delete n.shares[k]});const acl={};list.forEach(x=>{if(x.lv!=='Owner'&&x.u!=='Everyone')acl[x.u]={full:x.lv==='Read/Write',change:x.lv==='Read/Write',read:true}});n.shares[name]={path:p,full:!!ev&&ev.lv==='Read/Write',change:!!ev&&ev.lv==='Read/Write',read:!!ev,acl,noEveryone:!ev};n.ntfs=n.ntfs||{};const nt=Object.assign({},n.ntfs[p]||{});list.forEach(x=>{if(x.lv!=='Owner')nt[x.u]={full:x.lv==='Read/Write',change:x.lv==='Read/Write',read:true}});n.ntfs[p]=nt;D.changed('share');w.body.innerHTML=`<div class="dp"><h3 style="font-weight:400">Your folder is shared.</h3><p>${esc('\\\\'+n.hostname+'\\'+name)}</p></div><div class="dbtns"><button class="wb pri">Done</button></div>`;$('.wb',w.body).onclick=()=>{w.close();after&&after()}}};
  render();
 }
 /* ---------- Device Manager ---------- */
@@ -1943,27 +2063,28 @@ APPS.edge={title:'Microsoft Edge',icon:'🌐',w:820,h:540,open(w,D,args){
  if(args.url){u.value=args.url;go()}
 }};
 
-/* ================= WINDOWS SERVER 2019 TOOLS ================= */
+/* ================= WINDOWS SERVER 2012 R2 TOOLS ================= */
 APPS.dns={title:'DNS Manager',icon:'🔤',w:500,h:300,open(w,D){w.body.innerHTML='<div class="dp">DNS Manager<br><br>✔ Forward Lookup Zones: '+esc(D.n.domain||'')+', _msdcs.'+esc(D.n.domain||'')+'<br><br><span style="color:#777">The DNS zones were created automatically when the server was promoted. No changes are needed for this task.</span></div>'}};
 APPS.servermanager={title:'Server Manager',icon:'🗄️',w:900,h:560,single:true,open(w,D){
  let page='dash';
  const render=()=>{const n=D.n,flag=n.pendingPromote||n.pendingDhcpCfg;
-  const nav=[['dash','▦ Dashboard'],['local','▣ Local Server'],['all','▤ All Servers'],['file','▥ File and Storage Services']];if(n.roles.adds)nav.splice(3,0,['adds','▧ AD DS']);if(n.roles.dhcp)nav.splice(3,0,['dhcp','▨ DHCP']);if(n.isDC)nav.splice(3,0,['dnsr','▩ DNS']);
+  const nav=[['dash','▦ Dashboard'],['local','▏ Local Server'],['all','▤ All Servers'],['file','▥ File and Storage Services']];if(n.isDC||n.roles.dns)nav.splice(3,0,['dnsr','▩ DNS']);if(n.roles.dhcp)nav.splice(3,0,['dhcp','▨ DHCP']);if(n.roles.adds)nav.splice(3,0,['adds','▧ AD DS']);
   let body='';
-  if(page==='dash')body=`<div class="sm-tile"><div style="font-size:18px;font-weight:300;margin-bottom:10px">WELCOME TO SERVER MANAGER</div><div style="display:grid;gap:8px"><div><b>1</b> &nbsp;<a data-go="local">Configure this local server</a></div><div><b>2</b> &nbsp;<a data-go="add">Add roles and features</a></div><div><b>3</b> &nbsp;<span style="opacity:.75">Add other servers to manage</span></div><div><b>4</b> &nbsp;<span style="opacity:.75">Create a server group</span></div><div><b>5</b> &nbsp;<span style="opacity:.75">Connect this server to cloud services</span></div></div></div>
-   <b>ROLES AND SERVER GROUPS</b><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${[n.roles.adds&&'AD DS',n.roles.dhcp&&'DHCP',n.isDC&&'DNS','File and Storage Services','Local Server'].filter(Boolean).map(r=>`<div style="border:1px solid #ccc;border-top:4px solid #1e64a8;padding:10px;min-width:150px"><b>${r}</b><br><span style="color:#2a7a2a">● Manageability</span><br>Events<br>Services</div>`).join('')}</div>`;
+  if(page==='dash'){const rl=[n.roles.adds&&['AD DS','📒'],n.roles.dhcp&&['DHCP','🏷️'],(n.isDC||n.roles.dns)&&['DNS','🔤'],['File and Storage Services','🗃️'],['Local Server','🖥️'],['All Servers','🖧']].filter(Boolean);
+   body=`<div class="w12-wel"><div class="w12-h">WELCOME TO SERVER MANAGER</div><div class="w12-wb"><div class="w12-qs"><div class="q1">QUICK START</div><div class="q2">WHAT'S NEW</div><div class="q3">LEARN MORE</div></div><div class="w12-st"><div class="s1"><i>1</i><a data-go="local">Configure this local server</a></div><div><i>2</i><a data-go="add">Add roles and features</a></div><div><i>3</i><span>Add other servers to manage</span></div><div><i>4</i><span>Create a server group</span></div><div><i>5</i><span>Connect this server to cloud services</span></div></div><div class="w12-hide">Hide</div></div></div>
+   <div class="w12-rg">ROLES AND SERVER GROUPS</div><div class="w12-rgs">Roles: ${rl.length-2} &nbsp;|&nbsp; Server groups: 1 &nbsp;|&nbsp; Servers total: 1</div><div class="w12-tiles">${rl.map(([r,i])=>`<div class="w12-tl"><div class="th"><span>${i}</span><b>${r}</b><em>1</em></div><div class="tr"><div class="ok">Manageability</div><div>Events</div><div>Services</div><div>Performance</div><div>BPA results</div></div></div>`).join('')}</div>`}
   if(page==='local'){const ipTxt=!n.nic?'Not connected':n.dhcp?'IPv4 address assigned by DHCP, IPv6 enabled':esc(n.ip)+', IPv6 enabled';
-   body=`<b>PROPERTIES</b><br><span style="color:#666">For ${esc(n.hostname)}</span><table class="sm-props" style="margin-top:10px"><tr><td>Computer name</td><td><span class="sm-link" data-go="sysdm">${esc(n.hostname)}</span>${n.pendingName?' <small style="color:#c60">(restart pending: '+esc(n.pendingName)+')</small>':''}</td></tr><tr><td>${n.domain?'Domain':'Workgroup'}</td><td><span class="sm-link" data-go="sysdm">${esc(n.domain||n.workgroup)}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Windows Defender Firewall</td><td>${n.domain?'Domain: On':'Public: On'}</td></tr><tr><td>Remote management</td><td>Enabled</td></tr><tr><td>Remote Desktop</td><td><span class="sm-link" data-go="rdpdlg">${n.rdp&&n.rdp.on?'Enabled':'Disabled'}</span></td></tr><tr><td>NIC Teaming</td><td>Disabled</td></tr><tr><td>Ethernet</td><td><span class="sm-link" data-go="ncpa">${ipTxt}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Operating system version</td><td>Microsoft Windows Server 2019 Standard</td></tr><tr><td>IE Enhanced Security Configuration</td><td>On</td></tr><tr><td>Time zone</td><td>(UTC+08:00) Kuala Lumpur, Singapore</td></tr><tr><td>Processors</td><td>Intel(R) Xeon(R) E-2224 CPU @ 3.40GHz</td></tr><tr><td>Installed memory (RAM)</td><td>16 GB</td></tr></table>`}
+   body=`<b>PROPERTIES</b><br><span style="color:#666">For ${esc(n.hostname)}</span><table class="sm-props" style="margin-top:10px"><tr><td>Computer name</td><td><span class="sm-link" data-go="sysdm">${esc(n.hostname)}</span>${n.pendingName?' <small style="color:#c60">(restart pending: '+esc(n.pendingName)+')</small>':''}</td></tr><tr><td>${n.domain?'Domain':'Workgroup'}</td><td><span class="sm-link" data-go="sysdm">${esc(n.domain||n.workgroup)}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Windows Defender Firewall</td><td>${n.domain?'Domain: On':'Public: On'}</td></tr><tr><td>Remote management</td><td>Enabled</td></tr><tr><td>Remote Desktop</td><td><span class="sm-link" data-go="rdpdlg">${n.rdp&&n.rdp.on?'Enabled':'Disabled'}</span></td></tr><tr><td>NIC Teaming</td><td>Disabled</td></tr><tr><td>Ethernet</td><td><span class="sm-link" data-go="ncpa">${ipTxt}</span></td></tr><tr><td>&nbsp;</td><td></td></tr><tr><td>Operating system version</td><td>Microsoft Windows Server 2012 R2 Standard</td></tr><tr><td>IE Enhanced Security Configuration</td><td>On</td></tr><tr><td>Time zone</td><td>(UTC+08:00) Kuala Lumpur, Singapore</td></tr><tr><td>Processors</td><td>Intel(R) Xeon(R) E-2224 CPU @ 3.40GHz</td></tr><tr><td>Installed memory (RAM)</td><td>16 GB</td></tr></table>`}
   if(page==='all')body=`<b>SERVERS</b><table class="sm-props" style="margin-top:8px"><tr><td><b>Server Name</b></td><td><b>IPv4 Address</b></td><td><b>Manageability</b></td></tr><tr><td>${esc(n.hostname)}</td><td>${esc(n.ip)}</td><td>Online - Performance counters not started</td></tr></table>`;
   if(['adds','dhcp','dnsr','file'].includes(page))body=`<b>${{adds:'AD DS',dhcp:'DHCP',dnsr:'DNS',file:'File and Storage Services'}[page]}</b><p>Servers: ${esc(n.hostname)}</p>${page==='adds'&&n.pendingPromote?'<div class="wwarn">⚠ Configuration required for Active Directory Domain Services at '+esc(n.hostname)+'. <span class="sm-link" data-go="promote">More...</span></div>':''}${page==='dhcp'&&n.pendingDhcpCfg?'<div class="wwarn">⚠ Configuration required for DHCP Server at '+esc(n.hostname)+'. <span class="sm-link" data-go="dhcpcfg">More...</span></div>':''}<p style="color:#666">Use the <b>Tools</b> menu to open the management console for this role.</p>`;
-  w.body.innerHTML=`<div class="sm"><div class="sm-nav">${nav.map(([k,l])=>`<button class="${page===k?'on':''}" data-p="${k}">${l}</button>`).join('')}</div><div class="sm-main"><div class="sm-top"><div class="h">Server Manager › ${nav.find(x=>x[0]===page)[1].slice(2)}</div><button title="Refresh" data-a="ref">⟳</button><button class="sm-flag" data-a="flag" title="Notifications">🚩${flag?'<span class="bang">!</span>':''}</button><button data-a="manage">Manage</button><button data-a="tools">Tools</button><button>View</button><button>Help</button></div><div class="sm-body">${body}</div></div></div>`;
+  w.body.innerHTML=`<div class="sm"><div class="sm-nav">${nav.map(([k,l])=>`<button class="${page===k?'on':''}" data-p="${k}">${l}</button>`).join('')}</div><div class="sm-main"><div class="sm-top"><span class="w12-nv">◀ ▶</span><div class="h">Server Manager <span class="w12-ar">▸</span> ${nav.find(x=>x[0]===page)[1].slice(2)}</div><button title="Refresh" data-a="ref">⟳</button><button class="sm-flag" data-a="flag" title="Notifications">🚩${flag?'<span class="bang">!</span>':''}</button><button data-a="manage">Manage</button><button data-a="tools">Tools</button><button>View</button><button>Help</button></div><div class="sm-body">${body}</div></div></div>`;
   $$('[data-p]',w.body).forEach(b=>b.onclick=()=>{page=b.dataset.p;render()});
   $$('[data-go]',w.body).forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(g==='local'){page='local';render()}else if(g==='add')D.open('addroles');else if(g==='promote')D.open('adpromo');else if(g==='dhcpcfg')D.open('dhcpcfg');else D.open(g)});
   const btn=a=>$(`[data-a=${a}]`,w.body);
   btn('ref').onclick=render;
   btn('flag').onclick=e=>{const it=[];if(n.pendingPromote)it.push({l:'⚠ <b>Post-deployment Configuration</b><br><small>Configuration required for AD DS at '+esc(n.hostname)+'</small><br><u style="color:#06c">Promote this server to a domain controller</u>',f:()=>D.open('adpromo')});if(n.pendingDhcpCfg)it.push({l:'⚠ <b>Post-deployment Configuration</b><br><small>Configuration required for DHCP Server</small><br><u style="color:#06c">Complete DHCP configuration</u>',f:()=>D.open('dhcpcfg')});if(!it.length)it.push({l:'No new notifications.'});D.ctxMenu(e.clientX,e.clientY,it)};
   btn('manage').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[{l:'Add Roles and Features',f:()=>D.open('addroles')},{l:'Remove Roles and Features',f:()=>toast('Removing roles is not part of this assessment.')},{l:'Add Servers'},{l:'Create Server Group'},{l:'Server Manager Properties'}]);
-  btn('tools').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[n.isDC&&{l:'Active Directory Administrative Center',f:()=>D.open('aduc')},n.isDC&&{l:'Active Directory Users and Computers',f:()=>D.open('aduc')},{l:'Component Services'},{l:'Computer Management'},n.dhcpRole&&{l:'DHCP',f:()=>D.open('dhcp')},n.isDC&&{l:'DNS',f:()=>D.open('dns')},{l:'Event Viewer'},n.isDC&&{l:'Group Policy Management',f:()=>D.open('gpmc')},{l:'Services'},{l:'Task Scheduler'},{l:'Windows Defender Firewall with Advanced Security'}].filter(Boolean))};
+  btn('tools').onclick=e=>D.ctxMenu(e.clientX,e.clientY,[n.isDC&&{l:'Active Directory Administrative Center',f:()=>D.open('aduc')},n.isDC&&{l:'Active Directory Users and Computers',f:()=>D.open('aduc')},{l:'Component Services'},{l:'Computer Management'},n.dhcpRole&&{l:'DHCP',f:()=>D.open('dhcp')},n.isDC&&{l:'DNS',f:()=>D.open('dns')},{l:'Event Viewer'},n.isDC&&{l:'Group Policy Management',f:()=>D.open('gpmc')},{l:'Services'},{l:'Task Scheduler'},{l:'Windows Firewall with Advanced Security',f:()=>D.open('wfas')}].filter(Boolean))};
  render();w.sub(render);
 }};
 /* ---------- Add Roles and Features wizard ---------- */
@@ -1976,9 +2097,9 @@ APPS.addroles={title:'Add Roles and Features Wizard',icon:'🧙',w:800,h:540,sin
  const render=()=>{const P=pages(),cur=P[pg];let b='';
   if(cur==='Before You Begin')b=`<h3>Before you begin</h3><p>This wizard helps you install roles, role services, or features. You determine which roles, role services, or features to install based on the computing needs of your organization.</p><p>Before you continue, verify that the following tasks have been completed:</p><ul><li>The Administrator account has a strong password</li><li><b>Network settings, such as static IP addresses, are configured</b></li><li>The most current security updates from Windows Update are installed</li></ul>`;
   if(cur==='Installation Type')b=`<h3>Select installation type</h3><label class="radio"><input type="radio" checked name="it"> <b>Role-based or feature-based installation</b></label><p style="margin-left:22px;color:#555">Configure a single server by adding roles, role services, and features.</p><label class="radio"><input type="radio" name="it" disabled> Remote Desktop Services installation</label>`;
-  if(cur==='Server Selection')b=`<h3>Select destination server</h3><label class="radio"><input type="radio" checked> Select a server from the server pool</label><div class="wlist"><div class="hd">Name · IP Address · Operating System</div><div class="sel">${esc(n.hostname)}${n.domain?'.'+esc(n.domain):''} · ${esc(n.ip)} · Microsoft Windows Server 2019 Standard</div></div>`;
+  if(cur==='Server Selection')b=`<h3>Select destination server</h3><label class="radio"><input type="radio" checked> Select a server from the server pool</label><div class="wlist"><div class="hd">Name · IP Address · Operating System</div><div class="sel">${esc(n.hostname)}${n.domain?'.'+esc(n.domain):''} · ${esc(n.ip)} · Microsoft Windows Server 2012 R2 Standard</div></div>`;
   if(cur==='Server Roles')b=`<h3>Select server roles</h3><p>Select one or more roles to install on the selected server.</p><div class="wlist" style="max-height:300px">${ROLES.map(([k,l])=>{const inst=k==='file'||n.roles[k];return `<div data-r="${k}"><input type="checkbox" ${inst||sel[k]?'checked':''} ${inst?'disabled':''}> ${l}${inst&&k!=='file'?' (Installed)':''}</div>`}).join('')}</div>`;
-  if(cur==='Features')b=`<h3>Select features</h3><div class="wlist" style="max-height:300px">${['.NET Framework 3.5 Features','.NET Framework 4.7 Features (2 of 7 installed)','Background Intelligent Transfer Service (BITS)','BitLocker Drive Encryption',...Object.keys(feats).map(f=>f.trim()),'Group Policy Management','Remote Server Administration Tools','Telnet Client','Windows Defender Antivirus (Installed)','Windows PowerShell (2 of 5 installed)','XPS Viewer (Installed)'].filter((v,i,a)=>a.indexOf(v)===i).map(f=>`<div><input type="checkbox" ${feats[f]||feats['  '+f]||feats['    '+f]||feats['      '+f]||f.includes('Installed')?'checked':''} disabled> ${esc(f)}</div>`).join('')}</div>`;
+  if(cur==='Features')b=`<h3>Select features</h3><div class="wlist" style="max-height:300px">${['.NET Framework 3.5 Features','.NET Framework 4.5 Features (2 of 7 installed)','Background Intelligent Transfer Service (BITS)','BitLocker Drive Encryption',...Object.keys(feats).map(f=>f.trim()),'Group Policy Management','Remote Server Administration Tools','Telnet Client','Windows Server Backup','Windows PowerShell (2 of 5 installed)','XPS Viewer (Installed)'].filter((v,i,a)=>a.indexOf(v)===i).map(f=>`<div><input type="checkbox" ${feats[f]||feats['  '+f]||feats['    '+f]||feats['      '+f]||f.includes('Installed')?'checked':''} disabled> ${esc(f)}</div>`).join('')}</div>`;
   if(cur==='AD DS')b=`<h3>Active Directory Domain Services</h3><p>Active Directory Domain Services (AD DS) stores information about users, computers, and other devices on the network. AD DS helps administrators securely manage this information and facilitates resource sharing and collaboration between users.</p><p><b>Things to note:</b></p><ul><li>To help ensure that users can still log on in the event of a server outage, install a minimum of two domain controllers.</li><li>AD DS requires a DNS server to be installed on the network. If you do not have a DNS server installed, you will be prompted to install the DNS Server role on this machine.</li></ul>`;
   if(cur==='DHCP Server')b=`<h3>DHCP Server</h3><p>Dynamic Host Configuration Protocol (DHCP) allows servers to assign, or lease, IP addresses to computers and other devices that are enabled as DHCP clients.</p><p><b>Things to note:</b></p><ul><li>You should configure at least one static IP address on this computer.</li><li>Before you install DHCP Server, you should plan your subnets, scopes, and exclusions.</li></ul>`;
   if(cur==='DNS Server')b=`<h3>DNS Server</h3><p>Domain Name System (DNS) provides a standard method for associating names with numeric Internet addresses.</p>`;
@@ -1996,9 +2117,9 @@ APPS.addroles={title:'Add Roles and Features Wizard',icon:'🧙',w:800,h:540,sin
   $('#wzP',w.body).onclick=()=>{pg--;render()};
   $('#wzN',w.body).onclick=()=>{if(cur==='Server Roles'&&!Object.values(sel).some(Boolean)){D.msg('Add Roles and Features Wizard','Select at least one role or feature to install.',{icon:'⛔'});return}pg++;render()};
   $('#wzC',w.body).onclick=()=>w.close();
-  $('#wzI',w.body).onclick=async()=>{pg=pages().indexOf('Results');prog=0;render();for(prog=0;prog<=100;prog+=5){await sleep(160);if(w.closed)return;const p=$('#arP',w.body);if(p)p.style.width=prog+'%'}prog=100;
+  $('#wzI',w.body).onclick=async()=>{pg=pages().indexOf('Results');prog=0;render();for(prog=0;prog<=100;prog+=5){await sleep(160);if(w.closed)continue;const p=$('#arP',w.body);if(p)p.style.width=prog+'%'}prog=100;if(w.closed)toast('Add Roles and Features: installation succeeded on '+esc(n.hostname)+'.');
    Object.keys(sel).forEach(k=>{if(!sel[k])return;n.roles[k]=true;if(k==='adds')n.pendingPromote=true;if(k==='dhcp'){n.dhcpRole=true;n.pendingDhcpCfg=true}});
-   render();D.changed('roles',{...sel})};
+   if(!w.closed)render();D.changed('roles',{...sel})};
  };
  render();
 }};
@@ -2007,24 +2128,24 @@ APPS.adpromo={title:'Active Directory Domain Services Configuration Wizard',icon
  const n=D.n;const P=['Deployment Configuration','Domain Controller Options','DNS Options','Additional Options','Paths','Review Options','Prerequisites Check','Installation','Results'];
  let pg=0,s={op:'forest',dom:'',pw:'',pw2:'',nb:'',pre:false};
  if(n.isDC){w.body.innerHTML='<div class="dp">This server is already a domain controller.</div>';return}
+ if(!n.roles.adds){w.close();D.msg('Active Directory Domain Services Configuration Wizard','The Active Directory Domain Services role is not installed on this server.<br><br>Install it first: Manage › Add Roles and Features › Active Directory Domain Services.',{icon:'⛔'});return}
  const render=()=>{const cur=P[pg];let b='';
   if(cur==='Deployment Configuration')b=`<h3>Deployment Configuration</h3><p>Select the deployment operation</p><label class="radio"><input type="radio" name="op" value="dc" ${s.op==='dc'?'checked':''}> Add a domain controller to an existing domain</label><label class="radio"><input type="radio" name="op" value="dom" ${s.op==='dom'?'checked':''}> Add a new domain to an existing forest</label><label class="radio"><input type="radio" name="op" value="forest" ${s.op==='forest'?'checked':''}> Add a new forest</label><p style="margin-top:14px">Specify the domain information for this operation</p><div class="wf"><label>Root domain name:</label><input type="text" id="pdD" value="${esc(s.dom)}" style="width:260px;max-width:60%" autocapitalize="off" spellcheck="false"></div>`;
-  if(cur==='Domain Controller Options')b=`<h3>Domain Controller Options</h3><div class="wf"><label>Forest functional level:</label><select><option>Windows Server 2016</option><option>Windows Server 2012 R2</option></select></div><div class="wf"><label>Domain functional level:</label><select><option>Windows Server 2016</option></select></div><p>Specify domain controller capabilities</p><label class="radio"><input type="checkbox" checked> Domain Name System (DNS) server</label><label class="radio"><input type="checkbox" checked disabled> Global Catalog (GC)</label><label class="radio"><input type="checkbox" disabled> Read only domain controller (RODC)</label><p style="margin-top:10px">Type the Directory Services Restore Mode (DSRM) password</p><div class="wf"><label>Password:</label><input type="password" id="pdP" value="${esc(s.pw)}"></div><div class="wf"><label>Confirm password:</label><input type="password" id="pdP2" value="${esc(s.pw2)}"></div>`;
+  if(cur==='Domain Controller Options')b=`<h3>Domain Controller Options</h3><div class="wf"><label>Forest functional level:</label><select><option>Windows Server 2012 R2</option><option>Windows Server 2012</option><option>Windows Server 2008 R2</option><option>Windows Server 2008</option></select></div><div class="wf"><label>Domain functional level:</label><select><option>Windows Server 2012 R2</option><option>Windows Server 2012</option><option>Windows Server 2008 R2</option><option>Windows Server 2008</option></select></div><p>Specify domain controller capabilities</p><label class="radio"><input type="checkbox" checked> Domain Name System (DNS) server</label><label class="radio"><input type="checkbox" checked disabled> Global Catalog (GC)</label><label class="radio"><input type="checkbox" disabled> Read only domain controller (RODC)</label><p style="margin-top:10px">Type the Directory Services Restore Mode (DSRM) password</p><div class="wf"><label>Password:</label><input type="password" id="pdP" value="${esc(s.pw)}"></div><div class="wf"><label>Confirm password:</label><input type="password" id="pdP2" value="${esc(s.pw2)}"></div>`;
   if(cur==='DNS Options')b=`<h3>DNS Options</h3><div class="wwarn">⚠ A delegation for this DNS server cannot be created because the authoritative parent zone cannot be found or it does not run Windows DNS server. If you are integrating with an existing DNS infrastructure, you should manually create a delegation... Otherwise, no action is required.</div><label class="radio"><input type="checkbox" disabled> Create DNS delegation</label>`;
   if(cur==='Additional Options')b=`<h3>Additional Options</h3><p>Verify the NetBIOS name assigned to the domain and change it if necessary</p><div class="wf"><label>The NetBIOS domain name:</label><input type="text" id="pdN" value="${esc(s.nb)}" style="width:200px"></div>`;
   if(cur==='Paths')b=`<h3>Paths</h3><p>Specify the location of the AD DS database, log files, and SYSVOL</p><div class="wf"><label>Database folder:</label><input value="C:\\Windows\\NTDS" style="width:220px"></div><div class="wf"><label>Log files folder:</label><input value="C:\\Windows\\NTDS" style="width:220px"></div><div class="wf"><label>SYSVOL folder:</label><input value="C:\\Windows\\SYSVOL" style="width:220px"></div>`;
-  if(cur==='Review Options')b=`<h3>Review Options</h3><div class="wlist" style="max-height:none"><div style="display:block;white-space:normal">Configure this server as the first Active Directory domain controller in a new forest.<br><br>The new domain name is "<b>${esc(s.dom)}</b>". This is also the name of the new forest.<br><br>The NetBIOS name of the domain: <b>${esc(s.nb)}</b><br>Forest Functional Level: Windows Server 2016<br>Domain Functional Level: Windows Server 2016<br><br>Additional Options:<br>&nbsp; Global catalog: Yes<br>&nbsp; DNS Server: Yes<br>&nbsp; Create DNS Delegation: No</div></div>`;
-  if(cur==='Prerequisites Check')b=`<h3>Prerequisites Check</h3>${s.pre?`<div style="background:#dff6dd;padding:8px;border:1px solid #9c9">✔ All prerequisite checks passed successfully. Click 'Install' to begin installation.</div><div class="wwarn">⚠ Windows Server 2019 domain controllers have a default for the security setting named "Allow cryptography algorithms compatible with Windows NT 4.0"...</div>${n.dhcp?'<div class="wwarn">⚠ This computer has at least one physical network adapter that does not have static IP address(es) assigned to its IP Properties.</div>':''}<div class="wwarn">⚠ A delegation for this DNS server cannot be created because the authoritative parent zone cannot be found...</div>`:'<p>Validating prerequisites... <span class="spinner" style="display:inline-block;width:18px;height:18px;margin:0 6px;vertical-align:middle;border-color:#ccc;border-top-color:#0078d7;border-width:3px"></span></p>'}`;
+  if(cur==='Review Options')b=`<h3>Review Options</h3><div class="wlist" style="max-height:none"><div style="display:block;white-space:normal">Configure this server as the first Active Directory domain controller in a new forest.<br><br>The new domain name is "<b>${esc(s.dom)}</b>". This is also the name of the new forest.<br><br>The NetBIOS name of the domain: <b>${esc(s.nb)}</b><br>Forest Functional Level: Windows Server 2012 R2<br>Domain Functional Level: Windows Server 2012 R2<br><br>Additional Options:<br>&nbsp; Global catalog: Yes<br>&nbsp; DNS Server: Yes<br>&nbsp; Create DNS Delegation: No</div></div>`;
+  if(cur==='Prerequisites Check')b=`<h3>Prerequisites Check</h3>${s.pre?`<div style="background:#dff6dd;padding:8px;border:1px solid #9c9">✔ All prerequisite checks passed successfully. Click 'Install' to begin installation.</div><div class="wwarn">⚠ Windows Server 2012 R2 domain controllers have a default for the security setting named "Allow cryptography algorithms compatible with Windows NT 4.0"...</div>${n.dhcp?'<div class="wwarn">⚠ This computer has at least one physical network adapter that does not have static IP address(es) assigned to its IP Properties.</div>':''}<div class="wwarn">⚠ A delegation for this DNS server cannot be created because the authoritative parent zone cannot be found...</div>`:'<p>Validating prerequisites... <span class="spinner" style="display:inline-block;width:18px;height:18px;margin:0 6px;vertical-align:middle;border-color:#ccc;border-top-color:#0078d7;border-width:3px"></span></p>'}`;
   if(cur==='Installation')b=`<h3>Installation</h3><div style="height:14px;background:#ddd;margin:10px 0"><div id="pdBar" style="height:100%;width:0;background:#06b025;transition:width .2s"></div></div><p id="pdT">Installing Active Directory Domain Services...</p>`;
   w.body.innerHTML=`<div class="wiz"><div class="wiz-nav">${P.map((p,i)=>`<div class="${i===pg?'on':''}">${p}</div>`).join('')}</div><div class="wiz-main"><div style="padding:6px 18px;text-align:right;font-size:12px;color:#555">TARGET SERVER<br>${esc(n.hostname)}</div><div class="wiz-body">${b}</div><div class="dbtns"><button class="wb" id="pdPr" ${pg===0||pg>=7?'disabled':''}>&lt; Previous</button><button class="wb pri" id="pdNx" ${pg>=6?'disabled':''}>Next &gt;</button><button class="wb" id="pdIn" ${cur==='Prerequisites Check'&&s.pre?'':'disabled'}>Install</button><button class="wb" id="pdCn" ${pg>=7?'disabled':''}>Cancel</button></div></div></div>`;
   $$('input[name=op]',w.body).forEach(r=>r.onchange=()=>{s.op=r.value});
   const q=x=>$(x,w.body);
   $('#pdPr',w.body).onclick=()=>{save();pg--;render()};$('#pdCn',w.body).onclick=()=>w.close();
   $('#pdNx',w.body).onclick=async()=>{save();const err=m=>D.msg('Active Directory Domain Services Configuration Wizard',m,{icon:'⛔'});
-   if(cur==='Deployment Configuration'){if(s.op!=='forest')return err('There is no existing domain on this network yet. This is the first domain controller, so select "Add a new forest".');if(!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(s.dom))return err('Verification of the domain name failed. The domain name must be a fully qualified DNS name such as "contoso.local".');
-    const exp=D.o.expect&&D.o.expect.domain;if(exp&&s.dom.toLowerCase()!==exp){D.changed('wrongdomain',s.dom);return err(`👨‍🏫 Assessor: Wait! The task sheet says the domain name must be <b>${exp}</b>. Check your spelling before you continue.`)}
+   if(cur==='Deployment Configuration'){if(s.op!=='forest')return err('There is no existing domain on this network yet. This is the first domain controller, so select "Add a new forest".');if(!s.dom)return err('Verification of the domain name failed. Specify a domain name.');if(!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(s.dom))return err('Verification of the domain name failed.<br><br>The domain name "'+esc(s.dom)+'" is not a valid fully qualified DNS name. It must contain a dot, for example "css.org" or "contoso.local", and may only use letters, numbers and hyphens.');
     s.dom=s.dom.toLowerCase();s.nb='';}
-   if(cur==='Domain Controller Options'){if(!s.pw)return err('The Directory Services Restore Mode (DSRM) password is required.');if(s.pw!==s.pw2)return err('The passwords do not match.');if(!pwComplex(s.pw))return err('The password does not meet the password complexity requirements. Use at least 8 characters with uppercase, lowercase, numbers and symbols.')}
+   if(cur==='Domain Controller Options'){if(!s.pw)return err('The Directory Services Restore Mode (DSRM) password is required.');if(s.pw!==s.pw2)return err('The passwords do not match.');if(!pwComplex(s.pw))return err('The password does not meet the requirements of the password policy. The password must be at least 7 characters long and contain characters from at least three of these categories: uppercase letters, lowercase letters, numbers and symbols.')}
    if(cur==='Additional Options'&&!s.nb)return;
    pg++;render();
    if(P[pg]==='Additional Options'&&!s.nb){await sleep(900);s.nb=s.dom.split('.')[0].toUpperCase().slice(0,15);if(P[pg]==='Additional Options')render()}
@@ -2076,11 +2197,12 @@ APPS.aduc={title:'Active Directory Users and Computers',icon:'👥',w:820,h:500,
    dw.body.innerHTML=`<div class="dp">${b}</div><div class="dbtns"><button class="wb" id="nuB" ${pg===1?'disabled':''}>&lt; Back</button><button class="wb pri" id="nuN">${pg===3?'Finish':'Next &gt;'}</button><button class="wb" id="nuC">Cancel</button></div>`;
    const q=x=>$(x,dw.body);
    if(pg===1){const up=()=>{s.first=q('#u1').value;s.ini=q('#u2').value;s.last=q('#u3').value;s.logon=q('#u5').value.trim();q('#u4').value=(s.first+' '+s.last).trim();q('#u6').value=s.logon};['#u1','#u2','#u3','#u5'].forEach(i=>q(i).oninput=up)}
-   if(pg===2){const up=()=>{s.pw=q('#p1').value;s.pw2=q('#p2').value;s.must=q('#c1').checked;s.cant=q('#c2').checked;s.never=q('#c3').checked;s.dis=q('#c4').checked};$$('input',dw.body).forEach(i=>{i.oninput=up;i.onchange=up})}
+   if(pg===2){const up=()=>{s.pw=q('#p1').value;s.pw2=q('#p2').value;s.must=q('#c1').checked;s.cant=q('#c2').checked;s.never=q('#c3').checked;s.dis=q('#c4').checked};$$('input',dw.body).forEach(i=>{i.oninput=up;i.onchange=up});
+    q('#c3').addEventListener('change',()=>{if(q('#c3').checked&&q('#c1').checked){D.msg('Active Directory Domain Services','You specified that the password should never expire. The user will not be required to change the password at next logon.',{icon:'ℹ️'});q('#c1').checked=false;up()}})}
    q('#nuC').onclick=()=>dw.close();q('#nuB').onclick=()=>{pg--;r()};
    q('#nuN').onclick=()=>{const err=m=>D.msg('Active Directory Domain Services',m,{icon:'⛔'});
     if(pg===1){if(!(s.first+s.last).trim())return err('Enter a full name.');if(!s.logon)return err('Enter a user logon name.');if(/[\\\/\[\]:;|=,+*?<>"@]/.test(s.logon))return err('The user logon name contains invalid characters.');if(n.adUsers.some(u=>u.logon.toLowerCase()===s.logon.toLowerCase())||['administrator','guest','krbtgt'].includes(s.logon.toLowerCase()))return err(`The user logon name you have chosen is already in use in this enterprise. Choose another logon name.`)}
-    if(pg===2){if(s.pw!==s.pw2)return err('The passwords do not match.');if(s.must&&s.cant)return err('You specified that the password should never expire... The user will not be required to change the password at next logon.'.replace('You specified that the password should never expire...','You cannot select both "User must change password at next logon" and "User cannot change password" for the same user.'))}
+    if(pg===2){if(s.pw!==s.pw2)return err('The passwords do not match. Type the password and confirmation again.');if(s.must&&s.cant)return err('You cannot check both User must change password at next logon and User cannot change password for the same user.')}
     if(pg===3){if(!pwComplex(s.pw)){err(`Windows cannot set the password for ${esc((s.first+' '+s.last).trim())} because:<br><br>The password does not meet the password policy requirements. Check the minimum password length, password complexity and password history requirements.<br><br><small>(Minimum 8 characters, using 3 of: uppercase, lowercase, numbers, symbols)</small>`);pg=2;return r()}
      n.adUsers.push({first:s.first.trim(),last:s.last.trim(),full:(s.first+' '+s.last).trim(),logon:s.logon,pw:s.pw,mustChange:s.must,cant:s.cant,never:s.never,disabled:s.dis,ou:c});dw.close();render();D.changed('user',s.logon);return}
     pg++;r()};
@@ -3158,55 +3280,128 @@ T2.start=function(ctx){
 };
 })();
 
-/* ================= COC 3: SET UP COMPUTER SERVERS ================= */
-COCS[3]={icon:'🗄️',title:'Set Up Computer Servers',sub:'Windows Server 2016 · static IP · domain tesda.com · DHCP · firewall · OU & users · join client',
- brief:'This is COC 3. Following your instructor\'s guide, set up the Windows Server 2016 machine as the domain controller for <b>tesda.com</b>, configure DHCP, turn off the firewall, create the OU and user Client A, then join the client PC to the domain.',
- tasks:['c3_srv','c3_adds','c3_dhcp','c3_fw','c3_users','c3_join'],
- lab:()=>{const L={v2:1,router:{ip:XV('@@RIP@@'),up:true,internet:false,dhcp:{on:false,start:XV('@@NET@@.1'),end:XV('@@NET@@.99')}},
+/* ================= COC 3: SET UP COMPUTER SERVERS (Windows Server 2012 R2, follows the CSS NC II video guide) ================= */
+COCS[3]={icon:'🗄️',title:'Set Up Computer Servers',sub:'Windows Server 2012 R2 · firewall · AD DS, DHCP, DNS · folder redirection · OU & user · join the client',
+ brief:'This is COC 3. Following your instructor\'s guide, set up the Windows Server 2012 R2 machine in one sitting: turn off the firewall, add the AD DS, DHCP and DNS roles, promote it to a domain controller, share a folder for Folder Redirection, create the GPO, the OU and a domain user, then finish the extra server settings. After that, join the client PC to the domain and sign in as your domain user.',
+ tasks:['c3_server','c3_client'],
+ lab:()=>{const L={v3:1,router:{ip:XV('@@RIP@@'),up:true,internet:false,dhcp:{on:false,start:XV('@@NET@@.1'),end:XV('@@NET@@.99')}},
   nodes:{SRV:mkNode({hostname:'WIN-4G8K2LQ7R1M',os:'server',media:true,seg:'lan',roles:{},accounts:{[EX.au]:{pw:EX.ap}},adUsers:[],ous:[],mac:'00-15-5D-01-0A-10'}),
    CLIENT:mkNode({hostname:'CLIENT-01',media:true,seg:'lan',accounts:{[EX.cu]:{pw:EX.cp}},mac:'00-15-5D-01-0A-21'})}};
-  nodesOf(L).forEach(n=>dhcpRenew(L,n));return L},
+  nodesOf(L).forEach(n=>dhcpRenew(L,n));srvSetup(L);return L},
  room:{floor:['#2b2d3d','#303345'],wall:['#4a4560','#38344b'],start:{x:470,y:560},objs:[
   {type:'board',wall:1,solid:false,x:250,y:18,w:300,h:60,text:['COC 3','Set Up Computer Servers']},
   {type:'clock',wall:1,solid:false,x:880,y:44,w:1,h:1},{type:'ac',wall:1,solid:false,x:620,y:30,w:80,h:24},
   {type:'assessor',npc:1,x:40,y:150,w:150,h:60},{type:'chair',x:100,y:224,w:26,h:20},
   {type:'server',x:560,y:100,w:70,h:64},{type:'server',x:640,y:100,w:70,h:64},{type:'rack',x:720,y:100,w:80,h:64},
-  {type:'pc',x:380,y:300,w:200,h:66,label:'Server Console',tasks:['c3_srv','c3_adds','c3_dhcp','c3_fw','c3_users']},{type:'chair',x:467,y:378,w:26,h:20},
-  {type:'pc',x:730,y:390,w:170,h:62,label:'Client PC',tasks:['c3_join']},{type:'chair',x:802,y:462,w:26,h:20},
+  {type:'pc',x:380,y:300,w:200,h:66,label:'Server Console',tasks:['c3_server']},{type:'chair',x:467,y:378,w:26,h:20},
+  {type:'pc',x:730,y:390,w:170,h:62,label:'Client PC',tasks:['c3_client']},{type:'chair',x:802,y:462,w:26,h:20},
   {type:'plant',x:24,y:540,w:30,h:30},{type:'plant',x:906,y:100,w:30,h:30},{type:'extinguisher',x:210,y:108,w:14,h:28},
   {type:'door',exit:1,solid:false,x:944,y:250,w:16,h:90}]}};
-const c3mig=L=>{if(!L.v2&&!Object.keys(G.prog).some(k=>k.startsWith('c3_'))){const f=COCS[3].lab();Object.keys(L).forEach(k=>delete L[k]);Object.assign(L,f)}};
-function srvTask(id,title,info,objectives,o={}){return {id,coc:3,title,where:'Server Console',info:'Server login: @@AU@@ / @@AP@@\n\n'+info,objectives,
- start(ctx){const L=ctx.L;c3mig(L);o.start&&o.start(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'SRV',user:EX.au,locked:true,startup:['servermanager'],expect:{domain:'tesda.com'},onChange:(ev,d)=>{if(ev==='login')ctx.flag('login'+(L.nodes.SRV.isDC?'dc':''));o.ev&&o.ev(ctx,ev,d,L);ctx.check()}});ctx.cleanup.push(()=>D.destroy())}}}
+const c3mig=L=>{if(!L.v3&&!['c3_server','c3_client'].some(k=>G.prog[k]||(G.rs[k]&&Object.keys(G.rs[k].done||{}).length))){const f=COCS[3].lab();Object.keys(L).forEach(k=>delete L[k]);Object.assign(L,f)}srvSetup(L)};
 const S=L=>L.nodes.SRV;
-TASKS.c3_srv=srvTask('c3_srv','Server IP configuration','Internet Protocol Version 4 (TCP/IPv4) on the server:\n• IP address: @@SIP@@\n• Subnet mask: 255.255.255.0\n• Default gateway: @@RIP@@\n• Preferred DNS server: @@SIP@@',[
- {id:'login',text:'Sign in as @@AU@@',hint:'Click "Press Ctrl+Alt+Delete to unlock", type @@AP@@.',check:(L,f)=>f.login||f.logindc},
- {id:'ip',text:'Set IP @@SIP@@, mask 255.255.255.0, gateway @@RIP@@, DNS @@SIP@@',hint:'Server Manager › Local Server › click the Ethernet link › Ethernet › Properties › IPv4.',check:L=>{const n=S(L);return !n.dhcp&&n.ip===XV('@@SIP@@')&&n.mask==='255.255.255.0'&&n.gw===XV('@@RIP@@')&&[XV('@@SIP@@'),'127.0.0.1'].includes(n.dns1)}}]);
-TASKS.c3_adds=srvTask('c3_adds','Promote to a domain network','• Add Roles and Features: Active Directory Domain Services (and DHCP Server)\n• Promote this server to a domain controller\n• Add a new forest, root domain name: tesda.com\n• DSRM password: @@AP@@\n• Install, then the server restarts',[
- {id:'role',text:'Install the Active Directory Domain Services role',hint:'Server Manager › Manage › Add Roles and Features › Next › Next › Next › check Active Directory Domain Services › Add Features › Next... › Install.',check:L=>S(L).roles&&S(L).roles.adds},
- {id:'promo',text:'Promote to a domain controller: new forest "tesda.com"',hint:'Click the 🚩 flag › "Promote this server to a domain controller" › Add a new forest › tesda.com › DSRM password @@AP@@ › Next... › Install.',check:L=>S(L).isDC&&S(L).domain==='tesda.com'},
- {id:'dclogin',text:'After the restart, sign in as TESDA\\@@AU@@',hint:'Unlock and type @@AP@@.',check:(L,f)=>f.logindc}]);
-TASKS.c3_dhcp=srvTask('c3_dhcp','DHCP configuration','• Install the DHCP Server role and complete the post-install configuration\n• Tools › DHCP › IPv4 › New Scope (any name)\n• Start IP: @@NET@@.10\n• End IP: @@NET@@.20\n• Subnet mask: 255.255.255.0\n• Skip exclusions\n• Router (default gateway): @@RIP@@\n• Activate the scope',[
- {id:'role',text:'Install the DHCP Server role',hint:'Manage › Add Roles and Features › check DHCP Server › Add Features › ... › Install.',check:L=>S(L).dhcpRole},
- {id:'auth',text:'Complete the DHCP configuration (authorize the server)',hint:'Click the 🚩 flag › "Complete DHCP configuration" › Next › Commit.',check:L=>S(L).dhcpAuth},
- {id:'scope',text:'Create a scope @@NET@@.10 – @@NET@@.20 (255.255.255.0)',hint:'Tools › DHCP › expand the server › right-click IPv4 › New Scope...',check:L=>{const s=S(L).scope;return s&&s.start===XV('@@NET@@.10')&&s.end===XV('@@NET@@.20')&&s.mask==='255.255.255.0'}},
- {id:'opt',text:'Set the router (default gateway) @@RIP@@',hint:'In the wizard: "Yes, I want to configure these options now" › Router: @@RIP@@ › Add.',check:L=>{const s=S(L).scope;return s&&s.router===XV('@@RIP@@')}},
- {id:'act',text:'Activate the scope',hint:'Last page of the wizard: "Yes, I want to activate this scope now".',check:L=>{const s=S(L).scope;return s&&s.active}}]);
-TASKS.c3_fw=srvTask('c3_fw','Turn off Windows Firewall','• Control Panel › System and Security › Windows Defender Firewall\n• Turn Windows Defender Firewall on or off\n• Turn off for Domain, Private and Public networks › OK',[
- {id:'fw',text:'Turn off Windows Defender Firewall for all network types',hint:'Run firewall.cpl › "Turn Windows Defender Firewall on or off" › Turn off on all three › OK.',check:L=>{const f=S(L).fw;return f&&!f.domain&&!f.priv&&!f.pub}}]);
-TASKS.c3_users=srvTask('c3_users','Active Directory Users and Computers','In Active Directory Users and Computers (tesda.com):\n• New Organizational Unit: COMPUTERS DOMAIN\n• Inside it, New › User:\n   First name: Client A\n   User logon name: Client A\n   Password: @@AP@@\n   ☑ User cannot change password\n   ☑ Password never expires',[
- {id:'ou',text:'Create the Organizational Unit "COMPUTERS DOMAIN"',hint:'Tools › Active Directory Users and Computers › right-click tesda.com › New › Organizational Unit.',check:L=>S(L).ous.some(o=>o.toUpperCase()==='COMPUTERS DOMAIN')},
- {id:'u1',text:'Create user "Client A" inside COMPUTERS DOMAIN',hint:'Click the COMPUTERS DOMAIN OU first, then New › User. First name and logon name: Client A.',check:L=>S(L).adUsers.some(u=>u.logon.toLowerCase()==='client a'&&(u.ou||'').toUpperCase()==='COMPUTERS DOMAIN')},
- {id:'pw',text:'Password @@AP@@, "User cannot change password" and "Password never expires"',hint:'Second page of the New User wizard: tick the two boxes. Do not tick "must change password".',check:L=>S(L).adUsers.some(u=>u.logon.toLowerCase()==='client a'&&u.pw===EX.ap&&u.cant&&u.never)}]);
-TASKS.c3_join={id:'c3_join',coc:3,title:'Configure the client and join the domain',where:'Client PC',
- info:'Local login: @@CU@@ / @@CP@@\n\nInternet Protocol Version 4 (TCP/IPv4):\n• IP address: @@CIP@@\n• Subnet mask: 255.255.255.0\n• Default gateway: @@SIP@@\n• Preferred DNS server: @@SIP@@\n\n• Join the domain: tesda.com (TESDA\\@@AU@@ / @@AP@@)\n• Restart, then sign in as TESDA\\Client A / @@AP@@',
+/* ---- checks that accept any folder / GPO / OU / user name, as long as the setup really works ---- */
+const DU='Domain Users';
+const userShares=n=>Object.entries(n.shares||{}).filter(([k,v])=>/^C:\\[^\\]+$/i.test(v.path)&&!/^(Installers|Users|Windows|PerfLogs|Program Files.*)$/i.test(v.path.slice(3)));
+const shareWritable=(n,v)=>shareAllows(v,DU,'change')&&ntfsAllows(n,v.path,DU,'change');
+const gpoApplies=(n,g)=>(g.links||[]).some(l=>lcEq(l,n.domain)||(n.ous||[]).some(o=>lcEq(o,l)))&&(g.filter||[]).some(f=>['domain users','authenticated users','everyone'].includes(f.toLowerCase())||(n.adUsers||[]).some(u=>lcEq(u.logon,f)));
+const frGpo=L=>{const n=S(L);return gposOf(n).find(g=>{const d=g.fr&&g.fr.desktop;if(!d||d.setting!=='basic'||d.mode!=='peruser')return false;const t=uncOk(L,(d.root||'').replace(/\\+$/,''));return t&&shareWritable(n,t.sh)&&gpoApplies(n,g)})};
+const swShare=L=>{const n=S(L);return userShares(n).find(([k,v])=>shareAllows(v,DU,'read')&&ntfsAllows(n,v.path,DU,'read')&&(n.fs[v.path]||[]).some(x=>/\.msi$/i.test(x.n)))};
+const domUser=L=>(S(L).adUsers||[]).find(u=>u.ou&&u.ou!=='Users')||null;
+TASKS.c3_server={id:'c3_server',coc:3,title:'Set up the server',where:'Server Console',
+ info:`Server login: @@AU@@ / @@AP@@
+Do everything below in one sitting on the server.
+
+A. TURN OFF THE FIREWALL
+1. Server Manager › Tools › Windows Firewall with Advanced Security
+2. Windows Firewall Properties › Domain, Private and Public Profile: Firewall state = Off › Apply › OK
+3. Inbound Rules › click a rule › Ctrl+A (select all) › Enable Rule
+
+B. ADD ROLES AND FEATURES
+4. Manage › Add Roles and Features › Next until Server Roles
+5. Check Active Directory Domain Services, DHCP Server and DNS Server › Add Features › Next... › Install › Close
+
+C. PROMOTE TO A DOMAIN CONTROLLER
+6. Click the flag › Promote this server to a domain controller
+7. Add a new forest › Root domain name: tesda.com
+8. DSRM password: @@AP@@ › Next until Install › the server restarts
+9. Sign in again as the domain Administrator
+
+D. SHARED FOLDER (for Folder Redirection)
+10. File Explorer › Local Disk (C:) › New folder (example: FOLDER REDIRECTION)
+11. Right-click › Properties › Sharing › Share... › add Everyone › Read/Write › Share
+12. Copy the Network Path (\\\\SERVER\\folder)
+
+E. FOLDER REDIRECTION GPO
+13. Tools › Group Policy Management › Forest › Domains › right-click your domain › Create a GPO in this domain, and Link it here (example: FOLDER REDIRECTION)
+14. Right-click the GPO › Edit › User Configuration › Policies › Windows Settings › Folder Redirection › Desktop › Properties
+15. Setting: Basic › Create a folder for each user under the root path › Root Path: the network path › OK › Yes
+
+F. ORGANIZATIONAL UNIT AND USER
+16. Tools › Active Directory Users and Computers › right-click your domain › New › Organizational Unit (any name)
+17. Inside the OU › New › User (first name, last name, logon name)
+18. Password @@AP@@ · untick "User must change password at next logon" · tick "User cannot change password" and "Password never expires"
+
+G. CHECK
+19. Command Prompt › ipconfig
+
+ADDITIONAL SETTINGS
+20. Static IP: @@SIP@@ · 255.255.255.0 · gateway @@RIP@@ · DNS @@SIP@@ (or 127.0.0.1)
+21. Flag › Complete DHCP configuration › Commit. Tools › DHCP › IPv4 › New Scope: @@NET@@.10 – @@NET@@.20, router @@RIP@@, activate
+22. Software Deployment: share a folder for installers, copy an .msi from C:\\Installers into it, create and link a GPO › User Configuration › Policies › Software Settings › Software installation › New › Package from the NETWORK path › Assigned › Properties › Deployment › Install this application at logon
+23. Remote Desktop: Local Server › Remote Desktop › Allow remote connections › Select Users › Domain Users
+24. Command Prompt › gpupdate /force`,
+ objectives:[
+  {id:'login',text:'Sign in to the server as @@AU@@',hint:'Click "Press Ctrl+Alt+Delete to sign in" and type @@AP@@.',check:(L,f)=>f.login||f.logindc},
+  {id:'fwoff',text:'Firewall state Off for the Domain, Private and Public profiles',hint:'Tools › Windows Firewall with Advanced Security › Windows Firewall Properties › each profile tab › Firewall state: Off › Apply.',check:L=>{const f=S(L).fw;return f&&!f.domain&&!f.priv&&!f.pub}},
+  {id:'rules',text:'Enable all Inbound Rules',hint:'Click Inbound Rules › click one rule › press Ctrl+A (or right-click › Select All) › Enable Rule.',check:L=>fwRules(S(L)).every(Boolean)},
+  {id:'roles',text:'Install AD DS, DHCP Server and DNS Server',hint:'Manage › Add Roles and Features › Server Roles: tick all three › Add Features › Install.',check:L=>{const r=S(L).roles||{};return r.adds&&r.dhcp&&(r.dns||S(L).isDC)}},
+  {id:'promo',text:'Promote the server to a domain controller (new forest)',hint:'Flag › Promote this server to a domain controller › Add a new forest › root domain name › DSRM password › Install.',check:L=>S(L).isDC},
+  {id:'dclogin',text:'After the restart, sign in as DOMAIN\\@@AU@@',hint:'Press Ctrl+Alt+Delete and type @@AP@@.',check:(L,f)=>f.logindc},
+  {id:'share',text:'Share a folder that domain users can write to',hint:'New folder on C: › Properties › Sharing › Share... › Everyone (or Domain Users) › Read/Write › Share.',check:L=>userShares(S(L)).some(([k,v])=>shareWritable(S(L),v))},
+  {id:'frgpo',text:'Folder Redirection GPO: Desktop, Basic, root path = your shared folder',hint:'Group Policy Management › right-click the domain › Create a GPO..., Link it here › Edit › User Configuration › Policies › Windows Settings › Folder Redirection › Desktop › Properties. Root path must be the Network Path (\\\\SERVER\\share), not C:\\...',check:L=>!!frGpo(L)},
+  {id:'ou',text:'Create an Organizational Unit',hint:'Active Directory Users and Computers › right-click the domain › New › Organizational Unit.',check:L=>(S(L).ous||[]).length>0},
+  {id:'user',text:'Create a domain user inside the OU (password does not need changing)',hint:'Click the OU › New › User. On the password page untick "User must change password at next logon".',check:L=>{const u=domUser(L);return u&&!u.mustChange&&!u.disabled}},
+  {id:'ipcfg',text:'Check the server with ipconfig',hint:'Start › Command Prompt › ipconfig.',check:(L,f)=>f.ipcfg},
+  {id:'ip',text:'Static IP @@SIP@@, mask 255.255.255.0, gateway @@RIP@@, DNS @@SIP@@',hint:'Server Manager › Local Server › click the Ethernet link › Ethernet › Properties › IPv4.',check:L=>{const n=S(L);return !n.dhcp&&n.ip===XV('@@SIP@@')&&n.mask==='255.255.255.0'&&n.gw===XV('@@RIP@@')&&[XV('@@SIP@@'),'127.0.0.1'].includes(n.dns1)}},
+  {id:'dhcpauth',text:'Complete the DHCP configuration (authorize the server)',hint:'Flag › Complete DHCP configuration › Next › Commit.',check:L=>S(L).dhcpAuth},
+  {id:'scope',text:'DHCP scope @@NET@@.10 – @@NET@@.20, router @@RIP@@, activated',hint:'Tools › DHCP › expand the server › right-click IPv4 › New Scope... › Yes, configure options › Router › Activate.',check:L=>{const s=S(L).scope;return s&&s.start===XV('@@NET@@.10')&&s.end===XV('@@NET@@.20')&&s.mask==='255.255.255.0'&&s.router===XV('@@RIP@@')&&s.active}},
+  {id:'swshare',text:'Software folder shared with an .msi installer inside',hint:'New folder on C: › share it (Read is enough) › open C:\\Installers › copy an .msi › paste it into your folder.',check:L=>!!swShare(L)},
+  {id:'swgpo',text:'Software Deployment GPO: package from the network path, Assigned, install at logon',hint:'Create and link a GPO › Edit › User Configuration › Policies › Software Settings › Software installation › New › Package › type \\\\SERVER\\share\\ › choose the .msi › Assigned › Properties › Deployment › Install this application at logon.',check:L=>gposOf(S(L)).some(g=>gpoApplies(S(L),g)&&(g.sw||[]).some(p=>p.type==='assigned'&&p.atLogon&&uncOk(L,p.path.replace(/\\[^\\]+$/,''))))},
+  {id:'rdp',text:'Allow Remote Desktop for Domain Users',hint:'Server Manager › Local Server › Remote Desktop: Disabled › Allow remote connections › Select Users... › Add... › Domain Users.',check:L=>{const r=S(L).rdp;return r&&r.on&&(r.users||[]).some(u=>lcEq(u,DU)||lcEq(u,'Authenticated Users')||lcEq(u,'Everyone'))}},
+  {id:'gpu',text:'Run gpupdate /force on the server',hint:'Command Prompt › gpupdate /force.',check:(L,f)=>f.gpu}],
+ start(ctx){const L=ctx.L;c3mig(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
+  const D=new Desktop(scr,{L,key:'SRV',user:EX.au,locked:true,startup:['servermanager'],onChange:(ev,d)=>{
+   if(ev==='login')ctx.flag('login'+(S(L).isDC?'dc':''));
+   if(ev==='cmd'&&/^ipconfig\b/i.test((d||'').trim())&&S(L).isDC)ctx.R.flags.ipcfg=true;
+   if(ev==='gpupdate'&&d&&d.ok&&d.force)ctx.R.flags.gpu=true;
+   ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
+TASKS.c3_client={id:'c3_client',coc:3,title:'Join the client to the domain',where:'Client PC',
+ info:`Local login: @@CU@@ / @@CP@@
+
+1. Network: Change adapter options › Ethernet › Properties › Internet Protocol Version 4 (TCP/IPv4)
+   • IP address: @@CIP@@
+   • Subnet mask: 255.255.255.0
+   • Default gateway: @@SIP@@
+   • Preferred DNS server: @@SIP@@ (the server)
+2. File Explorer › right-click This PC › Properties › Change settings › Change...
+   • Member of: Domain › type your domain (example: tesda.com) › OK
+   • Enter the domain user you created on the server (or the Administrator) › Welcome to the domain › Restart
+3. Sign in with "Other user" as your domain user
+4. Check that the Desktop is redirected to the server and the software was installed
+5. Remote Desktop Connection › the server › sign in as your domain user`,
  objectives:[{id:'login',text:'Sign in with the local account',hint:'Password: @@CP@@.',check:(L,f)=>f.login},
   {id:'ip',text:'Set IP @@CIP@@, mask 255.255.255.0, gateway @@SIP@@, DNS @@SIP@@',hint:'Run ncpa.cpl › Ethernet › Properties › IPv4 › "Use the following IP address".',check:L=>{const n=L.nodes.CLIENT;return !n.dhcp&&n.ip===XV('@@CIP@@')&&n.mask==='255.255.255.0'&&n.gw===XV('@@SIP@@')&&n.dns1===XV('@@SIP@@')}},
-  {id:'join',text:'Join the computer to tesda.com and restart',hint:'Run sysdm.cpl › Change... › Member of: Domain › tesda.com › credentials › Welcome › Restart.',check:L=>L.nodes.CLIENT.domain==='tesda.com'},
-  {id:'du',text:'Sign in as the domain user TESDA\\Client A',hint:'On the lock screen choose "Other user" and type TESDA\\Client A with password @@AP@@.',check:(L,f)=>f.du}],
+  {id:'join',text:'Join the client to the domain and restart',hint:'sysdm.cpl › Change... › Member of: Domain › your domain name › credentials › Welcome › Restart. If the domain cannot be contacted, check that the preferred DNS is the server IP.',check:L=>L.nodes.CLIENT.domain&&S(L).isDC&&L.nodes.CLIENT.domain===S(L).domain},
+  {id:'du',text:'Sign in as the domain user you created',hint:'Lock screen › Other user › your user\'s logon name and password.',check:(L,f)=>f.du},
+  {id:'fr',text:'The Desktop is redirected to the server share',hint:'If it was not, check on the server: the share and its permissions, the GPO link, and that the root path is \\\\SERVER\\share. Then gpupdate /force and sign in again.',check:L=>!!L.nodes.CLIENT.redirect},
+  {id:'sw',text:'The assigned software installs at sign in',hint:'If it is missing, check the package path (\\\\SERVER\\share, not C:\\) and "Install this application at logon".',check:L=>(L.nodes.CLIENT.installed||[]).length>0},
+  {id:'rdpc',text:'Connect to the server with Remote Desktop Connection',hint:'Start › Remote Desktop Connection › server IP or domain › Connect › your domain user.',check:(L,f)=>f.rdp}],
  start(ctx){const L=ctx.L;c3mig(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'CLIENT',user:EX.cu,locked:true,onChange:(ev,d)=>{if(ev==='login'){ctx.flag('login');if(/client a/i.test(d))ctx.flag('du')}if(ev==='joinfail'&&!ctx.R.flags.jf){ctx.R.flags.jf=1;ctx.penalty(3,'Domain join failed: the client could not find the domain controller')}ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
+  const D=new Desktop(scr,{L,key:'CLIENT',user:EX.cu,locked:true,onChange:(ev,d)=>{
+   if(ev==='login'){ctx.flag('login');const id=d||'';if(id.includes('\\')&&!lcEq(id.split('\\').pop(),EX.au)){ctx.R.flags.du=true;
+    const res=applyUserPolicy(L,L.nodes.CLIENT,id);setTimeout(()=>{if(res.sw&&res.sw.length)toast('📦 Installing managed software: '+res.sw.join(', '),'good');if(res.fr)toast('📁 Desktop redirected to '+res.fr,'good');(res.errors||[]).forEach(e=>toast('⚠ '+e,'bad'));if(res.none)toast('ℹ No Group Policy applied to this user.','')},1300)}}
+   if(ev==='joinfail'&&!ctx.R.flags.jf){ctx.R.flags.jf=1;ctx.penalty(3,'Domain join failed: the client could not find the domain controller')}
+   if(ev==='rdpok')ctx.R.flags.rdp=true;ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
 
 /* ================= COC 3: Group Policy (folder redirection, software deployment) + Remote Desktop ================= */
 const dcNode=L=>nodesOf(L).find(o=>o.isDC);
@@ -3214,7 +3409,7 @@ const lcEq=(a,b)=>(a||'').toLowerCase()===(b||'').toLowerCase();
 function shareFor(n,path){const e=Object.entries(n.shares||{}).find(([k,v])=>lcEq(v.path,path));return e?{name:e[0],...e[1]}:null}
 function shareAllows(sh,who,lvl){if(!sh)return false;const pick=a=>a&&(lvl==='full'?a.full:lvl==='change'?(a.full||a.change):(a.full||a.change||a.read));
  if(!sh.noEveryone&&pick({full:sh.full,change:sh.change,read:sh.read!==false}))return true;const acl=sh.acl||{};return pick(acl[who])||pick(acl['Authenticated Users'])}
-function ntfsAllows(n,path,who,lvl){const a=((n.ntfs||{})[Object.keys(n.ntfs||{}).find(k=>lcEq(k,path))]||{});const q=a[who]||a['Authenticated Users']||a.Everyone;return !!q&&(lvl==='full'?q.full:lvl==='change'?(q.full||q.change):(q.full||q.change||q.read))}
+function ntfsAllows(n,path,who,lvl){const a=((n.ntfs||{})[Object.keys(n.ntfs||{}).find(k=>lcEq(k,path))]||{});/* new folders inherit BUILTIN\\Users: Read, and Domain Users are members of Users */const q=a[who]||a['Authenticated Users']||a.Everyone||a.Users||{read:true};return !!q&&(lvl==='full'?q.full:lvl==='change'?(q.full||q.change):(q.full||q.change||q.read))}
 function rootFolder(n,name){const it=(n.fs['C:']||[]).find(x=>x.d&&lcEq(x.n,name));return it?'C:\\'+it.n:null}
 function uncOk(L,unc){/* \\HOST\share\... -> {node,share,path} */const m=/^\\\\([^\\]+)\\([^\\]+)(.*)$/.exec(unc||'');if(!m)return null;const dc=dcNode(L);if(!dc)return null;
  const hostOk=lcEq(m[1],dc.hostname)||m[1]===dc.ip||lcEq(m[1],dc.hostname+'.'+dc.domain)||lcEq(m[1],dc.domain);if(!hostOk)return null;
@@ -3224,8 +3419,8 @@ function gpoForUser(dc,user){const ou=(user&&user.ou)||'';return gposOf(dc).filt
 /* what happens on the client when a domain user signs in */
 function applyUserPolicy(L,client,userId){
  const dc=dcNode(L);if(!dc||!userId||!userId.includes('\\'))return {};const logon=userId.split('\\').pop();const u=(dc.adUsers||[]).find(x=>lcEq(x.logon,logon));if(!u)return {};
- const res={fr:null,sw:[],errors:[]};
- gpoForUser(dc,u).forEach(g=>{
+ const res={fr:null,sw:[],errors:[]};const G=gpoForUser(dc,u);if(!G.length)res.none=true;
+ G.forEach(g=>{
   const d=g.fr&&g.fr.desktop;if(d&&d.setting==='basic'){const t=uncOk(L,d.root);
    if(!t)res.errors.push('Folder Redirection: the root path "'+(d.root||'')+'" is not a shared folder on the server.');
    else if(!shareAllows(t.sh,'Domain Users','change')||!ntfsAllows(dc,t.sh.path,'Domain Users','change'))res.errors.push('Folder Redirection: Domain Users have no write permission on '+d.root+'.');
@@ -3346,53 +3541,49 @@ APPS.mstsc={title:'Remote Desktop Connection',icon:'🖥️',w:460,h:300,open(w,
   w.body.innerHTML='<div class="dp" style="text-align:center;padding:30px"><div class="spinner" style="border-color:#1e64a8;border-top-color:transparent;margin:auto"></div><p>Initiating remote connection...</p></div>';await sleep(1400);
   if(!tg||lreach(D.L,n,ip,true)!=='ok'||!tg.rdp||!tg.rdp.on){await D.msg('Remote Desktop Connection','Remote Desktop can\'t connect to the remote computer for one of these reasons:<br><br>1) Remote access to the server is not enabled<br>2) The remote computer is turned off<br>3) The remote computer is not available on the network<br><br>Make sure the remote computer is turned on and connected to the network, and that remote access is enabled.',{icon:'⛔'});D.changed('rdpfail');w.close();return}
   w.body.innerHTML=`<div class="dp"><b>Enter your credentials</b><p style="font-size:12px">These credentials will be used to connect to ${esc(t)}.</p><input id="mU" style="width:100%" value="${esc(D.user)}" autocapitalize="off"><input id="mP" type="password" style="width:100%;margin-top:6px" placeholder="Password"><div id="mE" style="color:#c00;font-size:12px"></div></div><div class="dbtns"><button class="wb pri" id="mO">OK</button><button class="wb" id="mX">Cancel</button></div>`;
-  $('#mX',w.body).onclick=()=>w.close();$('#mO',w.body).onclick=async()=>{const u=$('#mU',w.body).value.trim().replace(/^tesda\\/i,''),p=$('#mP',w.body).value;const dc2=dcNode(D.L);
+  $('#mX',w.body).onclick=()=>w.close();$('#mO',w.body).onclick=async()=>{const u=stripDom(D.L,$('#mU',w.body).value)||'#',p=$('#mP',w.body).value;const dc2=dcNode(D.L);
    const rec=lcEq(u,EX.au)?{logon:EX.au,pw:tg.accounts[EX.au].pw,admin:1}:(dc2.adUsers||[]).find(x=>lcEq(x.logon,u));
    if(!rec||rec.pw!==p)return $('#mE',w.body).textContent='The user name or password is incorrect.';
    const allowed=rec.admin||(tg.rdp.users||[]).some(x=>lcEq(x,'Domain Users')||lcEq(x,rec.logon)||lcEq(x,'Authenticated Users')||lcEq(x,'Everyone'));
    if(!allowed){await D.msg('Remote Desktop Connection','The connection was denied because the user account is not authorized for remote login.',{icon:'⛔'});return}
-   w.setTitle(t+' - Remote Desktop Connection');w.body.innerHTML=`<div style="height:100%;min-height:240px;background:linear-gradient(#0b3a6e,#081d36);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-family:Segoe UI,sans-serif"><div style="font-size:42px">🗄️</div><b>${esc(tg.hostname)} — Windows Server 2016</b><span style="opacity:.8">Signed in remotely as TESDA\\${esc(rec.logon)}</span><button class="wb" id="mD" style="margin-top:10px">Disconnect</button></div>`;
+   w.setTitle(t+' - Remote Desktop Connection');w.body.innerHTML=`<div style="height:100%;min-height:240px;background:linear-gradient(#0b3a6e,#081d36);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-family:Segoe UI,sans-serif"><div style="font-size:42px">🗄️</div><b>${esc(tg.hostname)} — Windows Server 2012 R2</b><span style="opacity:.8">Signed in remotely as ${esc(nbOf(D.L))}\\${esc(rec.logon)}</span><button class="wb" id="mD" style="margin-top:10px">Disconnect</button></div>`;
    D.changed('rdpok',{to:tg.hostname,user:rec.logon});$('#mD',w.body).onclick=()=>w.close()}};
  $('#mG',w.body).onclick=go;$('#mC',w.body).onkeydown=e=>{if(e.key==='Enter')go()}}};
-/* ================= COC 3 tasks from the instructor's guide ================= */
-const srvSetup=L=>{const s=L.nodes.SRV;if(!s)return;s.gpos=s.gpos||[];s.ntfs=s.ntfs||{};s.rdp=s.rdp||{on:false,users:[]};
+
+/* ---------- Windows Firewall with Advanced Security (wf.msc), Windows Server 2012 R2 ---------- */
+const FW_RULES=[['Active Directory Domain Controller - Echo Request (ICMPv4-In)','Active Directory Domain Services','All',0],['Active Directory Domain Controller - LDAP (TCP-In)','Active Directory Domain Services','All',1],['Active Directory Domain Controller - SAM/LSA (NP-UDP-In)','Active Directory Domain Services','All',1],['BranchCache Content Retrieval (HTTP-In)','BranchCache - Content Retrieval (Uses HTTP)','All',0],['BranchCache Hosted Cache Server (HTTP-In)','BranchCache - Hosted Cache Server (Uses HTTPS)','All',0],['BranchCache Peer Discovery (WSD-In)','BranchCache - Peer Discovery (Uses WSD)','All',0],['COM+ Network Access (DCOM-In)','COM+ Network Access','All',0],['COM+ Remote Administration (DCOM-In)','COM+ Remote Administration','All',0],['Core Networking - Destination Unreachable (ICMPv6-In)','Core Networking','All',1],['Core Networking - Destination Unreachable Fragmentation Needed (ICMPv4-In)','Core Networking','All',1],['Core Networking - Dynamic Host Configuration Protocol (DHCP-In)','Core Networking','All',1],['Core Networking - Internet Group Management Protocol (IGMP-In)','Core Networking','All',1],['Core Networking - Neighbor Discovery Advertisement (ICMPv6-In)','Core Networking','All',1],['DFS Management (DCOM-In)','DFS Management','All',0],['DHCP Server v4 (UDP-In)','DHCP Server','All',1],['DNS (TCP, Incoming)','DNS Service','All',1],['DNS (UDP, Incoming)','DNS Service','All',1],['Distributed Transaction Coordinator (RPC)','Distributed Transaction Coordinator','All',0],['File and Printer Sharing (Echo Request - ICMPv4-In)','File and Printer Sharing','All',0],['File and Printer Sharing (NB-Datagram-In)','File and Printer Sharing','All',0],['File and Printer Sharing (NB-Name-In)','File and Printer Sharing','All',0],['File and Printer Sharing (SMB-In)','File and Printer Sharing','All',1],['File Server Remote Management (DCOM-In)','File Server Remote Management','All',1],['iSCSI Service (TCP-In)','iSCSI Service','Domain',0],['Key Management Service (TCP-In)','Key Management Service','All',0],['Netlogon Service (NP-In)','Netlogon Service','All',0],['Network Discovery (LLMNR-UDP-In)','Network Discovery','All',0],['Network Discovery (NB-Name-In)','Network Discovery','All',0],['Performance Logs and Alerts (DCOM-In)','Performance Logs and Alerts','Domain',0],['Remote Desktop - User Mode (TCP-In)','Remote Desktop','All',0],['Remote Desktop - User Mode (UDP-In)','Remote Desktop','All',0],['Remote Event Log Management (RPC)','Remote Event Log Management','All',0],['Remote Service Management (RPC)','Remote Service Management','All',0],['Windows Management Instrumentation (WMI-In)','Windows Management Instrumentation (WMI)','Domain',1],['Windows Remote Management (HTTP-In)','Windows Remote Management','Domain',1]];
+function fwRules(n){if(!n.fwRules||n.fwRules.length!==FW_RULES.length)n.fwRules=FW_RULES.map(r=>!!r[3]);return n.fwRules}
+APPS.wfas={title:'Windows Firewall with Advanced Security',icon:'🧱',w:900,h:540,single:true,open(w,D){
+ const n=D.n;let node='root',sel=new Set(),anchor=null;fwRules(n);
+ const fw=()=>n.fw||(n.fw={domain:true,priv:true,pub:true});
+ const prof=(k,l,act)=>{const on=fw()[k];return `<div class="wf-pr"><b>${l}${act?' is Active':''}</b>${on?`<div><i class="ok">✔</i>Windows Firewall is on.</div><div><i class="no">⛔</i>Inbound connections that do not match a rule are blocked.</div><div><i class="ok">✔</i>Outbound connections that do not match a rule are allowed.</div>`:`<div><i class="no">⛔</i>Windows Firewall is off.</div>`}</div>`};
+ const render=()=>{const R=fwRules(n);let mid='',acts='';
+  const head=`<div class="wf-mh">${{root:'Windows Firewall with Advanced Security on Local Computer',in:'Inbound Rules',out:'Outbound Rules',csr:'Connection Security Rules',mon:'Monitoring'}[node]}</div>`;
+  if(node==='root'){mid=head+`<div class="wf-ov"><p>🧱 Windows Firewall with Advanced Security provides network security for Windows computers.</p><div class="wf-sec">Overview</div>${prof('domain','Domain Profile',!!n.domain)}${prof('priv','Private Profile',!n.domain)}${prof('pub','Public Profile',false)}<div class="wf-lnk"><span class="sm-link" data-x="props">Windows Firewall Properties</span></div><div class="wf-sec">Getting Started</div><p style="color:#555">Authenticate communications between computers</p><p style="color:#555">View and create firewall rules</p></div>`;
+   acts=`<div class="wf-ah">Windows Firewall with Advanced Security on L... ▲</div><button>Import Policy...</button><button>Export Policy...</button><button>Restore Default Policy</button><button>Diagnose / Repair</button><button>View ▸</button><button data-x="ref">Refresh</button><button data-x="props">Properties</button><button>Help</button>`}
+  else if(node==='in'){mid=head+`<div class="wf-tbl" tabindex="0"><table><tr><th>Name</th><th>Group</th><th>Profile</th><th>Enabled</th><th>Action</th><th>Override</th><th>Program</th></tr>${FW_RULES.map((r,i)=>`<tr data-i="${i}" class="${sel.has(i)?'sel':''}"><td><i class="${R[i]?'ok':'off'}">${R[i]?'✔':'●'}</i>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td>${R[i]?'Yes':'No'}</td><td>Allow</td><td>No</td><td>${i%3?'Any':'System'}</td></tr>`).join('')}</table></div>`;
+   acts=`<div class="wf-ah">Inbound Rules ▲</div><button>New Rule...</button><button>Filter by Profile ▸</button><button>Filter by State ▸</button><button>Filter by Group ▸</button><button>View ▸</button><button data-x="ref">Refresh</button><button>Export List...</button><button>Help</button>${sel.size?`<div class="wf-ah">${sel.size>1?'Selected Items':esc(FW_RULES[[...sel][0]][0]).slice(0,34)+'...'} ▲</div><button data-x="en">✔ Enable Rule</button><button data-x="dis">Disable Rule</button><button>Cut</button><button>Copy</button><button>Delete</button><button>Help</button>`:''}`}
+  else{mid=head+`<p style="padding:10px;color:#777">There are no items to show in this view.</p>`;acts=`<div class="wf-ah">${node==='out'?'Outbound Rules':node==='csr'?'Connection Security Rules':'Monitoring'} ▲</div><button data-x="ref">Refresh</button><button>Help</button>`}
+  w.body.innerHTML=`<div class="mmc"><div class="mmc-menu"><button>File</button><button data-x="actm">Action</button><button>View</button><button>Help</button></div><div class="mmc-main"><div class="mmc-tree">${[['root','🧱 Windows Firewall with Advanced Security on Local Computer',0],['in','📥 Inbound Rules',1],['out','📤 Outbound Rules',1],['csr','🔐 Connection Security Rules',1],['mon','📈 Monitoring',1]].map(([k,l,d])=>`<div data-k="${k}" class="${node===k?'sel':''}" style="padding-left:${6+d*14}px">${l}</div>`).join('')}</div><div class="mmc-list wf-mid">${mid}</div><div class="wf-act"><div class="wf-ah0">Actions</div>${acts}</div></div></div>`;
+  $$('[data-k]',w.body).forEach(d=>d.onclick=()=>{node=d.dataset.k;sel.clear();render()});
+  $$('tr[data-i]',w.body).forEach(tr=>{const i=+tr.dataset.i;
+   tr.onclick=e=>{if(e.shiftKey&&anchor!=null){sel.clear();for(let k=Math.min(anchor,i);k<=Math.max(anchor,i);k++)sel.add(k)}else if(e.ctrlKey||e.metaKey){sel.has(i)?sel.delete(i):sel.add(i);anchor=i}else{sel=new Set([i]);anchor=i}render();const t=$('.wf-tbl',w.body);t&&t.focus({preventScroll:true})};
+   tr.oncontextmenu=e=>{e.preventDefault();if(!sel.has(i)){sel=new Set([i]);anchor=i;render()}D.ctxMenu(e.clientX,e.clientY,[{l:'Select All (Ctrl+A)',f:selAll},null,{l:'Enable Rule',f:()=>setR(true)},{l:'Disable Rule',f:()=>setR(false)},{l:'Cut'},{l:'Copy'},{l:'Delete',f:()=>D.msg('Windows Firewall with Advanced Security','Built-in rules should not be deleted for this task.',{icon:'ℹ️'})},null,{l:'Properties'},{l:'Help'}])}});
+  const tb=$('.wf-tbl',w.body);if(tb){tb.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a'){e.preventDefault();selAll()}};const st=w._st||0;tb.scrollTop=st;tb.onscroll=()=>w._st=tb.scrollTop}
+  $$('[data-x]',w.body).forEach(b=>b.onclick=e=>{const x=b.dataset.x;if(x==='props')props();if(x==='ref')render();if(x==='en')setR(true);if(x==='dis')setR(false);if(x==='actm')D.ctxMenu(e.clientX,e.clientY,node==='in'?[{l:'New Rule...'},{l:'Refresh',f:render},...(sel.size?[null,{l:'Enable Rule',f:()=>setR(true)},{l:'Disable Rule',f:()=>setR(false)}]:[])]:[{l:'Properties',f:props},{l:'Refresh',f:render}])})};
+ const selAll=()=>{sel=new Set(FW_RULES.map((_,i)=>i));render();const t=$('.wf-tbl',w.body);t&&t.focus({preventScroll:true})};
+ const setR=on=>{const R=fwRules(n);sel.forEach(i=>R[i]=on);D.changed('fwrules',{on,count:sel.size});render()};
+ const props=()=>{const f=fw(),c={...f};let tab='domain';const dw=D.win('Windows Firewall with Advanced Security on Local Computer Properties',{dialog:true,w:430,icon:''});
+  const r=()=>{const k=tab,nm={domain:'Domain',priv:'Private',pub:'Public'}[k];dw.body.innerHTML=`<div class="dp"><div class="wtabs">${[['domain','Domain Profile'],['priv','Private Profile'],['pub','Public Profile'],['ipsec','IPsec Settings']].map(([t,l])=>`<span data-t="${t}" class="${tab===t?'on':''}">${l}</span>`).join('')}</div>${k==='ipsec'?'<p style="color:#666">Not needed for this task.</p>':`<p>Specify behavior for when a computer is connected to ${k==='domain'?'its corporate domain':k==='priv'?'a private network location':'a public network location'}.</p><fieldset class="wfs"><legend>State</legend><div class="wf"><label>Firewall state:</label><select id="fS"><option value="1" ${c[k]?'selected':''}>On (recommended)</option><option value="0" ${c[k]?'':'selected'}>Off</option></select></div><div class="wf"><label>Inbound connections:</label><select ${c[k]?'':'disabled'}><option>Block (default)</option><option>Block all connections</option><option>Allow</option></select></div><div class="wf"><label>Outbound connections:</label><select ${c[k]?'':'disabled'}><option>Allow (default)</option><option>Block</option></select></div><div class="wf"><label>Protected network connections:</label><button class="wb">Customize...</button></div></fieldset><fieldset class="wfs"><legend>Settings</legend><div class="wf"><label>Specify settings that control Windows Firewall behavior.</label><button class="wb">Customize...</button></div></fieldset><fieldset class="wfs"><legend>Logging</legend><div class="wf"><label>Specify logging settings for troubleshooting.</label><button class="wb">Customize...</button></div></fieldset>`}</div><div class="dbtns"><button class="wb pri" id="fO">OK</button><button class="wb" id="fC">Cancel</button><button class="wb" id="fA">Apply</button></div>`;
+   const q=s=>$(s,dw.body);if(q('#fS'))q('#fS').onchange=()=>{c[k]=q('#fS').value==='1';r()};
+   $$('.wtabs span',dw.body).forEach(s=>s.onclick=()=>{tab=s.dataset.t;r()});
+   const ap=()=>{Object.assign(n.fw,{domain:c.domain,priv:c.priv,pub:c.pub});if(!c.domain&&!c.priv&&!c.pub)n.icmp=true;D.changed('firewall');render()};
+   q('#fO').onclick=()=>{ap();dw.close()};q('#fA').onclick=ap;q('#fC').onclick=()=>dw.close()};r()};
+ render();w.sub(ev=>{if(ev==='firewall')render()});
+}};
+/* ================= COC 3 lab helpers ================= */
+const srvSetup=L=>{const s=L.nodes&&L.nodes.SRV;if(!s)return;s.gpos=s.gpos||[];s.ntfs=s.ntfs||{};s.rdp=s.rdp||{on:false,users:[]};
  if(!s.fs['C:'].some(x=>x.n==='Installers')){s.fs['C:'].push({n:'Installers',d:1});s.fs['C:\\Installers']=[{n:'7z2301-x64.msi',d:0},{n:'GoogleChromeStandaloneEnterprise64.msi',d:0},{n:'vlc-3.0.20-win64.exe',d:0}]}};
-const DU='Domain Users';
-const S3=L=>L.nodes.SRV;
-TASKS.c3_fr=srvTask('c3_fr','Folder Redirection','1. This PC › Local Disk (C:) › create the folder SHARED FILES\n2. Properties › Sharing › Advanced Sharing › Share this folder › Permissions › Add "Domain Users" › Full Control\n3. Security tab › Edit › Add "Domain Users" › Full Control\n4. Sharing tab: copy the Network Path\n5. Tools › Group Policy Management › right-click COMPUTERS DOMAIN › Create a GPO in this domain, and Link it here › name: FOLDER REDIRECTION\n6. Security Filtering › Add › Domain Users\n7. Right-click FOLDER REDIRECTION › Edit › User Configuration › Policies › Windows Settings › Folder Redirection › Desktop › Properties\n8. Setting: Basic, "Create a folder for each user under the root path", Root Path = the network path\n9. Settings tab › Apply › OK',[
- {id:'dir',text:'Create C:\\SHARED FILES',hint:'File Explorer › Local Disk (C:) › New folder › SHARED FILES.',check:L=>!!rootFolder(S3(L),'SHARED FILES')},
- {id:'share',text:'Share it: Domain Users = Full Control (share permissions)',hint:'Right-click the folder › Properties › Sharing › Advanced Sharing › ☑ Share this folder › Permissions › Add... › Domain Users › Check Names › OK › tick Full Control.',check:L=>{const p=rootFolder(S3(L),'SHARED FILES');return p&&shareAllows(shareFor(S3(L),p),DU,'full')}},
- {id:'ntfs',text:'Security tab: Domain Users = Full Control',hint:'Properties › Security › Edit... › Add... › Domain Users › tick Full Control › Apply.',check:L=>{const p=rootFolder(S3(L),'SHARED FILES');return p&&ntfsAllows(S3(L),p,DU,'full')}},
- {id:'gpo',text:'GPO "FOLDER REDIRECTION" linked to the COMPUTERS DOMAIN OU',hint:'Tools › Group Policy Management › Forest › Domains › tesda.com › right-click COMPUTERS DOMAIN › Create a GPO in this domain, and Link it here...',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'FOLDER REDIRECTION')&&g.links.some(l=>lcEq(l,'COMPUTERS DOMAIN')))},
- {id:'flt',text:'Security Filtering: add Domain Users',hint:'Click the FOLDER REDIRECTION link › Scope tab › Security Filtering › Add... › Domain Users.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'FOLDER REDIRECTION')&&(g.filter||[]).some(f=>lcEq(f,DU)))},
- {id:'desk',text:'Redirect Desktop: Basic, a folder for each user, root path = \\\\server\\SHARED FILES',hint:'Right-click the GPO › Edit... › User Configuration › Policies › Windows Settings › Folder Redirection › right-click Desktop › Properties.',check:L=>gposOf(S3(L)).some(g=>{const d=g.fr&&g.fr.desktop;if(!lcEq(g.name,'FOLDER REDIRECTION')||!d||d.setting!=='basic'||d.mode!=='peruser')return false;const t=uncOk(L,d.root.replace(/\\+$/,''));return t&&lcEq(t.sh.path,rootFolder(S3(L),'SHARED FILES'))})}],{start:srvSetup});
-TASKS.c3_sw=srvTask('c3_sw','Software Deployment','1. This PC › Local Disk (C:) › create the folder Softwares\n2. Share it (Advanced Sharing › Permissions): Domain Users = Full Control\n3. Security tab › Edit › Domain Users = Full Control\n4. Copy the .msi installers from C:\\Installers into Softwares (only .msi can be deployed)\n5. Group Policy Management › right-click tesda.com › Create a GPO in this domain, and Link it here › SOFTWARE DEPLOYMENT\n6. Security Filtering › Add › Domain Users\n7. Edit › User Configuration › Policies › Software Settings › Software installation › New › Package\n8. Pick the .msi through the network path \\\\server\\Softwares (not C:\\)\n9. Assigned › OK, then Properties › Deployment › ☑ Install this application at logon\n10. Run gpupdate /force',[
- {id:'dir',text:'Create C:\\Softwares and share it: Domain Users = Full Control',hint:'New folder › Softwares › Properties › Sharing › Advanced Sharing › Permissions › Add Domain Users › Full Control.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&shareAllows(shareFor(S3(L),p),DU,'full')}},
- {id:'ntfs',text:'Security tab: Domain Users = Full Control',hint:'Properties › Security › Edit... › Add... › Domain Users › Full Control.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&ntfsAllows(S3(L),p,DU,'full')}},
- {id:'msi',text:'Copy an .msi installer into Softwares',hint:'Open C:\\Installers › right-click 7z2301-x64.msi › Copy › open C:\\Softwares › right-click empty space › Paste.',check:L=>{const p=rootFolder(S3(L),'Softwares');return p&&(S3(L).fs[p]||[]).some(x=>/\.msi$/i.test(x.n))}},
- {id:'gpo',text:'GPO "SOFTWARE DEPLOYMENT" linked, Security Filtering: Domain Users',hint:'Group Policy Management › right-click tesda.com › Create a GPO in this domain, and Link it here... › then Scope › Security Filtering › Add › Domain Users.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'SOFTWARE DEPLOYMENT')&&g.links.length&&(g.filter||[]).some(f=>lcEq(f,DU)))},
- {id:'pkg',text:'Assign the package from the network path \\\\server\\Softwares',hint:'Edit the GPO › User Configuration › Policies › Software Settings › right-click Software installation › New › Package... › type \\\\SERVERNAME\\Softwares\\ › choose the .msi › Assigned.',check:L=>gposOf(S3(L)).some(g=>lcEq(g.name,'SOFTWARE DEPLOYMENT')&&(g.sw||[]).some(p=>p.type==='assigned'&&uncOk(L,p.path)))},
- {id:'logon',text:'Deployment tab: ☑ Install this application at logon',hint:'Right-click the package › Properties › Deployment.',check:L=>gposOf(S3(L)).some(g=>(g.sw||[]).some(p=>p.atLogon))},
- {id:'gpu',text:'Run gpupdate /force on the server',hint:'Win + R › gpupdate /force, or Command Prompt.',check:(L,f)=>f.gpu}],
- {start:srvSetup,ev:(ctx,ev,d)=>{if(ev==='gpupdate'&&d&&d.ok&&d.force)ctx.R.flags.gpu=true}});
-TASKS.c3_rdp=srvTask('c3_rdp','Remote Desktop','1. Server Manager › Local Server › click "Disabled" next to Remote Desktop\n2. ◉ Allow remote connections to this computer\n3. Select Users... › Add... › Domain Users › OK\n4. Apply › OK',[
- {id:'on',text:'Allow remote connections to this computer',hint:'Server Manager › Local Server › Remote Desktop: Disabled › Allow remote connections.',check:L=>S3(L).rdp&&S3(L).rdp.on},
- {id:'du',text:'Add Domain Users to the Remote Desktop users',hint:'In the Remote tab › Select Users... › Add... › Domain Users › Check Names › OK.',check:L=>S3(L).rdp&&S3(L).rdp.on&&(S3(L).rdp.users||[]).some(u=>lcEq(u,DU))}],{start:srvSetup});
-TASKS.c3_test={id:'c3_test',coc:3,title:'Test the policies and Remote Desktop on the client',where:'Client PC',
- info:'On the client, sign in as TESDA\\Client A (password @@AP@@).\n\n1. Open Command Prompt › gpupdate /force › type Y to sign out\n2. Sign in again as Client A: the Desktop is redirected and the software installs\n3. Open Remote Desktop Connection (mstsc) › Computer: tesda.com or the server IP › Connect › sign in as Client A',
- objectives:[{id:'login',text:'Sign in as TESDA\\Client A',hint:'Lock screen › Other user › TESDA\\Client A / @@AP@@.',check:(L,f)=>f.du},
-  {id:'gpu',text:'Run gpupdate /force and sign out (Y)',hint:'Command Prompt: gpupdate /force, then type Y.',check:(L,f)=>f.gpout},
-  {id:'fr',text:'After signing in again, the Desktop is redirected to the server',hint:'If it failed, check the share and Security permissions and the root path on the server.',check:L=>!!L.nodes.CLIENT.redirect},
-  {id:'sw',text:'The assigned software installs at logon',hint:'If it is missing, check that the package path is \\\\server\\Softwares and "Install this application at logon" is ticked.',check:L=>(L.nodes.CLIENT.installed||[]).length>0},
-  {id:'rdp',text:'Connect to the server with Remote Desktop Connection',hint:'Start › Remote Desktop Connection › tesda.com › Connect › TESDA\\Client A.',check:(L,f)=>f.rdp}],
- start(ctx){const L=ctx.L;c3mig(L);srvSetup(L);const scr=monitorFrame(ctx,null);ctx.body.querySelector('.monwrap').style.padding='4px';
-  const D=new Desktop(scr,{L,key:'CLIENT',user:EX.cu,locked:true,onChange:(ev,d)=>{
-   if(ev==='login'&&/client a/i.test(d||'')){ctx.R.flags.du=true;const res=applyUserPolicy(L,L.nodes.CLIENT,d);
-    if(ctx.R.flags.gpout){setTimeout(()=>{if(res.sw.length)toast('📦 Installing managed software: '+res.sw.join(', '),'good');if(res.fr)toast('📁 Desktop redirected to '+res.fr,'good');res.errors.forEach(e=>toast('⚠ '+e,'bad'))},1300)}}
-   if(ev==='gpsignout')ctx.R.flags.gpout=true;if(ev==='rdpok')ctx.R.flags.rdp=true;ctx.check()}});ctx.cleanup.push(()=>D.destroy())}};
-COCS[3].tasks.push('c3_fr','c3_sw','c3_rdp','c3_test');
-(function(){const o=COCS[3].room.objs;const s=o.find(x=>x.label==='Server Console');if(s)s.tasks.push('c3_fr','c3_sw','c3_rdp');const c=o.find(x=>x.label==='Client PC');if(c)c.tasks.push('c3_test')})();
-COCS[3].sub='Windows Server 2016 · domain tesda.com · DHCP · OU & users · folder redirection · software deployment · Remote Desktop';
 
 /* ================= EXAM DETAILS (credentials + IPs from your assessor) ================= */
 const EX_BAD=/[<>&"'\\\/\[\]:;|=,+*?%]/;
